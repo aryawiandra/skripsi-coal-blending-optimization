@@ -1,6 +1,6 @@
 # Coal Blending Optimization
 
-Repository for undergraduate thesis research on machine learning-based coal blending optimization and supply chain modeling, with case study context from PT Adaro Andalan Indonesia Tbk (AAI).
+Repository for undergraduate thesis research on machine learning-based coal blending optimization and supply chain modeling, with case study context from PT Adaro Andalan Indonesia Tbk (AAI), research heavily based on Financial Statement (FS) AADI and ATRI.
 
 ## Overview
 
