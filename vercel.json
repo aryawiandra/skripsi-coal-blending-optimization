@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/visualizations/peta-rantai-batubara-adaro.html"
+    }
+  ]
+}
