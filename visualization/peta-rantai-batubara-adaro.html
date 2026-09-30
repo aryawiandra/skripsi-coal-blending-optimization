@@ -1,0 +1,3000 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Peta Rantai Batubara Adaro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Konsep tata letak: peta 3D isometrik memenuhi layar; panel info di kanan, urutan tahap di kiri.
+   Token mengikuti halaman GAR (model-gar-batubara.html) supaya keduanya satu keluarga. */
+:root {
+  --bg: #ECEEF1;
+  --surface: #F8F9FB;
+  --surface-2: #E2E5EA;
+  --glass: rgba(248, 249, 251, 0.88);
+  --ink: #14161B;
+  --ink-2: #3B414C;
+  --muted: #5E6573;
+  --line: #C8CDD5;
+  --line-soft: #DADDE3;
+  --accent: #A95C0C;
+  --accent-strong: #8B4A07;
+  --accent-soft: #F3E2CA;
+  --c-tm: #2A62C4;
+  --c-ash: #8A8698;
+  --c-vm: #C47A14;
+  --c-fc: #1A1C21;
+  --bad: #B3372B;
+  --bad-soft: #F2D9D5;
+  --good: #2E7A4C;
+  --good-soft: #D7EBDF;
+  --warn-soft: #F1E4CC;
+  --scene-bg: #E9ECF0;
+  --shadow: 0 1px 0 rgba(20, 22, 27, 0.04), 0 14px 34px -18px rgba(20, 22, 27, 0.35);
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --panel-w: min(420px, 100vw);
+  --gutter: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0E1014; --surface: #161920; --surface-2: #1E222A; --glass: rgba(22, 25, 32, 0.88);
+    --ink: #E7E9EE; --ink-2: #C4C9D2; --muted: #8E96A4; --line: #2C313B; --line-soft: #232730;
+    --accent: #F0A443; --accent-strong: #F6B865; --accent-soft: #3A2A15;
+    --c-tm: #62A0FF; --c-ash: #A9A5B8; --c-vm: #F0A443; --c-fc: #E7E9EE;
+    --bad: #FF7A6B; --bad-soft: #3A1D1A; --good: #5CC48A; --good-soft: #15291F; --warn-soft: #33260F;
+    --scene-bg: #12151C;
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 18px 40px -22px rgba(0, 0, 0, 0.75);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E1014; --surface: #161920; --surface-2: #1E222A; --glass: rgba(22, 25, 32, 0.88);
+  --ink: #E7E9EE; --ink-2: #C4C9D2; --muted: #8E96A4; --line: #2C313B; --line-soft: #232730;
+  --accent: #F0A443; --accent-strong: #F6B865; --accent-soft: #3A2A15;
+  --c-tm: #62A0FF; --c-ash: #A9A5B8; --c-vm: #F0A443; --c-fc: #E7E9EE;
+  --bad: #FF7A6B; --bad-soft: #3A1D1A; --good: #5CC48A; --good-soft: #15291F; --warn-soft: #33260F;
+  --scene-bg: #12151C;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 18px 40px -22px rgba(0, 0, 0, 0.75);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 14px/1.55 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 11px/1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- Kanvas dan HUD ---------- */
+#app { position: fixed; inset: 0; background: var(--scene-bg); }
+#stage { position: absolute; inset: 0; touch-action: none; }
+#stage canvas { display: block; width: 100%; height: 100%; outline: none; }
+#pins, #ptags { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 3; }
+#ptags { z-index: 4; }
+
+.hud { position: absolute; z-index: 5; }
+.brand { top: calc(var(--gutter) + env(safe-area-inset-top, 0px)); left: var(--gutter); max-width: min(440px, calc(100vw - 2 * var(--gutter))); pointer-events: none; }
+.brand h1 { font-size: clamp(20px, 2.6vw, 28px); font-weight: 800; font-stretch: 112%; letter-spacing: -0.01em; line-height: 1.08; }
+.brand p { margin-top: 6px; color: var(--muted); font-size: 12.5px; max-width: 38ch; }
+
+.topbar { top: calc(var(--gutter) + env(safe-area-inset-top, 0px)); right: var(--gutter); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; max-width: calc(100vw - 2 * var(--gutter)); transition: right .3s ease; }
+body.panel-open .topbar { right: calc(var(--panel-w) + var(--gutter)); }
+.seg { display: inline-flex; padding: 3px; border-radius: 10px; background: var(--glass); border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(8px); }
+.seg button { border: 0; background: transparent; padding: 7px 14px; border-radius: 7px; font: 600 12.5px/1 var(--font-mono); letter-spacing: 0.04em; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.icon-btn { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line); background: var(--glass); box-shadow: var(--shadow); backdrop-filter: blur(8px); }
+.icon-btn[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.icon-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.term-note { top: calc(var(--gutter) + 52px + env(safe-area-inset-top, 0px)); right: var(--gutter); max-width: min(360px, calc(100vw - 2 * var(--gutter))); padding: 10px 12px; font-size: 12px; line-height: 1.45; color: var(--ink-2); background: var(--glass); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); backdrop-filter: blur(8px); transition: right .3s ease; }
+body.panel-open .term-note { right: calc(var(--panel-w) + var(--gutter)); }
+.term-note b { font-weight: 600; color: var(--ink); }
+
+.hint { right: var(--gutter); bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px)); max-width: min(520px, calc(100vw - 2 * var(--gutter))); margin: 0; font-size: 11.5px; line-height: 1.45; color: var(--muted); text-align: right; pointer-events: none; transition: right .3s ease; }
+body.panel-open .hint { right: calc(var(--panel-w) + var(--gutter)); }
+
+/* ---------- Urutan tahap ---------- */
+.stepper { left: var(--gutter); top: 50%; transform: translateY(-50%); margin-top: 24px; display: flex; flex-direction: column; gap: 2px; padding: 8px; border-radius: 14px; background: var(--glass); border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(8px); max-height: calc(100% - 210px); overflow: auto; }
+.step { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: center; text-align: left; padding: 7px 12px 7px 8px; border: 0; border-radius: 9px; background: transparent; min-width: 168px; }
+.step:hover { background: var(--surface-2); }
+.step[aria-current="true"] { background: var(--ink); color: var(--surface); }
+.step .n { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; font: 600 11.5px/1 var(--font-mono); border: 1.5px solid currentColor; }
+.step .t { font: 600 13px/1.2 var(--font-body); }
+.step .s { display: block; margin-top: 2px; font: 500 10.5px/1.2 var(--font-mono); letter-spacing: 0.03em; opacity: 0.7; }
+.step.dim { opacity: 0.45; }
+.tour-btn { margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 12px; border: 0; border-radius: 9px; background: var(--accent); color: #fff; font: 600 12.5px/1 var(--font-body); }
+:root[data-theme="dark"] .tour-btn { color: #1a1206; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tour-btn { color: #1a1206; } }
+.tour-btn[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+
+/* ---------- Pin di peta ---------- */
+.pin { position: absolute; left: 0; top: 0; pointer-events: auto; display: flex; flex-direction: column; align-items: center; will-change: transform; border: 0; background: transparent; padding: 0; }
+.pin .tag { display: flex; align-items: center; gap: 7px; padding: 4px 10px 4px 4px; border-radius: 999px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 6px 18px -8px rgba(0,0,0,.45); white-space: nowrap; transition: transform .15s ease, background .15s ease; }
+.pin .num { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: var(--surface); font: 700 11.5px/1 var(--font-mono); }
+.pin .nm { font: 600 12.5px/1 var(--font-body); }
+.pin .co { font: 500 10px/1 var(--font-mono); color: var(--muted); letter-spacing: 0.04em; }
+.pin .stem { width: 1.5px; height: var(--stem, 18px); background: var(--ink); opacity: .55; }
+.pin .co { display: none; }
+.pin[aria-current="true"] .co { display: inline; }
+.pin .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 28%, transparent); }
+.pin:hover .tag, .pin:focus-visible .tag { transform: translateY(-2px); }
+.pin[aria-current="true"] .tag { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.pin[aria-current="true"] .num { background: var(--accent); color: #fff; }
+.pin[aria-current="true"] .co { color: color-mix(in srgb, var(--surface) 70%, transparent); }
+.pin.dim { opacity: 0.4; }
+.ptag { position: absolute; left: 0; top: 0; pointer-events: auto; padding: 4px 9px; border-radius: 7px; background: var(--glass); color: var(--ink); border: 1px solid var(--line); font: 500 11.5px/1.25 var(--font-body); box-shadow: 0 6px 16px -10px rgba(0,0,0,.5); white-space: nowrap; backdrop-filter: blur(6px); will-change: transform; text-align: left; }
+.ptag small { display: block; font: 500 9.5px/1.2 var(--font-mono); color: var(--muted); letter-spacing: .03em; margin-top: 1px; }
+.ptag:hover, .ptag[aria-current="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.ptag:hover small, .ptag[aria-current="true"] small { color: color-mix(in srgb, var(--surface) 70%, transparent); }
+.ptag.ilus { border-style: dashed; }
+
+/* ---------- Panel info ---------- */
+.panel { position: absolute; z-index: 6; top: 0; right: 0; bottom: 0; width: var(--panel-w); padding: calc(var(--gutter) + env(safe-area-inset-top, 0px)) var(--gutter) calc(var(--gutter) + env(safe-area-inset-bottom, 0px)); overflow: auto; background: var(--glass); border-left: 1px solid var(--line); backdrop-filter: blur(14px); transform: translateX(102%); transition: transform .35s cubic-bezier(.2,.8,.2,1); overscroll-behavior: contain; }
+body.panel-open .panel { transform: none; }
+.panel-head { display: flex; align-items: flex-start; gap: 12px; }
+.panel-head .num { flex: none; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: var(--surface); font: 700 15px/1 var(--font-mono); }
+.panel-head h2 { font-size: 22px; font-weight: 800; font-stretch: 110%; line-height: 1.1; }
+.panel-head .eyebrow { margin-top: 5px; text-transform: none; letter-spacing: 0.02em; font-size: 11.5px; }
+.panel-close { margin-left: auto; flex: none; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; }
+.panel-close svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.sec { margin-top: 18px; display: grid; gap: 8px; }
+.sec h3 { font: 600 11px/1.2 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.sec p, .sec li { color: var(--ink-2); font-size: 13.5px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { --c: var(--muted); display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px 4px 7px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c) 45%, var(--line)); background: color-mix(in srgb, var(--c) 12%, var(--surface)); font: 600 11.5px/1 var(--font-mono); letter-spacing: 0.02em; color: var(--ink); }
+.chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.cos { display: grid; gap: 8px; }
+.co-row { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; }
+.co-row p { font-size: 12.5px; line-height: 1.4; }
+.co-row .full { display: block; font-weight: 600; color: var(--ink); font-size: 12.5px; }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; counter-reset: s; }
+.steps li { counter-increment: s; }
+.steps button { width: 100%; display: grid; grid-template-columns: 22px 1fr; gap: 10px; text-align: left; padding: 8px 10px; border-radius: 9px; border: 1px solid var(--line-soft); background: var(--surface); }
+.steps button:hover, .steps button[aria-current="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.steps button::before { content: counter(s); width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--surface-2); font: 600 11px/1 var(--font-mono); }
+.steps .txt { display: block; min-width: 0; }
+.steps b { display: block; font-weight: 600; font-size: 13px; color: var(--ink); }
+.steps .d { display: block; font-size: 12.5px; color: var(--ink-2); line-height: 1.4; margin-top: 1px; }
+.src { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); font: 500 10px/1.5 var(--font-mono); color: var(--muted); white-space: nowrap; vertical-align: 1px; }
+.src.ilus { border-style: dashed; color: var(--accent-strong); border-color: var(--accent); }
+.facts { display: grid; margin: 0; }
+.facts div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 12px; padding: 7px 0; border-top: 1px solid var(--line-soft); }
+.facts dt { font-size: 12.5px; color: var(--muted); }
+.facts dd { margin: 0; font-size: 13px; font-weight: 500; color: var(--ink); }
+.dps { display: grid; gap: 6px; }
+.dp { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: center; font-size: 12.5px; color: var(--ink-2); }
+.dp b { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 7px; background: var(--ink); color: var(--surface); font: 700 12px/1 var(--font-mono); }
+.callout { padding: 10px 12px; border-radius: 10px; font-size: 12.5px; line-height: 1.45; background: var(--warn-soft); color: var(--ink); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line)); }
+.callout.info { background: var(--surface-2); border-color: var(--line); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px; border-radius: 10px; border: 1px solid var(--ink); background: var(--ink); color: var(--surface); font: 600 13px/1 var(--font-body); }
+.btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+:root[data-theme="dark"] .btn.accent { color: #1a1206; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.accent { color: #1a1206; } }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-row .btn { padding: 8px 12px; font-size: 12px; }
+.panel-nav { margin-top: 20px; display: flex; gap: 8px; }
+.panel-nav .btn { flex: 1; }
+.foot { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--line-soft); font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+.pit-list { display: grid; gap: 6px; }
+.pit-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; padding: 7px 10px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line-soft); font-size: 12.5px; }
+.pit-row b { font-weight: 600; }
+.pit-row small { display: block; color: var(--muted); font-size: 11px; }
+.pit-row .v { font: 600 12px/1 var(--font-mono); color: var(--ink); }
+.pit-row.gone { opacity: .7; }
+
+/* ---------- Muat & galat ---------- */
+#loading { position: absolute; inset: 0; z-index: 9; display: grid; place-items: center; background: var(--scene-bg); transition: opacity .5s ease; }
+#loading[hidden] { display: none; }
+#loading.fade { opacity: 0; pointer-events: none; }
+#loading .box { text-align: center; }
+#loading .bar { width: 180px; height: 3px; margin: 14px auto 0; background: var(--line); border-radius: 3px; overflow: hidden; }
+#loading .bar i { display: block; width: 40%; height: 100%; background: var(--accent); animation: slide 1.1s ease-in-out infinite; }
+@keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(260%); } }
+#fallback { position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; padding: 24px; text-align: center; }
+#fallback[hidden] { display: none; }
+#fallback p { max-width: 46ch; color: var(--ink-2); }
+
+/* ---------- Blend Lab ---------- */
+.lab-back { position: fixed; inset: 0; z-index: 20; background: rgba(8, 10, 14, 0.55); display: grid; place-items: center; padding: calc(var(--gutter) + env(safe-area-inset-top, 0px)) var(--gutter) calc(var(--gutter) + env(safe-area-inset-bottom, 0px)); backdrop-filter: blur(3px); }
+.lab-back[hidden] { display: none; }
+.lab { width: min(1120px, 100%); max-height: 100%; overflow: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 30px 80px -20px rgba(0,0,0,.6); }
+.lab-head { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 14px; padding: 14px 20px; background: var(--bg); border-bottom: 1px solid var(--line); }
+.lab-head h2 { font-size: 20px; font-weight: 800; font-stretch: 112%; }
+.lab-head p { font-size: 12.5px; color: var(--muted); }
+.lab-body { padding: 20px; display: grid; gap: 24px; }
+.lab-sec h3 { font: 800 16px/1.2 var(--font-display); font-stretch: 108%; }
+.lab-sec > p { margin-top: 6px; color: var(--ink-2); font-size: 13.5px; max-width: 78ch; }
+.lab-grid { margin-top: 14px; display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 18px; align-items: start; }
+.lab-panel { padding: 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line-soft); }
+.ctl { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; margin-bottom: 14px; }
+.ctl label { font-weight: 600; font-size: 12.5px; }
+.ctl output { font: 600 12.5px/1.4 var(--font-mono); color: var(--ink); }
+.ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--c, var(--accent)); margin: 4px 0 0; }
+.ctl .hint { grid-column: 1 / -1; font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+.big-gar { display: flex; align-items: baseline; gap: 8px; }
+.big-gar b { font: 800 46px/1 var(--font-display); font-stretch: 112%; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.big-gar span { font: 500 12px/1.3 var(--font-mono); color: var(--muted); }
+.kg { margin-top: 12px; }
+.kg-bar { display: flex; height: 22px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+.kg-bar span { display: block; height: 100%; }
+.seg-tm { background: var(--c-tm); } .seg-ash { background: var(--c-ash); } .seg-vm { background: var(--c-vm); } .seg-fc { background: var(--c-fc); } .seg-im { background: color-mix(in srgb, var(--c-tm) 45%, var(--surface)); }
+.kg-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font: 500 11px/1.4 var(--font-mono); color: var(--ink-2); }
+.kg-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.bases { display: grid; gap: 8px; margin-top: 14px; }
+.base-row { display: grid; grid-template-columns: 118px minmax(0, 1fr) 84px; gap: 10px; align-items: center; }
+.base-row.is-ar .base-name b { color: var(--accent-strong); }
+.base-name b { display: block; font-size: 12px; }
+.base-name span { font-size: 10.5px; color: var(--muted); }
+.base-bar { display: flex; height: 14px; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); }
+.base-bar span { display: block; height: 100%; }
+.base-val { text-align: right; font: 700 15px/1 var(--font-mono); }
+.base-val small { display: block; font: 500 9.5px/1.3 var(--font-mono); color: var(--muted); margin-top: 2px; }
+.sens { margin-top: 12px; font-size: 12.5px; color: var(--ink-2); line-height: 1.5; }
+.sens b { color: var(--ink); }
+.sources { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.srcc { padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); }
+.srcc .hd { display: flex; align-items: baseline; gap: 6px; }
+.srcc .hd { flex-wrap: wrap; }
+.srcc .hd b { font: 800 15px/1.2 var(--font-display); }
+.srcc dl { margin: 6px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 1px 8px; font-size: 12px; }
+.srcc dt { color: var(--muted); } .srcc dd { margin: 0; text-align: right; font: 600 12px/1.4 var(--font-mono); }
+.srcc p { margin-top: 4px; font-size: 11px; color: var(--muted); }
+.fig { padding: 14px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line-soft); }
+.fig + .fig { margin-top: 14px; }
+.fig-title { font: 600 13px/1.3 var(--font-body); }
+.fig svg { width: 100%; height: auto; display: block; margin-top: 8px; }
+.legend { display: flex; gap: 14px; margin-top: 4px; font-size: 11.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 18px; border-top: 2px solid var(--ink); margin-right: 6px; vertical-align: 3px; }
+.legend i.dash { border-top-style: dashed; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 10px; }
+.stat { padding: 8px 10px; border-radius: 8px; background: var(--surface-2); }
+.stat .k { display: block; font-size: 11px; color: var(--muted); }
+.stat .v { display: block; font: 600 14px/1.3 var(--font-mono); margin-top: 2px; }
+.decision { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 12px; }
+.dcard { padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); display: grid; gap: 6px; align-content: start; }
+.dcard h3 { font: 600 11px/1.2 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.dcard .big { font: 700 15px/1.3 var(--font-mono); }
+.dcard p { font-size: 12.5px; color: var(--ink-2); line-height: 1.45; }
+.dcard.lin { border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
+.dcard.rob { border-color: color-mix(in srgb, var(--good) 45%, var(--line)); }
+.dcard .btn { justify-self: start; padding: 8px 12px; font-size: 12px; }
+.caveat { font-size: 12px; color: var(--muted); line-height: 1.5; max-width: 90ch; }
+.caveat b { color: var(--ink-2); }
+.ax text { font: 500 10.5px var(--font-mono); fill: var(--muted); }
+.ax line { stroke: var(--line); }
+.ax .grid-line { stroke: var(--line-soft); }
+.ax .axis-title { font: 500 11px var(--font-body); fill: var(--ink-2); }
+.zone-bad { fill: color-mix(in srgb, var(--bad) 14%, transparent); }
+.zone-ok { fill: color-mix(in srgb, var(--good) 12%, transparent); }
+.zone-over { fill: color-mix(in srgb, var(--accent) 14%, transparent); }
+.zone-lbl { font: 600 10px var(--font-mono); letter-spacing: .05em; }
+.zone-lbl.bad { fill: var(--bad); } .zone-lbl.ok { fill: var(--good); } .zone-lbl.over { fill: var(--accent-strong); }
+.bin { fill: var(--ink-2); opacity: .8; }
+.vline-lin { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 4; }
+.vline-mean { stroke: var(--ink); stroke-width: 2; }
+.curve { fill: none; stroke: var(--ink); stroke-width: 2.2; }
+.curve-area { fill: color-mix(in srgb, var(--ink) 8%, transparent); }
+.hline-target { stroke: var(--good); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.lbl-target { font: 600 10.5px var(--font-mono); fill: var(--good); }
+.pt-lin { fill: var(--bad); stroke: var(--surface); stroke-width: 2; }
+.pt-rob { fill: var(--good); stroke: var(--surface); stroke-width: 2; }
+.pt-cur { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+.pt-lbl { font: 600 11px var(--font-mono); }
+.pt-lbl.lin { fill: var(--bad); } .pt-lbl.rob { fill: var(--good); }
+
+/* ---------- Layar sempit ---------- */
+@media (max-width: 760px), (max-aspect-ratio: 1/1) and (max-width: 1000px) {
+  :root { --panel-w: 100vw; }
+  .hint { display: none; }
+  .brand p { display: none; }
+  .brand h1 { font-size: 18px; }
+  .topbar { top: calc(var(--gutter) + 34px + env(safe-area-inset-top, 0px)); left: var(--gutter); right: auto; justify-content: flex-start; }
+  .stepper { top: auto; bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px)); left: var(--gutter); right: var(--gutter); transform: none; margin: 0; flex-direction: row; max-height: none; overflow-x: auto; padding: 6px; }
+  .step { flex: 0 0 auto; min-width: 0; grid-template-columns: 24px auto; white-space: nowrap; }
+  .step .s { display: none; }
+  .tour-btn { margin: 0 0 0 4px; white-space: nowrap; }
+  .panel { top: auto; height: 62%; width: 100%; border-left: 0; border-top: 1px solid var(--line); border-radius: 18px 18px 0 0; transform: translateY(102%); }
+  body.panel-open .panel { transform: none; }
+  body.panel-open .topbar, body.panel-open .term-note { right: auto; }
+  body.panel-open .stepper { display: none; }
+  .term-note { top: calc(var(--gutter) + 92px + env(safe-area-inset-top, 0px)); }
+  .lab-grid { grid-template-columns: minmax(0, 1fr); }
+  .base-row { grid-template-columns: 96px minmax(0, 1fr) 72px; }
+}
+@media (max-width: 520px) {
+  .term-note { display: none; }
+  .pin .co { display: none; }
+  .pin .nm { font-size: 11.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel, .topbar, .term-note, #loading { transition: none; }
+  #loading .bar i { animation: none; }
+}
+</style>
+
+<div id="app">
+  <div id="stage" aria-label="Peta 3D rantai batubara Adaro dari pit sampai kapal"></div>
+  <div id="pins"></div>
+  <div id="ptags"></div>
+
+  <div class="hud brand">
+    <h1>Peta Rantai Batubara Adaro</h1>
+    <p>Dari pit dan seam sampai kapal. Klik satu tahap untuk zoom, lihat siapa yang mengurus, dan lihat truk atau tongkang berjalan.</p>
+  </div>
+
+  <div class="hud topbar">
+    <div class="seg" role="group" aria-label="Syarat penjualan">
+      <button type="button" id="mode-fob" aria-pressed="true">FOB</button>
+      <button type="button" id="mode-cif" aria-pressed="false">CIF</button>
+    </div>
+    <button type="button" class="icon-btn" id="btn-motion" aria-pressed="true" aria-label="Animasi berjalan" title="Jeda atau jalankan animasi">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="btn-theme" aria-label="Ganti tema" title="Ganti tema terang atau gelap">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="btn-home" aria-label="Lihat seluruh peta" title="Lihat seluruh peta">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+  </div>
+  <div class="hud term-note" id="term-note" aria-live="polite"></div>
+
+  <p class="hud hint" id="hint">Seret untuk geser · gulir untuk zoom · klik area atau nomor untuk detail. Panah oranye = alur batubara yang disorot. Data publik AR AADI 2025, peta tidak sesuai skala.</p>
+
+  <nav class="hud stepper" id="stepper" aria-label="Tahapan rantai batubara"></nav>
+
+  <aside class="panel" id="panel" aria-label="Detail tahap" tabindex="-1"></aside>
+
+  <div id="loading" role="status"><div class="box"><div class="eyebrow">Memuat peta 3D</div><div class="bar"><i></i></div></div></div>
+  <div id="fallback" hidden><div><h2>Peta 3D tidak bisa dimuat</h2><p id="fb-msg">Browser ini tidak menjalankan WebGL. Blend Lab tetap bisa dibuka tanpa peta.</p><p style="margin-top:14px"><button type="button" class="btn" id="fb-lab">Buka Blend Lab</button></p></div></div>
+</div>
+
+<div class="lab-back" id="lab-back" hidden>
+  <section class="lab" role="dialog" aria-modal="true" aria-labelledby="lab-title" id="lab">
+    <header class="lab-head">
+      <div><h2 id="lab-title">Blend Lab</h2><p>Model dari halaman GAR, dengan sumber A = Tutupan dan B = Wara. Parameter ilustrasi, bukan data operasi.</p></div>
+      <button type="button" class="panel-close" id="lab-close" aria-label="Tutup Blend Lab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div class="lab-body">
+      <section class="lab-sec" aria-labelledby="lab-a-title">
+        <h3 id="lab-a-title">1. Kenapa GAR bukan x + y</h3>
+        <p>GAR adalah kalori per kilogram batubara seperti yang diterima pembeli, termasuk airnya. Geser satu variabel dan lihat variabel lain ikut mengubah pengaruhnya.</p>
+        <div class="lab-grid">
+          <div class="lab-panel">
+            <div class="ctl" style="--c: var(--c-tm)"><label for="bl-tm">Total Moisture (TM), % ar</label><output id="bl-out-tm" for="bl-tm"></output><input id="bl-tm" type="range" min="5" max="50" step="0.5"><p class="hint">Seluruh air di batubara saat diterima.</p></div>
+            <div class="ctl" style="--c: var(--c-tm)"><label for="bl-im">Inherent Moisture (IM), % ad</label><output id="bl-out-im" for="bl-im"></output><input id="bl-im" type="range" min="2" max="25" step="0.5"><p class="hint" id="bl-im-hint"></p></div>
+            <div class="ctl" style="--c: var(--c-ash)"><label for="bl-ash">Abu, % ad</label><output id="bl-out-ash" for="bl-ash"></output><input id="bl-ash" type="range" min="1" max="30" step="0.5"></div>
+            <div class="ctl" style="--c: var(--c-vm)"><label for="bl-rank">Peringkat batubara</label><output id="bl-out-rank" for="bl-rank"></output><input id="bl-rank" type="range" min="0" max="1" step="0.01"></div>
+            <div class="btn-row"><button type="button" class="btn ghost" id="bl-reset-comp">Contoh Tutupan</button><button type="button" class="btn ghost" id="bl-load-wara">Contoh Wara</button></div>
+          </div>
+          <div class="lab-panel">
+            <div class="big-gar"><b id="bl-gar">0</b><span>kcal/kg GAR</span></div>
+            <div class="kg"><div class="kg-bar" id="bl-kgbar" aria-hidden="true"></div><div class="kg-legend" id="bl-kglegend"></div></div>
+            <div class="bases" id="bl-bases"></div>
+            <p class="sens" id="bl-sens"></p>
+          </div>
+        </div>
+      </section>
+      <section class="lab-sec" aria-labelledby="lab-b-title">
+        <h3 id="lab-b-title">2. Campur Tutupan dan Wara, lalu menunggu kapal</h3>
+        <p>Tepat saat dicampur, GAR campuran memang rata-rata tertimbang. Setelah itu kadar air bergeser, batubara teroksidasi pelan-pelan, dan kualitas tiap sumber hanya diketahui dari sampel. Simulasi menjalankan 3.000 kemungkinan untuk setiap rasio.</p>
+        <div class="lab-grid">
+          <div class="lab-panel">
+            <div class="sources" id="bl-sources"></div>
+            <div class="ctl" style="--c: var(--accent)"><label for="bl-ratio">Porsi A (Tutupan)</label><output id="bl-out-ratio" for="bl-ratio"></output><input id="bl-ratio" type="range" min="0" max="100" step="1"><p class="hint">Sisanya dari B (Wara). A kalorinya lebih tinggi dan lebih mahal.</p></div>
+            <div class="ctl" style="--c: var(--c-fc)"><label for="bl-days">Hari di stockpile</label><output id="bl-out-days" for="bl-days"></output><input id="bl-days" type="range" min="0" max="30" step="1"></div>
+            <div class="ctl" style="--c: var(--c-tm)"><label for="bl-rain">Curah hujan selama menunggu</label><output id="bl-out-rain" for="bl-rain"></output><input id="bl-rain" type="range" min="0" max="150" step="5"></div>
+            <div class="ctl" style="--c: var(--c-ash)"><label for="bl-sigma">Galat sampling kualitas sumber (σ)</label><output id="bl-out-sigma" for="bl-sigma"></output><input id="bl-sigma" type="range" min="20" max="150" step="5"></div>
+            <p class="caveat">Kontrak ilustratif: ditolak di bawah <b>4.600</b> kcal/kg GAR, harga pro-rata sampai <b>4.800</b>, kelebihan di atas itu tidak dibayar (give-away).</p>
+          </div>
+          <div>
+            <div class="fig">
+              <div class="fig-title">Sebaran GAR saat dimuat, pada porsi A sekarang</div>
+              <div class="legend"><span><i class="dash" style="border-color: var(--accent)"></i>prediksi linier</span><span><i></i>rata-rata realisasi</span></div>
+              <svg id="bl-hist" viewBox="0 0 590 300" role="img" aria-label="Histogram GAR hasil simulasi dengan zona kontrak"></svg>
+              <div class="stats" id="bl-stats"></div>
+            </div>
+            <div class="fig">
+              <div class="fig-title">Peluang kargo ditolak untuk setiap porsi A</div>
+              <svg id="bl-curve" viewBox="0 0 900 300" role="img" aria-label="Kurva peluang tolak terhadap porsi A"></svg>
+              <div class="decision" id="bl-decision" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+        <p class="caveat"><b>Parameter ilustratif.</b> TM awal Tutupan dan Wara diambil dari estimasi sumber daya di AR AADI 2025 (Tutupan 27,4%, Wara I 38,8%). Sisanya (IM, abu, peringkat), laju pengeringan, efek hujan, oksidasi, dan galat sampling adalah angka contoh. Nilai sebenarnya berbeda per lokasi, musim, dan cara penimbunan, dan di skripsi dipelajari dari data historis rencana campuran vs Certificate of Analysis.</p>
+      </section>
+    </div>
+  </section>
+</div>
+
+<script>
+/* Jika modul 3D gagal dimuat (CDN diblokir), tampilkan cadangan setelah 12 detik. */
+setTimeout(function () {
+  if (window.__peta) return;
+  var f = document.getElementById('fallback'), l = document.getElementById('loading');
+  if (f) f.hidden = false;
+  if (l) l.hidden = true;
+  var m = document.getElementById('fb-msg'), b = document.getElementById('fb-lab');
+  if (m) m.textContent = 'Pustaka Three.js tidak termuat. Periksa koneksi internet lalu muat ulang halaman.';
+  if (b) b.hidden = true;
+}, 12000);
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+'use strict';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+
+/*<BlendCore>*/
+/* ================= BlendCore: model fisis GAR + simulasi blend =================
+   Port dari model-gar-batubara.html (fungsi murni, tanpa DOM).
+   Rumus tidak diubah; hanya dibungkus supaya sumber A/B bisa diganti. */
+const BlendCore = (() => {
+  const RANK_ANCHORS = Object.freeze([
+    Object.freeze({ r: 0, C: 66.0, H: 4.8, O: 27.4, N: 1.0, S: 0.8, VM: 54 }),
+    Object.freeze({ r: 1 / 3, C: 73.0, H: 5.0, O: 20.3, N: 1.1, S: 0.6, VM: 47 }),
+    Object.freeze({ r: 2 / 3, C: 82.0, H: 5.4, O: 9.9, N: 1.7, S: 1.0, VM: 36 }),
+    Object.freeze({ r: 1, C: 92.5, H: 3.3, O: 2.5, N: 1.0, S: 0.7, VM: 6 })
+  ]);
+  const KCAL_PER_MJ = 1000 / 4.1868;
+  const IM_MARGIN = 0.5;
+  const LIMITS = Object.freeze({ tm: [5, 50], im: [2, 25], ashAd: [1, 30], rank: [0, 1] });
+  const CONTRACT = Object.freeze({ reject: 4600, cap: 4800 });
+  const SIM = Object.freeze({
+    draws: 3000, seed: 20260929, tmSd: 1.0, eqOffset: 12, kBase: 0.04, kSpread: 0.25,
+    rainMax: 5, rainScale: 120, oxBase: 0.0008, segFactor: 0.6, targetP: 0.05
+  });
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+  function dafComposition(rank) {
+    const r = clamp(rank, 0, 1);
+    for (let i = 0; i < RANK_ANCHORS.length - 1; i++) {
+      const a = RANK_ANCHORS[i];
+      const b = RANK_ANCHORS[i + 1];
+      if (r <= b.r + 1e-9) {
+        const t = (r - a.r) / (b.r - a.r);
+        return Object.freeze({
+          C: lerp(a.C, b.C, t), H: lerp(a.H, b.H, t), O: lerp(a.O, b.O, t),
+          N: lerp(a.N, b.N, t), S: lerp(a.S, b.S, t), VM: lerp(a.VM, b.VM, t)
+        });
+      }
+    }
+    return RANK_ANCHORS[RANK_ANCHORS.length - 1];
+  }
+
+  function rankName(rank) {
+    if (rank < 0.17) return 'Lignit';
+    if (rank < 0.5) return 'Sub-bituminus';
+    if (rank < 0.84) return 'Bituminus';
+    return 'Antrasit';
+  }
+
+  function grossDaf(d) {
+    return (0.3491 * d.C + 1.1783 * d.H + 0.1005 * d.S - 0.1034 * d.O - 0.0151 * d.N) * KCAL_PER_MJ;
+  }
+
+  function analyze(input) {
+    const { tm, im, ashAd, rank } = input;
+    const d = dafComposition(rank);
+    const qDaf = grossDaf(d);
+    const ashAr = ashAd * (100 - tm) / (100 - im);
+    const ashDb = ashAd * 100 / (100 - im);
+    const combAr = 100 - tm - ashAr;
+    const combAd = 100 - im - ashAd;
+    const combDb = 100 - ashDb;
+    const gar = qDaf * combAr / 100;
+    const hAr = d.H * combAr / 100;
+    return Object.freeze({
+      daf: d, qDaf, ashAr, ashDb, combAr, combAd, combDb, gar,
+      gad: qDaf * combAd / 100,
+      gdb: qDaf * combDb / 100,
+      nar: gar - 50.6 * hAr - 5.85 * tm,
+      vmAr: d.VM * combAr / 100,
+      fcAr: (100 - d.VM) * combAr / 100,
+      dGarDAsh: -qDaf / 100 * (100 - tm) / (100 - im),
+      dGarDTm: -qDaf / 100 * (100 - im - ashAd) / (100 - im),
+      rankName: rankName(rank)
+    });
+  }
+
+  function effectiveIm(tm, im) {
+    return Math.max(LIMITS.im[0], Math.min(im, tm - IM_MARGIN));
+  }
+
+  function normalize(s) {
+    const tm = clamp(s.tm, LIMITS.tm[0], LIMITS.tm[1]);
+    const imRaw = clamp(s.im, LIMITS.im[0], LIMITS.im[1]);
+    const im = effectiveIm(tm, imRaw);
+    return Object.freeze({
+      ...s, tm, im,
+      ashAd: clamp(s.ashAd, LIMITS.ashAd[0], LIMITS.ashAd[1]),
+      rank: clamp(s.rank, LIMITS.rank[0], LIMITS.rank[1]),
+      imClamped: im < imRaw
+    });
+  }
+
+  function mulberry32(seed) {
+    let t = seed >>> 0;
+    return function () {
+      t += 0x6D2B79F5;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function standardNormals(n, rand) {
+    const out = new Float64Array(n);
+    for (let i = 0; i < n; i += 2) {
+      const u = Math.max(rand(), 1e-12), v = rand();
+      const m = Math.sqrt(-2 * Math.log(u));
+      out[i] = m * Math.cos(2 * Math.PI * v);
+      if (i + 1 < n) out[i + 1] = m * Math.sin(2 * Math.PI * v);
+    }
+    return out;
+  }
+
+  /* Pabrik model: sumber A/B dan kontrak bisa diganti, rumusnya tetap. */
+  function createBlendModel({ sourceA, sourceB, contract = CONTRACT, sim = SIM }) {
+    const garA = analyze(sourceA).gar;
+    const garB = analyze(sourceB).gar;
+    const draws = (() => {
+      const rand = mulberry32(sim.seed);
+      const mk = () => standardNormals(sim.draws, rand);
+      return Object.freeze({ a: mk(), b: mk(), ta: mk(), tb: mk(), seg: mk(), k: mk() });
+    })();
+
+    function simulate(w, cond) {
+      const out = new Float64Array(sim.draws);
+      const tmEq = w * sourceA.im + (1 - w) * sourceB.im + sim.eqOffset;
+      const rain = sim.rainMax * (1 - Math.exp(-cond.rain / sim.rainScale));
+      const rankMix = w * sourceA.rank + (1 - w) * sourceB.rank;
+      const ox = 1 - sim.oxBase * (1 - rankMix) * cond.days;
+      for (let j = 0; j < sim.draws; j++) {
+        const ta = sourceA.tm + sim.tmSd * draws.ta[j];
+        const tb = sourceB.tm + sim.tmSd * draws.tb[j];
+        const ga = garA * (100 - ta) / (100 - sourceA.tm) + cond.sigma * draws.a[j];
+        const gb = garB * (100 - tb) / (100 - sourceB.tm) + cond.sigma * draws.b[j];
+        const tm0 = w * ta + (1 - w) * tb;
+        const g0 = w * ga + (1 - w) * gb;
+        const k = sim.kBase * Math.exp(sim.kSpread * draws.k[j]);
+        const tmT = tmEq + (tm0 - tmEq) * Math.exp(-k * cond.days) + rain;
+        out[j] = g0 * (100 - tmT) / (100 - tm0) * ox + sim.segFactor * cond.sigma * draws.seg[j];
+      }
+      return out;
+    }
+
+    function summarize(arr) {
+      let rej = 0, sum = 0, give = 0;
+      for (let j = 0; j < arr.length; j++) {
+        const v = arr[j];
+        if (v < contract.reject) rej++;
+        if (v > contract.cap) give += v - contract.cap;
+        sum += v;
+      }
+      return { pReject: rej / arr.length, mean: sum / arr.length, giveaway: give / arr.length };
+    }
+
+    const linearRatio = () => clamp((contract.reject - garB) / (garA - garB), 0, 1);
+
+    function rejectCurve(cond) {
+      return Array.from({ length: 101 }, (_, i) => ({ w: i / 100, p: summarize(simulate(i / 100, cond)).pReject }));
+    }
+
+    return Object.freeze({
+      sourceA, sourceB, garA, garB, contract, sim,
+      simulate, summarize, linearRatio, rejectCurve,
+      robustPoint: curve => curve.find(pt => pt.p <= sim.targetP) || null
+    });
+  }
+
+  return Object.freeze({
+    LIMITS, CONTRACT, SIM, analyze, effectiveIm, normalize, rankName, mulberry32, createBlendModel, clamp
+  });
+})();
+/*</BlendCore>*/
+
+/*<Data>*/
+/* ================= DATA: isi semua panel, satu tempat =================
+   Sumber utama: Laporan Tahunan PT Adaro Andalan Indonesia Tbk 2025 (AR25, nomor halaman cetak).
+   Tag "umum" = praktik lazim industri, bukan pernyataan Adaro. Tag "ilustrasi" = contoh, bukan data. */
+const deepFreeze = obj => {
+  Object.values(obj).forEach(v => { if (v && typeof v === 'object' && !Object.isFrozen(v)) deepFreeze(v); });
+  return Object.freeze(obj);
+};
+
+const DATA = deepFreeze({
+  companies: {
+    AI:   { name: 'PT Adaro Indonesia', color: '#C2620F', role: 'Pemegang izin tambang (IUPK-KOP, 88% milik AAI). Merencanakan tambang, mengoperasikan jalan hauling dan fasilitas CPBL Kelanis.' },
+    BAL:  { name: 'Balangan Coal (SCM, LSA, PCS)', color: '#8A6D3B', role: 'Tiga perusahaan IUP di Kalimantan Selatan (75% milik AAI). Batubaranya dipakai sebagai bahan baku Envirocoal pesanan di CPBL Kelanis.' },
+    SIS:  { name: 'PT Saptaindra Sejati', color: '#4E6E8E', role: 'Kontraktor grup: pengupasan overburden, penambangan batubara, dan angkutan batubara. Kontrak sampai 2042.' },
+    BUMA: { name: 'PT Bukit Makmur Mandiri Utama', color: '#B5453B', role: 'Kontraktor jasa pertambangan. Kontrak baru berlaku 1 April 2026 sampai 2030.' },
+    PPA:  { name: 'PT Putra Perkasa Abadi', color: '#5E8C61', role: 'Kontraktor jasa pertambangan, kontrak sampai 30 September 2027.' },
+    AL:   { name: 'PT Adaro Logistics', color: '#0E8C8C', role: 'Induk segmen logistik: pusat operasi Kelanis, manajemen bahan bakar, B to B transfer. Membawahi MBP, IBT, IMPT, PBMM, SDM, SMT, HBI, BGN.' },
+    MBP:  { name: 'PT Maritim Barito Perkasa', color: '#2F6FBF', role: 'Angkutan batubara dengan tongkang dan fasilitas transhipmen (floating crane, floating transfer unit).' },
+    PBMM: { name: 'PT Puradika Bongkar Muat Makmur', color: '#7C5CBF', role: 'Bongkar muat (stevedoring) di Kelanis dan Taboneo.' },
+    IMPT: { name: 'PT Indonesia Multi Purpose Terminal', color: '#3F51B5', role: 'Mengelola Terminal Apung Taboneo, termasuk pusat komando terapung (konsesi KSOP Banjarmasin).' },
+    IBT:  { name: 'PT Indonesia Bulk Terminal', color: '#2E8B57', role: 'Terminal Pulau Laut: penimbunan sementara, blending, dan pemuatan kapal.' },
+    TCU:  { name: 'PT Terminal Curah Utama', color: '#6B7F2A', role: 'Operator di pelabuhan Pulau Laut bersama IBT.' },
+    SDM:  { name: 'PT Sarana Daya Mandiri', color: '#3C87A3', role: 'Menjaga lebar dan kedalaman alur Sungai Barito sepanjang 15 km.' },
+    SMT:  { name: 'PT Sarana Multi Talenta', color: '#A0673D', role: 'Pengerukan (dredging), termasuk area jetty Kelanis dan Kelanis Utara.' },
+    HBI:  { name: 'PT Harapan Bahtera Internusa', color: '#7A7F8C', role: 'Angkutan bahan bakar dengan tongkang ke Kelanis, Muara Tuhup, dan Taboneo.' },
+    MKT:  { name: 'Pemasaran Grup Adaro', color: '#C0446B', role: 'Kontrak penjualan, spesifikasi mutu, dan jaminan kualitas (quality assurance) sebelum pengapalan.' }
+  },
+
+  dataPoints: {
+    A: 'Mutu per sumber: GAR, TM, abu, sulfur, dan tonase',
+    B: 'Inventori stockpile harian: tonase dan mutu tiap tumpukan',
+    C: 'Catatan pencampuran: sumber apa, berapa porsi',
+    D: 'Batas mutu kontrak: min dan maks GAR, TM, abu, sulfur',
+    E: 'Certificate of Analysis per kargo: hasil lab saat dimuat'
+  },
+
+  stations: [
+    {
+      id: 'pit', n: 1, name: 'Pit & Seam', short: 'Pit & Seam', kicker: 'Tambang terbuka · Tabalong, Kalimantan Selatan',
+      cos: ['AI', 'SIS', 'BUMA', 'PPA', 'BAL'],
+      what: 'Batubara tersimpan dalam lapisan yang disebut seam, terkubur di bawah tanah dan batuan penutup (overburden). Tambang terbuka mengupas overburden bertahap sehingga pit berbentuk teras (bench), lalu batubara tiap seam digali dan dimuat ke dump truck. Setiap pit dan seam punya kualitas sendiri, misalnya kadar air dan kalori. Perbedaan itulah yang nanti dicampur pada tahap blending.',
+      steps: [
+        { t: 'Pengupasan overburden', d: 'Tanah dan batuan di atas seam digali lalu dibuang ke area timbunan. Tahun 2025: 4,24 bcm tanah per ton batubara.', src: 'AR25 p.52', part: 'benches' },
+        { t: 'Penggalian seam (coal getting)', d: 'Excavator menggali batubara per seam dan per teras, dipisah dari lapisan pengotor di antaranya.', src: 'umum', part: 'excavator' },
+        { t: 'Pemuatan dan angkut', d: 'Batubara dimuat ke dump truck, naik lewat ramp, lalu dibawa ke ROM stockpile.', src: 'umum', part: 'ramp' }
+      ],
+      facts: [
+        { k: 'Produksi batubara AAI 2025', v: '68,73 juta ton', src: 'AR25 p.51' },
+        { k: 'Overburden dikupas 2025', v: '291,74 juta bcm', src: 'AR25 p.51' },
+        { k: 'Nisbah kupas 2025', v: '4,24x', src: 'AR25 p.52' },
+        { k: 'Kalori Envirocoal AI', v: '4.000–5.000 kcal/kg GAR', src: 'AR25 p.50' },
+        { k: 'Kontraktor tambang', v: 'Tiga kontraktor: SIS, BUMA, PPA', src: 'AR25 p.51, cat. 38' },
+        { k: 'Sumber daya batubara AI', v: '3.319,5 Mt', src: 'AR25 p.56' },
+        { k: 'Cadangan AI (2025)', v: '567,0 Mt', src: 'AR25 p.58' }
+      ],
+      dp: ['A'],
+      note: 'Kode seam per pit tidak dipublikasikan. Seam A–E pada peta hanya ilustrasi supaya kamu bisa membayangkan lapisan yang bertumpuk. Ganti lewat DATA.seams bila ada kode asli dari mine planning.'
+    },
+    {
+      id: 'rom', n: 2, name: 'ROM Stockpile', short: 'ROM', kicker: 'Run-of-mine · tepi pit',
+      cos: ['AI', 'SIS'],
+      what: 'ROM (run of mine) adalah tumpukan batubara mentah persis seperti keluar dari tambang: belum dihancurkan dan belum dicampur. Batubara dari pit dan seam yang berbeda ditampung sementara di sini sebelum diangkut. Karena tiap sumber punya kualitas sendiri, ROM adalah tempat pertama mutu tiap sumber dicatat lewat sampling.',
+      steps: [
+        { t: 'Penampungan sementara', d: 'Dump truck menumpahkan batubara ke ROM. Batubara ditampung sementara sebelum diangkut, umumnya dipisah per sumber agar mutunya tidak tercampur.', src: 'AR25 p.52', part: 'romPile' },
+        { t: 'Sampling mutu pertama', d: 'Sampel diambil untuk dianalisis di laboratorium: kalori, kadar air, abu, sulfur.', src: 'umum', part: 'romPile' },
+        { t: 'Pemuatan ke trailer hauling', d: 'Loader memindahkan batubara ke trailer yang akan berangkat ke Kelanis.', src: 'umum', part: 'loader' }
+      ],
+      facts: [
+        { k: 'Fungsi', v: 'Batubara ditampung sementara sebelum diangkut', src: 'AR25 p.52' },
+        { k: 'Tujuan berikutnya', v: 'Sebagian besar ke CPBL Kelanis lewat hauling road', src: 'AR25 p.52' }
+      ],
+      dp: ['A'],
+      note: null
+    },
+    {
+      id: 'haul', n: 3, name: 'Hauling Road 89 km', short: 'Hauling', kicker: 'Jalan khusus tambang · Tabalong → Barito Timur → Barito Selatan',
+      cos: ['AI', 'SIS', 'AL'],
+      what: 'Jalan khusus milik tambang, bukan jalan umum, yang menghubungkan tambang di Tabalong, Kalimantan Selatan, dengan terminal Kelanis di tepi Sungai Barito. Trailer batubara berjalan bergantian dengan pemantauan GPS dan dua kantor dispatch. Menurut arsip laporan Adaro yang lebih lama, sistem dispatch juga dipakai untuk mengatur campuran beberapa jenis batubara selama hauling.',
+      steps: [
+        { t: 'Timbang di jembatan timbang', d: 'Jalan hauling punya jembatan timbang untuk mencatat tonase yang diangkut.', src: 'AR25 p.52', part: 'weighbridge' },
+        { t: 'Dispatch memantau armada', d: 'Dua kantor dispatch dan pelacak GPS memantau pergerakan trailer, supaya hambatan di jalan cepat ditangani.', src: 'AR25 p.52', part: 'dispatch1' },
+        { t: 'Melintasi batas provinsi', d: 'Jalan melewati tiga kabupaten dan dua provinsi (Kalimantan Selatan dan Tengah).', src: 'AR25 p.52', part: 'border' },
+        { t: 'Isi BBM di KM 73', d: 'Depo bahan bakar milik Adaro Logistics di tengah jalan hauling.', src: 'AR25 p.62', part: 'fuel' }
+      ],
+      facts: [
+        { k: 'Panjang hauling road', v: '89 km', src: 'AR25 p.52' },
+        { k: 'Wilayah dilintasi', v: '3 kabupaten, 2 provinsi', src: 'AR25 p.52' },
+        { k: 'Fasilitas', v: 'Jembatan timbang dan 2 kantor dispatch', src: 'AR25 p.52' },
+        { k: 'Keselamatan', v: 'GPS pelacak dan kamera dalam kabin trailer', src: 'AR25 p.52' },
+        { k: 'Depo BBM KM 73', v: '3 tangki, total 4.400 kL', src: 'AR25 p.62' },
+        { k: 'Kapasitas trailer', v: '±130–140 ton (sumber lama)', src: 'arsip' }
+      ],
+      dp: ['B'],
+      note: 'Sumber lama menyebut jalan 80 atau 86 km. Peta memakai 89 km dari AR 2025. Panjang di peta tidak sesuai skala.'
+    },
+    {
+      id: 'kelanis', n: 4, name: 'CPBL Kelanis', short: 'Kelanis', kicker: 'Coal Processing & Barge Loading · Sungai Barito',
+      cos: ['AI', 'AL', 'PBMM', 'BAL'],
+      what: 'CPBL adalah pabrik pengolahan batubara di tepi sungai. Trailer membongkar muatan ke hopper, batubara dihancurkan ke ukuran butir yang seragam, dibawa konveyor ke stockpile, lalu dimuat ke tongkang lewat jetty. Di sini Adaro juga membuat Envirocoal sesuai spesifikasi pesanan pembeli, memakai batubara Balangan sebagai bahan baku.',
+      steps: [
+        { t: 'Dump hopper', d: 'Trailer menumpahkan batubara ke hopper penerima.', src: 'AR25 p.53', part: 'hoppers' },
+        { t: 'Crusher', d: 'Batubara dihancurkan agar ukuran butirnya seragam dan bisa dibawa konveyor.', src: 'AR25 p.53', part: 'crushers' },
+        { t: 'Konveyor', d: '53 jalur konveyor, kapasitas terpasang 16.500 ton per jam.', src: 'AR25 p.53', part: 'conveyors' },
+        { t: 'Stockpile dan tripper', d: 'Tripper di atas konveyor mengatur tempat batubara ditumpuk, dikendalikan jarak jauh dari ruang kontrol ±300 m.', src: 'AR25 p.53', part: 'stockpile' },
+        { t: 'Sampling dan timbangan sabuk', d: 'Sampler otomatis dan belt scale mencatat mutu dan tonase batubara yang lewat.', src: 'umum', part: 'sampler' },
+        { t: 'Jetty dan pemuatan tongkang', d: 'Dua jetty memuat batubara ke tongkang.', src: 'AR25 p.53', part: 'jetty' }
+      ],
+      facts: [
+        { k: 'Hopper dan crusher', v: '7 set, 10.500 ton per jam', src: 'AR25 p.53' },
+        { k: 'Konveyor', v: '53 jalur, 16.500 ton per jam', src: 'AR25 p.53' },
+        { k: 'Jetty tongkang', v: '2 jetty', src: 'AR25 p.53' },
+        { k: 'Ruang kontrol tripper', v: '±300 m dari stockpile', src: 'AR25 p.53' },
+        { k: 'Depo BBM Kelanis', v: '4 tangki, total 4.200 kL', src: 'AR25 p.62' },
+        { k: 'Produk pesanan', v: 'Envirocoal sesuai spesifikasi pembeli, bahan baku dari Balangan', src: 'AR25 p.53' }
+      ],
+      dp: ['B'],
+      note: null
+    },
+    {
+      id: 'blend', n: 5, name: 'Blending', short: 'Blending', kicker: 'Titik keputusan rasio · Kelanis dan IBT Pulau Laut',
+      cos: ['AI', 'IBT', 'MKT'],
+      what: 'Blending adalah mencampur batubara dari beberapa sumber supaya kualitas satu kargo pas dengan kontrak, terutama GAR (kalori). Kontrak punya batas bawah (di bawahnya kargo ditolak) dan pita harga (kalori di atas batas tidak dibayar). Menghitung campuran sebagai rata-rata biasa itu keliru, karena kadar air dan abu bergeser setelah dicampur. Buka Blend Lab untuk memainkan variabelnya.',
+      steps: [
+        { t: 'Pilih sumber dan porsi', d: 'Tentukan tumpukan mana yang dipakai dan berapa persen tiap tumpukan.', src: 'konteks skripsi', part: 'pileA' },
+        { t: 'Campur', d: 'Pencampuran terjadi lewat urutan trailer, stacker, dan reclaimer di stockpile.', src: 'umum', part: 'reclaimer' },
+        { t: 'Ukur hasil', d: 'Sampling dan belt scale mengukur mutu dan tonase campuran yang dimuat.', src: 'umum', part: 'sampler' },
+        { t: 'Bandingkan dengan kontrak', d: 'Hasil dicek terhadap batas mutu kontrak: ditolak, diterima, atau give-away.', src: 'umum', part: 'jetty' }
+      ],
+      facts: [
+        { k: 'Envirocoal pesanan', v: 'Diproduksi di CPBL Kelanis memakai batubara Balangan', src: 'AR25 p.53' },
+        { k: 'Layanan IBT Pulau Laut', v: 'Muat kapal, timbun sementara, blending', src: 'AR25 p.62' },
+        { k: 'Blending saat hauling', v: 'Beberapa jenis batubara dicampur lewat sistem dispatch', src: 'arsip AR Adaro Energy' }
+      ],
+      dp: ['C', 'D'],
+      note: 'Titik keputusan rasio ini adalah konteks skripsi, bukan pernyataan resmi Adaro tentang cara kerja internal.',
+      cta: 'lab'
+    },
+    {
+      id: 'barge', n: 6, name: 'Sungai Barito & Tongkang', short: 'Tongkang', kicker: 'Alur sungai 15 km · Kelanis → Taboneo / Pulau Laut',
+      cos: ['MBP', 'SDM', 'SMT', 'AL', 'PBMM'],
+      what: 'Dari Kelanis, batubara berjalan di Sungai Barito di atas tongkang yang didorong kapal tunda. Tujuannya ada dua: ke Taboneo untuk dipindah ke kapal laut (ekspor), atau langsung ke pelabuhan pelanggan domestik. Alur sungai harus dikeruk rutin agar tongkang tidak kandas. Di Kelanis Utara, batubara juga dipindah dari tongkang kecil ke tongkang besar (B to B transfer) supaya ongkos angkut lebih murah.',
+      steps: [
+        { t: 'Muat tongkang di jetty', d: 'Tongkang merapat di jetty Kelanis dan diisi lewat konveyor.', src: 'AR25 p.53', part: 'jetty' },
+        { t: 'B to B transfer di Kelanis Utara', d: 'Batubara dipindah dari tongkang 5.000 dwt ke tongkang 10.000–15.000 dwt.', src: 'AR25 p.62', part: 'b2b' },
+        { t: 'Didorong tug lewat alur Barito', d: 'Alur dijaga lebar dan dalamnya oleh SDM, dikeruk oleh SMT.', src: 'AR25 p.63', part: 'river' }
+      ],
+      facts: [
+        { k: 'Volume tongkang MBP 2025', v: '74,5 juta ton', src: 'AR25 p.61' },
+        { k: 'Armada MBP akhir 2025', v: '70 tongkang, 89 tug, 3 SPB', src: 'AR25 p.61' },
+        { k: 'Kapasitas angkut armada', v: '±738.000 ton', src: 'AR25 p.61' },
+        { k: 'Alur Barito', v: '15 km, dikeruk berkala', src: 'AR25 p.63' },
+        { k: 'Fasilitas B to B kedua', v: 'Selesai di Kelanis Utara, 2025', src: 'AR25 p.63' }
+      ],
+      dp: [],
+      note: null
+    },
+    {
+      id: 'taboneo', n: 7, name: 'Taboneo Floating Terminal', short: 'Taboneo', kicker: 'Terminal apung · muara Sungai Barito, Banjarmasin',
+      cos: ['IMPT', 'PBMM', 'MBP', 'HBI'],
+      what: 'Kapal laut besar tidak bisa masuk sungai dangkal, jadi mereka berlabuh di area laut Taboneo. Tongkang merapat di sisi kapal, lalu floating crane atau floating transfer unit memindahkan batubara dari tongkang ke palka kapal (transhipment). Untuk pasar ekspor, kargo dimuat ke kapal di sini. Pusat komando terapung mengatur penempatan kapal dan mengawasi semua kegiatan.',
+      steps: [
+        { t: 'Kapal induk berlabuh', d: 'Kapal Handymax, Panamax, atau Capesize menunggu di area ship-to-ship, ditempatkan oleh pusat komando terapung.', src: 'arsip', part: 'mothers' },
+        { t: 'Tongkang merapat', d: 'Tongkang dari Kelanis merapat di sisi kapal.', src: 'AR25 p.61', part: 'bargeAlong' },
+        { t: 'Floating crane memindahkan muatan', d: 'Empat floating crane dan tiga floating transfer unit memindahkan batubara ke kapal.', src: 'AR25 p.61', part: 'fcrane' },
+        { t: 'Pusat komando terapung', d: 'IMPT menempatkan kapal dan mengawasi kegiatan bongkar muat.', src: 'AR25 p.62', part: 'command' },
+        { t: 'Sampling dan survei muat', d: 'Surveyor independen mengambil sampel dan menghitung muatan.', src: 'umum', part: 'mothers' }
+      ],
+      facts: [
+        { k: 'Fasilitas transhipmen', v: '7 (4 floating crane, 3 FTU)', src: 'AR25 p.61' },
+        { k: 'Laju throughput', v: '234.000 ton per hari', src: 'AR25 p.61' },
+        { k: 'Pusat komando terapung', v: 'Dikelola IMPT, konsesi KSOP Banjarmasin', src: 'AR25 p.62' },
+        { k: 'Pasar yang dilayani', v: 'Ekspor', src: 'AR25 p.53' }
+      ],
+      dp: ['E'],
+      note: 'Pada penjualan FOB ekspor, titik serah terima ada di sini: saat batubara sudah terpasang di kapal.'
+    },
+    {
+      id: 'ibt', n: 8, name: 'Pulau Laut · IBT', short: 'Pulau Laut', kicker: 'Terminal batubara laut · pesisir tenggara Kalimantan Selatan',
+      cos: ['IBT', 'TCU', 'MBP', 'HBI'],
+      what: 'Alternatif dari Taboneo: terminal darat di Pulau Laut dengan dermaga dan area timbun. Tongkang membongkar ke stockpile, batubara bisa dicampur ulang, lalu ship loader memuat kapal sampai 80.000 dwt dalam kurang dari dua hari. Sebelum dimuat, alat pendeteksi memisahkan kontaminan logam dari batubara.',
+      steps: [
+        { t: 'Bongkar tongkang ke stockpile', d: 'Batubara dari Kelanis ditimbun sementara di area stockpile.', src: 'AR25 p.62', part: 'ibtPiles' },
+        { t: 'Blending ulang', d: 'IBT menyediakan layanan pencampuran batubara sebelum dimuat.', src: 'AR25 p.62', part: 'ibtPiles' },
+        { t: 'Deteksi kontaminan logam', d: 'Logam dipisahkan dari batubara sebelum masuk kapal.', src: 'AR25 p.62', part: 'ibtLoader' },
+        { t: 'Ship-loading', d: 'Kapal sampai 80.000 dwt dimuat kurang dari dua hari.', src: 'AR25 p.62', part: 'ibtShip' }
+      ],
+      facts: [
+        { k: 'Kapasitas throughput', v: '12 juta ton per tahun', src: 'AR25 p.62' },
+        { k: 'Kapal terbesar', v: '80.000 dwt, muat < 2 hari', src: 'AR25 p.62' },
+        { k: 'Tangki BBM Pulau Laut', v: '4 tangki, 80.000 kL', src: 'AR25 p.62' },
+        { k: 'Jetty BBM', v: '2 jetty, 1,5 juta kL per tahun', src: 'AR25 p.62' }
+      ],
+      dp: ['C', 'E'],
+      note: null
+    },
+    {
+      id: 'dest', n: 9, name: 'Kapal & Pelabuhan Tujuan', short: 'Tujuan', kicker: 'Pengapalan · FOB berhenti di pelabuhan muat, CIF sampai pelabuhan bongkar',
+      cos: ['MKT', 'MBP'],
+      what: 'Setelah dimuat, kapal berlayar ke pelabuhan pembeli. Siapa yang menanggung ongkos kapal, asuransi, dan risiko selama pelayaran ditentukan oleh syarat penjualan. Geser tombol FOB atau CIF di atas untuk melihat batas tanggung jawab Adaro di peta.',
+      steps: [
+        { t: 'Kapal berangkat dari pelabuhan muat', d: 'Setelah surveyor menyelesaikan survei muat, kapal berangkat.', src: 'umum', part: 'shipDepart' },
+        { t: 'Berlayar ke pelabuhan bongkar', d: 'Pelayaran ke India, Malaysia, China, atau pelabuhan domestik.', src: 'AR25 p.73', part: 'route' },
+        { t: 'Bongkar di pelanggan', d: 'Pada CIF, hak milik dan risiko baru pindah setelah batubara melewati pelabuhan bongkar.', src: 'AR25 catatan 38', part: 'ports' }
+      ],
+      facts: [
+        { k: 'Syarat penjualan umum', v: 'FOB (kendali pindah saat batubara terpasang di kapal)', src: 'AR25 cat. 38' },
+        { k: 'Juga dijual', v: 'CIF (risiko tetap di Adaro sampai pelabuhan bongkar)', src: 'AR25 cat. 38' },
+        { k: 'Tujuan 2025', v: 'Indonesia 25% (DMO), India 18%, Malaysia ±15%, China ±15%', src: 'AR25 p.73' },
+        { k: 'DMO', v: '25% penjualan ke pasar domestik', src: 'AR25 p.73' }
+      ],
+      dp: ['E'],
+      note: 'Titik FOB untuk pengiriman tongkang langsung ke pelanggan domestik tidak dirinci di laporan. Peta hanya menggambarnya sebagai jalur langsung ke pelanggan.'
+    }
+  ],
+
+  pits: [
+    { name: 'North Tutupan', tm: 27.4, res: 1058.1, rsv: 284.0, note: 'aktif' },
+    { name: 'South Tutupan', tm: 29.1, res: 674.4, rsv: 46.0, note: 'aktif' },
+    { name: 'Wara I', tm: 38.8, res: 1049.7, rsv: 237.0, note: 'aktif' },
+    { name: 'Wara II', tm: 42.7, res: 326.5, rsv: null, note: 'belum ada estimasi cadangan 2025' },
+    { name: 'North Paringin', tm: 28.4, res: 210.9, rsv: 0, note: 'selesai ditambang Oktober 2022, kini danau pascatambang', gone: true }
+  ],
+
+  /* ILUSTRASI: kode seam asli tidak dipublikasikan. Ganti isi array ini bila ada data resmi. */
+  seams: [
+    { code: 'Seam A', color: '#1b1d22' },
+    { code: 'Seam B', color: '#262930' },
+    { code: 'Seam C', color: '#15171b' },
+    { code: 'Seam D', color: '#2b2e35' },
+    { code: 'Seam E', color: '#1b1d22' }
+  ],
+
+  sales: {
+    fob: {
+      title: 'FOB (Free on Board)',
+      text: '<b>FOB.</b> Adaro menyerahkan batubara saat sudah terpasang di kapal di pelabuhan muat. Ongkos laut, asuransi, dan risiko sesudahnya ada di pembeli.'
+    },
+    cif: {
+      title: 'CIF (Cost, Insurance, Freight)',
+      text: '<b>CIF.</b> Adaro membayar ongkos kapal dan asuransi, dan hak milik serta risiko tetap di Adaro sampai batubara melewati pelabuhan bongkar.'
+    },
+    destinations: [
+      { name: 'Indonesia', share: '25%', note: 'DMO' },
+      { name: 'India', share: '18%', note: 'tujuan ekspor terbesar' },
+      { name: 'Malaysia', share: '±15%', note: '' },
+      { name: 'China', share: '±15%', note: '' }
+    ]
+  },
+
+  /* Sumber A/B untuk Blend Lab. TM dari estimasi sumber daya AR25 p.56; sisanya ilustrasi. */
+  blend: {
+    tutupan: { label: 'Tutupan', tm: 27.4, im: 14, ashAd: 3.5, rank: 0.4, tag: 'premium' },
+    wara: { label: 'Wara', tm: 38.8, im: 18, ashAd: 4.5, rank: 0.19, tag: 'murah' }
+  }
+});
+/*</Data>*/
+
+/*<Geo>*/
+/* ================= Geo: pembangun geometri low-poly =================
+   Semua bentuk memakai vertex color + flat shading, digabung per model agar draw call sedikit. */
+const TAU = Math.PI * 2;
+const clamp01 = v => Math.min(1, Math.max(0, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const hash1 = n => { const s = Math.sin(n * 127.1 + 311.7) * 43758.5453123; return s - Math.floor(s); };
+const hash2 = (a, b) => hash1(a * 17.13 + b * 91.7);
+const pick = (arr, r) => arr[Math.min(arr.length - 1, Math.floor(r * arr.length))];
+
+const _c = new THREE.Color();
+const _c2 = new THREE.Color();
+function shade(hex, amt) {
+  _c2.set(hex);
+  _c2.offsetHSL(0, 0, amt);
+  return _c2.getHex();
+}
+
+function paint(g, color) {
+  const n = g.attributes.position.count;
+  const arr = new Float32Array(n * 3);
+  _c.set(color);
+  for (let i = 0; i < n; i++) { arr[i * 3] = _c.r; arr[i * 3 + 1] = _c.g; arr[i * 3 + 2] = _c.b; }
+  g.setAttribute('color', new THREE.BufferAttribute(arr, 3));
+}
+
+/* Satu bentuk dasar berwarna. at/rot/scl memodifikasi geometri milik bentuk itu sendiri. */
+class Part {
+  constructor(geom, color) {
+    this.g = geom.index ? geom.toNonIndexed() : geom;
+    if (this.g.attributes.uv) this.g.deleteAttribute('uv');
+    paint(this.g, color);
+  }
+  at(x = 0, y = 0, z = 0) { this.g.translate(x, y, z); return this; }
+  rot(x = 0, y = 0, z = 0) {
+    if (x) this.g.rotateX(x);
+    if (y) this.g.rotateY(y);
+    if (z) this.g.rotateZ(z);
+    return this;
+  }
+  scl(x = 1, y = x, z = x) { this.g.scale(x, y, z); return this; }
+}
+
+const P = {
+  box: (w, h, d, c) => new Part(new THREE.BoxGeometry(w, h, d).translate(0, h / 2, 0), c),
+  cyl: (rt, rb, h, c, seg = 8) => new Part(new THREE.CylinderGeometry(rt, rb, h, seg).translate(0, h / 2, 0), c),
+  wheel: (r, w, c, seg = 10) => new Part(new THREE.CylinderGeometry(r, r, w, seg).rotateX(Math.PI / 2), c),
+  cone: (r, h, c, seg = 6) => new Part(new THREE.ConeGeometry(r, h, seg).translate(0, h / 2, 0), c),
+  ico: (r, c, detail = 0) => new Part(new THREE.IcosahedronGeometry(r, detail), c),
+  /* atap pelana: penampang segitiga sepanjang sumbu Z */
+  prism: (w, h, d, c) => {
+    const s = new THREE.Shape([new THREE.Vector2(-w / 2, 0), new THREE.Vector2(w / 2, 0), new THREE.Vector2(0, h)]);
+    return new Part(new THREE.ExtrudeGeometry(s, { depth: d, bevelEnabled: false }).translate(0, 0, -d / 2), c);
+  },
+  /* baji: tinggi h di sisi +x, nol di sisi -x; lebar d sepanjang Z */
+  wedge: (w, h, d, c) => {
+    const s = new THREE.Shape([new THREE.Vector2(-w / 2, 0), new THREE.Vector2(w / 2, 0), new THREE.Vector2(w / 2, h)]);
+    return new Part(new THREE.ExtrudeGeometry(s, { depth: d, bevelEnabled: false }).translate(0, 0, -d / 2), c);
+  }
+};
+
+function bundle(parts) {
+  const g = BufferGeometryUtils.mergeGeometries(parts.map(p => p.g), false);
+  if (!g) throw new Error('Gagal menggabungkan geometri');
+  return g;
+}
+
+const MAT = {
+  solid: new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 0.86, metalness: 0.03 }),
+  glossy: new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 0.42, metalness: 0.22 }),
+  water: new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 0.3, metalness: 0.06 })
+};
+
+function meshOf(parts, mat = MAT.solid, shadows = true) {
+  const m = new THREE.Mesh(Array.isArray(parts) ? bundle(parts) : parts, mat);
+  m.castShadow = shadows;
+  m.receiveShadow = shadows;
+  return m;
+}
+
+/* ---------- Pulau melayang (grid polar) ---------- */
+const SKIRT_DEFAULT = Object.freeze([[0.995, -1.2], [0.94, -3.2], [0.84, -5.6], [0.66, -8.4], [0.38, -10.8], [0, -12.5]]);
+const SKIRT_COLORS = Object.freeze(['#b58c5b', '#a5804f', '#9a8b7c', '#877868', '#716459', '#716459']);
+
+function makeEdge(seed) {
+  const p1 = hash1(seed * 1.7) * TAU, p2 = hash1(seed * 2.3) * TAU, p3 = hash1(seed * 3.1) * TAU;
+  return th => 1 + 0.07 * Math.sin(3 * th + p1) + 0.045 * Math.sin(5 * th + p2) + 0.03 * Math.sin(8 * th + p3);
+}
+
+/* o: {cx,cz,rx,rz,seed,seg,profile,skirt,color(ctx),ramp:{cols:Set,y(f,y)},jitter,skirtColors} */
+function buildIsland(o) {
+  const N = o.seg || 56;
+  const seed = o.seed || 1;
+  const edge = makeEdge(seed);
+  const top = o.profile || [[0, 0], [0.3, 0], [0.62, 0], [0.86, 0], [1, 0]];
+  const skirt = o.skirt || SKIRT_DEFAULT;
+  const rows = [
+    ...top.map(([f, y]) => ({ f, y, skirt: false, band: -1 })),
+    ...skirt.map(([f, y], i) => ({ f, y, skirt: true, band: i }))
+  ];
+  const R = rows.length;
+  const V = Array.from({ length: R }, () => new Array(N + 1));
+  for (let i = 0; i < R; i++) {
+    for (let j = 0; j <= N; j++) {
+      const jj = j % N;
+      const th = jj / N * TAU;
+      const row = rows[i];
+      const e = 1 + (edge(th) - 1) * clamp01(row.f * 1.15);
+      let f = row.f, y = row.y;
+      if (row.skirt) {
+        const jit = hash2(i * 31 + jj, seed * 13) - 0.5;
+        f *= 1 + jit * 0.07;
+        y += jit * 1.4;
+      } else if (o.jitter && row.f > 0.05 && i < top.length - 1) {
+        y += (hash2(i * 53 + jj, seed * 7) - 0.5) * o.jitter;
+      }
+      if (o.ramp && o.ramp.cols.has(jj) && !row.skirt) y = o.ramp.y(row.f, y);
+      V[i][j] = [o.cx + o.rx * f * e * Math.cos(th), y, o.cz + o.rz * f * e * Math.sin(th)];
+    }
+  }
+  const pos = [];
+  const col = [];
+  const colorFn = o.color || (() => 0x8fca6a);
+  const skirtColors = o.skirtColors || SKIRT_COLORS;
+  const tri = (a, b, c, hex) => {
+    const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+    const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+    const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    if (nx * nx + ny * ny + nz * nz < 1e-10) return;
+    pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
+    _c.set(hex);
+    for (let k = 0; k < 3; k++) col.push(_c.r, _c.g, _c.b);
+  };
+  for (let i = 0; i < R - 1; i++) {
+    const r0 = rows[i], r1 = rows[i + 1];
+    for (let j = 0; j < N; j++) {
+      const A = V[i][j], B = V[i + 1][j], C = V[i + 1][j + 1], D = V[i][j + 1];
+      for (let t = 0; t < 2; t++) {
+        const rnd = hash2(i * 131 + j * 7 + t, seed);
+        const ctx = {
+          i, j, t, rnd, f: (r0.f + r1.f) / 2, y: (r0.y + r1.y) / 2, dy: r1.y - r0.y,
+          th: (j + 0.5) / N * TAU, skirt: r1.skirt, band: r1.band
+        };
+        const hex = r1.skirt
+          ? shade(skirtColors[Math.min(r1.band, skirtColors.length - 1)], (rnd - 0.5) * 0.1)
+          : colorFn(ctx);
+        if (t === 0) tri(A, C, B, hex); else tri(A, D, C, hex);
+      }
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, o.material || MAT.solid);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  const pointAt = (f, th, y = 0) => {
+    const e = 1 + (edge(th) - 1) * clamp01(f * 1.15);
+    return new THREE.Vector3(o.cx + o.rx * f * e * Math.cos(th), y, o.cz + o.rz * f * e * Math.sin(th));
+  };
+  const contains = (x, z, margin = 0.1) => {
+    const dx = (x - o.cx) / o.rx, dz = (z - o.cz) / o.rz;
+    const th = Math.atan2(dz, dx);
+    return Math.hypot(dx, dz) < edge(th) * (1 - margin);
+  };
+  return { mesh, pointAt, contains, opts: o };
+}
+
+/* ---------- Pita jalan / sungai ---------- */
+function curveOf(points, y = 0.16) {
+  const c = new THREE.CatmullRomCurve3(points.map(([x, z]) => new THREE.Vector3(x, y, z)), false, 'centripetal');
+  c.arcLengthDivisions = 600;
+  return c;
+}
+
+function lanePoint(curve, u, off, out = new THREE.Vector3(), tan = new THREE.Vector3()) {
+  const uu = Math.min(1, Math.max(0, u));
+  curve.getPointAt(uu, out);
+  curve.getTangentAt(uu, tan);
+  out.x += -tan.z * off;
+  out.z += tan.x * off;
+  return out;
+}
+
+/* o: {width,y,thick,step,top(ctx)->hex,side,edgeLine,dash,dashColor,lineColor} */
+function buildRibbon(curve, o) {
+  const len = curve.getLength();
+  const n = Math.max(2, Math.ceil(len / (o.step || 2.5)));
+  const pts = curve.getSpacedPoints(n);
+  const L = [], R = [];
+  for (let i = 0; i <= n; i++) {
+    const a = pts[Math.max(0, i - 1)], b = pts[Math.min(n, i + 1)];
+    let tx = b.x - a.x, tz = b.z - a.z;
+    const m = Math.hypot(tx, tz) || 1;
+    tx /= m; tz /= m;
+    const w = typeof o.width === 'function' ? o.width(i / n) : o.width;
+    const nx = -tz, nz = tx;
+    L.push([pts[i].x + nx * w / 2, o.y, pts[i].z + nz * w / 2, nx, nz]);
+    R.push([pts[i].x - nx * w / 2, o.y, pts[i].z - nz * w / 2, -nx, -nz]);
+  }
+  const pos = [], col = [];
+  const tri = (a, b, c, hex, hx = 0, hy = 1, hz = 0) => {
+    const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+    const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+    const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+    if (nx * hx + ny * hy + nz * hz < 0) { const t = b; b = c; c = t; }
+    pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
+    _c.set(hex);
+    for (let k = 0; k < 3; k++) col.push(_c.r, _c.g, _c.b);
+  };
+  const quad = (a, b, c, d, hex, hx, hy, hz) => { tri(a, b, c, hex, hx, hy, hz); tri(a, c, d, hex, hx, hy, hz); };
+  const off = (p, dy) => [p[0], p[1] + dy, p[2]];
+  const inset = (p, q, k) => [lerp(p[0], q[0], k), p[1], lerp(p[2], q[2], k)];
+  for (let i = 0; i < n; i++) {
+    const rnd = hash2(i, 5);
+    quad(L[i], R[i], R[i + 1], L[i + 1], o.top({ i, rnd }));
+    if (o.thick) {
+      const dn = p => [p[0], p[1] - o.thick, p[2]];
+      quad(L[i], L[i + 1], dn(L[i + 1]), dn(L[i]), o.side, L[i][3], 0, L[i][4]);
+      quad(R[i], R[i + 1], dn(R[i + 1]), dn(R[i]), o.side, R[i][3], 0, R[i][4]);
+    }
+    if (o.edgeLine) {
+      const k = o.edgeLine.k;
+      const a0 = off(inset(L[i], R[i], k), 0.02), a1 = off(inset(L[i], R[i], k + 0.05), 0.02);
+      const a2 = off(inset(L[i + 1], R[i + 1], k + 0.05), 0.02), a3 = off(inset(L[i + 1], R[i + 1], k), 0.02);
+      quad(a0, a1, a2, a3, o.edgeLine.color);
+      const b0 = off(inset(R[i], L[i], k), 0.02), b1 = off(inset(R[i], L[i], k + 0.05), 0.02);
+      const b2 = off(inset(R[i + 1], L[i + 1], k + 0.05), 0.02), b3 = off(inset(R[i + 1], L[i + 1], k), 0.02);
+      quad(b0, b1, b2, b3, o.edgeLine.color);
+    }
+    if (o.dash && i % o.dash.every === 0 && i + 1 < n) {
+      const m0 = inset(L[i], R[i], 0.5 - o.dash.w), m1 = inset(L[i], R[i], 0.5 + o.dash.w);
+      const m2 = inset(L[i + 1], R[i + 1], 0.5 + o.dash.w), m3 = inset(L[i + 1], R[i + 1], 0.5 - o.dash.w);
+      quad(off(m0, 0.025), off(m1, 0.025), off(m2, 0.025), off(m3, 0.025), o.dash.color);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, o.material || MAT.solid);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
+}
+
+/* ---------- Sebar dekorasi (pohon, batu) ---------- */
+function scatter(island, count, seed, blockers, margin = 0.16) {
+  const out = [];
+  let tries = 0;
+  while (out.length < count && tries < count * 40) {
+    tries++;
+    const th = hash1(seed * 3.7 + tries * 1.13) * TAU;
+    const rr = Math.sqrt(hash1(seed * 5.1 + tries * 2.71));
+    const o = island.opts;
+    const x = o.cx + o.rx * rr * Math.cos(th) * 0.95;
+    const z = o.cz + o.rz * rr * Math.sin(th) * 0.95;
+    if (!island.contains(x, z, margin)) continue;
+    if (blockers.some(b => (b.x - x) ** 2 + (b.z - z) ** 2 < b.r * b.r)) continue;
+    out.push({ x, z, s: 0.75 + hash1(tries * 9.3 + seed) * 0.7, r: hash1(tries * 4.1 + seed) * TAU, k: hash1(tries * 6.7 + seed) });
+  }
+  return out;
+}
+
+function instanced(geom, mat, items, colorFn) {
+  const m = new THREE.InstancedMesh(geom, mat, items.length);
+  const dummy = new THREE.Object3D();
+  items.forEach((it, i) => {
+    dummy.position.set(it.x, it.y || 0, it.z);
+    dummy.rotation.set(0, it.r || 0, 0);
+    dummy.scale.setScalar(it.s || 1);
+    dummy.updateMatrix();
+    m.setMatrixAt(i, dummy.matrix);
+    if (colorFn) m.setColorAt(i, _c.set(colorFn(it)));
+  });
+  m.instanceMatrix.needsUpdate = true;
+  m.castShadow = true;
+  m.receiveShadow = true;
+  return m;
+}
+/*</Geo>*/
+
+/*<Models>*/
+/* ================= Models: bangunan, alat, kendaraan, kapal (prosedural) =================
+   Sumbu depan kendaraan = +X. Titik asal = tengah alas. Satuan peta, bukan meter. */
+const PAL = Object.freeze({
+  steel: 0x8f97a3, steelL: 0xb4bcc7, dark: 0x3b4049, dark2: 0x2a2e35, asphalt: 0x40434b, white: 0xf3f4f6, cream: 0xe9e3d3,
+  yellow: 0xf2b01e, orange: 0xe8792a, red: 0xc94a3f, blue: 0x3f7fc4, navy: 0x24405f, teal: 0x2b9a9a, green: 0x4d9a5a,
+  concrete: 0xc4c8ce, concreteD: 0xa2a8b0, coal: 0x1d1f24, coalB: 0x5a4632, glass: 0x9cc7e6, roofRed: 0xb5503f,
+  roofBlue: 0x4a6fa5, wood: 0x9c7a52, soil: 0x9a7a52, tan: 0xc9a878, water: 0x5aa9dc
+});
+
+/* Mesin tulang bergerak: pivot terpisah supaya bisa dianimasikan */
+function groupOf(...children) {
+  const g = new THREE.Group();
+  children.forEach(c => g.add(c));
+  return g;
+}
+
+/* ---------- Kendaraan (geometri untuk InstancedMesh) ---------- */
+function truckRigidGeo() {
+  const p = [
+    P.box(4.6, 0.7, 2.4, PAL.dark2).at(0, 0.9, 0),
+    P.box(1.5, 1.4, 2.2, PAL.yellow).at(1.7, 1.45, 0),
+    P.box(0.12, 0.6, 1.7, PAL.glass).at(2.48, 2.05, 0),
+    P.box(3.1, 1.2, 2.7, PAL.orange).at(-0.9, 1.5, 0).rot(0, 0, 0.1),
+    P.box(0.8, 0.5, 2.7, PAL.orange).at(0.85, 2.6, 0)
+  ];
+  [-1.5, 1.55].forEach(x => [-1.3, 1.3].forEach(z => p.push(P.wheel(0.66, 0.6, PAL.dark).at(x, 0.66, z))));
+  return bundle(p);
+}
+function truckRigidMoundGeo() {
+  return bundle([P.ico(1.2, PAL.coal, 1).scl(1.3, 0.5, 1.05).at(-0.9, 2.25, 0)]);
+}
+function trailerRigGeo() {
+  const p = [
+    P.box(3.4, 0.6, 2.2, PAL.dark2).at(0, 0.8, 0),
+    P.box(1.5, 1.6, 2.2, PAL.yellow).at(1.0, 1.4, 0),
+    P.box(0.12, 0.6, 1.7, PAL.glass).at(1.78, 2.15, 0),
+    P.cyl(0.13, 0.13, 1.4, PAL.dark).at(0.2, 2.3, 0.8, 6),
+    P.box(4.3, 1.3, 2.5, PAL.steelL).at(-3.6, 0.9, 0),
+    P.box(4.3, 1.3, 2.5, PAL.steelL).at(-8.2, 0.9, 0),
+    P.box(1.2, 0.3, 0.6, PAL.dark).at(-5.9, 0.9, 0)
+  ];
+  [-0.4, 1.3, -4.6, -5.4, -9.2, -10.0].forEach(x => p.push(P.wheel(0.58, 2.7, PAL.dark, 8).at(x, 0.58, 0)));
+  return bundle(p).translate(4.6, 0, 0);
+}
+function trailerMoundGeo() {
+  return bundle([
+    P.ico(1.4, PAL.coal, 1).scl(1.4, 0.5, 0.85).at(-3.6, 2.2, 0),
+    P.ico(1.4, PAL.coal, 1).scl(1.4, 0.5, 0.85).at(-8.2, 2.2, 0)
+  ]).translate(4.6, 0, 0);
+}
+
+/* ---------- Alat tambang ---------- */
+function makeExcavator(scale = 1) {
+  const base = meshOf([
+    P.box(4.4, 0.9, 1.1, PAL.dark2).at(0, 0, -1.5), P.box(4.4, 0.9, 1.1, PAL.dark2).at(0, 0, 1.5)
+  ]);
+  const turretMesh = meshOf([
+    P.box(3.4, 1.3, 3.0, PAL.yellow).at(0, 0.9, 0),
+    P.box(1.3, 1.2, 1.4, PAL.yellow).at(1.0, 2.2, -0.6),
+    P.box(0.1, 0.7, 1.1, PAL.glass).at(1.68, 2.45, -0.6),
+    P.box(1.1, 1.1, 2.6, PAL.dark2).at(-1.8, 0.9, 0)
+  ]);
+  const boom = new THREE.Group();
+  boom.position.set(1.4, 1.7, 0);
+  const stick = new THREE.Group();
+  stick.position.set(4.6, 0.5, 0);
+  stick.add(meshOf([P.box(3.6, 0.6, 0.6, PAL.yellow).at(0, -0.3, 0).rot(0, 0, -0.5), P.box(1.5, 1.0, 2.0, PAL.dark).at(2.6, -2.1, 0)]));
+  boom.add(meshOf([P.box(4.8, 0.8, 0.9, PAL.yellow).at(0, 0, 0).rot(0, 0, 0.35)]), stick);
+  boom.rotation.z = 0.05;
+  const swing = groupOf(turretMesh, boom);
+  swing.position.y = 0.85;
+  const g = groupOf(base, swing);
+  g.scale.setScalar(scale);
+  g.userData = { swing, boom, stick };
+  return g;
+}
+
+function makeLoader() {
+  return meshOf([
+    P.box(3.2, 1.0, 2.4, PAL.orange).at(0, 0.8, 0), P.box(1.3, 1.3, 2.0, PAL.orange).at(0.6, 1.8, 0),
+    P.box(0.1, 0.6, 1.5, PAL.glass).at(1.28, 2.1, 0), P.box(1.8, 0.5, 2.6, PAL.dark).at(2.5, 0.6, 0),
+    P.wheel(0.85, 0.7, PAL.dark).at(-0.9, 0.85, -1.3), P.wheel(0.85, 0.7, PAL.dark).at(-0.9, 0.85, 1.3),
+    P.wheel(0.85, 0.7, PAL.dark).at(1.0, 0.85, -1.3), P.wheel(0.85, 0.7, PAL.dark).at(1.0, 0.85, 1.3)
+  ]);
+}
+
+/* ---------- Bangunan dan fasilitas ---------- */
+function buildingParts(w, d, h, wallC, roofC, gable = true) {
+  const p = [P.box(w, h, d, wallC)];
+  if (gable) p.push(P.prism(w + 0.6, Math.min(h * 0.4, 2.2), d + 0.6, roofC).at(0, h, 0));
+  else p.push(P.box(w + 0.5, 0.4, d + 0.5, roofC).at(0, h, 0));
+  return p;
+}
+function makeDispatchOffice() {
+  return meshOf([
+    ...buildingParts(5.5, 4, 3, PAL.white, PAL.roofBlue),
+    P.cyl(0.12, 0.12, 6.5, PAL.steel, 6).at(2.6, 0, 1.4),
+    P.cone(1.0, 0.6, PAL.white, 8).at(2.6, 6.5, 1.4).rot(Math.PI, 0, 0).at(0, 0.6, 0),
+    P.box(2.6, 1.2, 0.2, PAL.blue).at(-1.2, 3.7, 2.1)
+  ]);
+}
+function makeWeighbridge() {
+  return meshOf([
+    P.box(13, 0.5, 5.4, PAL.concrete).at(0, 0, 0), P.box(11, 0.15, 3.6, PAL.concreteD).at(0, 0.5, 0),
+    ...buildingParts(2.6, 2.6, 2.6, PAL.cream, PAL.roofRed).map(p => p.at(0, 0, -4.2)),
+    P.box(0.3, 1.8, 0.3, PAL.red).at(-5.5, 0, 3.2), P.box(4.2, 0.22, 0.22, PAL.white).at(-3.6, 1.6, 3.2)
+  ]);
+}
+function makeFuelDepot() {
+  const p = [P.box(13, 0.5, 8, PAL.concreteD).at(0, 0, 0)];
+  [-4, 0, 4].forEach(x => p.push(P.cyl(1.7, 1.7, 5, PAL.white, 12).at(x, 0.5, 0), P.cone(1.7, 0.9, PAL.steelL, 12).at(x, 5.5, 0)));
+  p.push(P.box(12, 0.25, 0.25, PAL.steel).at(0, 0.9, 3.3));
+  return meshOf(p);
+}
+function makeBorderGate() {
+  return meshOf([
+    P.box(0.9, 9, 0.9, PAL.dark).at(0, 0, -6), P.box(0.9, 9, 0.9, PAL.dark).at(0, 0, 6),
+    P.box(1.1, 1.2, 13.4, PAL.dark2).at(0, 9, 0),
+    P.box(0.4, 2.6, 5.6, PAL.blue).at(0.6, 6.3, -3.1), P.box(0.4, 2.6, 5.6, PAL.green).at(0.6, 6.3, 3.1)
+  ]);
+}
+function makeControlRoom() {
+  return meshOf([...buildingParts(6, 5, 3.4, PAL.white, PAL.roofBlue, false), P.box(4, 0.8, 0.15, PAL.glass).at(0, 2.2, 2.55)]);
+}
+function makeSamplerHouse() {
+  return meshOf([
+    ...buildingParts(3.4, 3.4, 3.4, PAL.cream, PAL.roofRed), P.cyl(0.25, 0.25, 4, PAL.steel, 6).at(1.4, 0, 1.4),
+    P.box(0.5, 0.5, 0.5, PAL.orange).at(1.4, 4, 1.4)
+  ]);
+}
+
+/* Hopper penerima + crusher + rangka (1 set) */
+function makeHopperSet(long = false) {
+  return meshOf([
+    P.wedge(8, 3.2, 5.6, PAL.concrete).at(-4, 0, 0),
+    P.box(5.6, 3.2, 5.6, PAL.concrete).at(2.8, 0, 0),
+    P.box(4.2, 0.25, 4.2, PAL.dark).at(2.8, 3.2, 0),
+    P.box(0.5, 1.2, 5.6, PAL.concreteD).at(5.5, 3.2, 0),
+    P.box(6, 5.6, 5.6, PAL.steelL).at(10.5, 0, 0), P.box(6.6, 0.5, 6.2, PAL.roofBlue).at(10.5, 5.6, 0),
+    P.cyl(0.5, 0.5, 2.4, PAL.steel, 6).at(12.2, 6.1, 1.6),
+    P.box(7, 0.9, 1.4, PAL.steel).at(6.4, 3.9, 0).rot(0, 0, 0.35).at(0, -0.4, 0)
+  ]);
+}
+
+/* Konveyor terbuka di atas kaki penopang; mengembalikan {mesh, path}. */
+function makeConveyor(points, height = 3, width = 1.6) {
+  const parts = [];
+  const pts = points.map(([x, z]) => new THREE.Vector3(x, height, z));
+  let acc = 0;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i], b = pts[i + 1];
+    const len = a.distanceTo(b);
+    const ang = Math.atan2(-(b.z - a.z), b.x - a.x);
+    const cx = (a.x + b.x) / 2, cz = (a.z + b.z) / 2;
+    parts.push(P.box(len, 0.22, width, PAL.dark2).at(0, 0, 0).rot(0, ang, 0).at(cx, height, cz));
+    parts.push(P.box(len, 0.5, 0.14, PAL.steelL).at(0, 0, width / 2).rot(0, ang, 0).at(cx, height, cz));
+    parts.push(P.box(len, 0.5, 0.14, PAL.steelL).at(0, 0, -width / 2).rot(0, ang, 0).at(cx, height, cz));
+    for (let s = 0; s <= len; s += 7) {
+      const t = s / len;
+      parts.push(P.box(0.4, height, 0.4, PAL.steel).at(lerp(a.x, b.x, t), 0, lerp(a.z, b.z, t)));
+    }
+    acc += len;
+  }
+  const path = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(p.x, p.y + 0.35, p.z)), false, 'catmullrom', 0);
+  return { mesh: meshOf(parts), path, length: acc };
+}
+
+function makeStockpileGeo(len, wid, h, coalHex, seed = 1) {
+  const g = new THREE.IcosahedronGeometry(1, 2);
+  const p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    let x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+    const j = 1 + (hash2(Math.round(x * 50) + seed, Math.round(z * 50) + Math.round(y * 50)) - 0.5) * 0.18;
+    x *= len / 2 * j; z *= wid / 2 * j; y = Math.max(0, y) * h * j;
+    p.setXYZ(i, x, y, z);
+  }
+  g.deleteAttribute('uv');
+  const arr = new Float32Array(p.count * 3);
+  for (let t = 0; t < p.count; t += 3) {
+    const r = hash2(t, seed);
+    _c.set(shade(coalHex, (r - 0.5) * 0.06));
+    for (let k = 0; k < 3; k++) { arr[(t + k) * 3] = _c.r; arr[(t + k) * 3 + 1] = _c.g; arr[(t + k) * 3 + 2] = _c.b; }
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(arr, 3));
+  g.computeVertexNormals();
+  return g;
+}
+function makeStockpile(len, wid, h, coalHex, seed) {
+  return meshOf(makeStockpileGeo(len, wid, h, coalHex, seed));
+}
+
+/* Tripper/stacker di atas timbunan: portal + kereta */
+function makeStacker(span = 12, h = 9) {
+  const g = new THREE.Group();
+  const frame = meshOf([
+    P.box(0.7, h, 0.7, PAL.yellow).at(0, 0, -span / 2), P.box(0.7, h, 0.7, PAL.yellow).at(0, 0, span / 2),
+    P.box(1.0, 0.9, span + 1.4, PAL.yellow).at(0, h, 0), P.box(1.6, 0.5, 1.6, PAL.dark).at(0, -0.1, -span / 2),
+    P.box(1.6, 0.5, 1.6, PAL.dark).at(0, -0.1, span / 2)
+  ]);
+  const cart = meshOf([P.box(1.8, 1.4, 1.8, PAL.orange).at(0, h + 0.9, 0), P.box(6, 0.4, 0.8, PAL.steelL).at(-3, h + 1.1, 0).rot(0, 0, -0.32)]);
+  g.add(frame, cart);
+  g.userData = { cart, span };
+  return g;
+}
+function makeReclaimer() {
+  const g = new THREE.Group();
+  const body = meshOf([
+    P.box(4, 1.2, 3, PAL.dark2).at(0, 0, 0), P.box(2.6, 3.4, 2.4, PAL.orange).at(0, 1.2, 0),
+    P.box(9, 0.7, 0.9, PAL.steel).at(3.8, 3.4, 0).rot(0, 0, -0.25)
+  ]);
+  const wheel = meshOf([P.wheel(2, 0.8, PAL.steelL, 12).at(0, 0, 0)]);
+  wheel.position.set(8, 1.4, 0);
+  g.add(body, wheel);
+  g.userData = { wheel };
+  return g;
+}
+
+/* ---------- Dermaga, tongkang, kapal ---------- */
+function makeJetty(len = 18, wid = 5) {
+  const p = [P.box(len, 0.7, wid, PAL.concrete).at(0, 1.2, 0)];
+  for (let x = -len / 2 + 1; x <= len / 2; x += 4) [-wid / 2 + 0.5, wid / 2 - 0.5].forEach(z => p.push(P.cyl(0.32, 0.32, 3.4, PAL.wood, 6).at(x, -1.6, z)));
+  [-len / 3, 0, len / 3].forEach(x => p.push(P.cyl(0.3, 0.35, 0.6, PAL.dark, 6).at(x, 1.9, wid / 2 - 0.4)));
+  p.push(P.box(len * 0.55, 0.3, 1.3, PAL.dark2).at(-len * 0.1, 3.6, 0), P.box(0.4, 2.4, 0.4, PAL.steel).at(-len * 0.35, 1.9, 0));
+  return meshOf(p);
+}
+function makeBarge(len = 18, wid = 5.6) {
+  const g = new THREE.Group();
+  const hull = meshOf([
+    P.box(len * 0.86, 1.9, wid, 0x7f2f2a).at(-len * 0.07, -0.5, 0), P.wedge(len * 0.14, 1.9, wid, 0x7f2f2a).at(len * 0.36, -0.5, 0).rot(0, 0, 0),
+    P.box(len * 0.86, 0.25, wid + 0.2, PAL.steel).at(-len * 0.07, 1.4, 0)
+  ]);
+  const cargo = meshOf(makeStockpileGeo(len * 0.7, wid * 0.78, 2.1, PAL.coal, 3));
+  cargo.position.set(-len * 0.07, 1.6, 0);
+  g.add(hull, cargo);
+  g.userData = { cargo, len };
+  return g;
+}
+function makeTug() {
+  return meshOf([
+    P.box(6.2, 1.5, 3.4, PAL.blue).at(0, -0.5, 0), P.wedge(1.6, 1.5, 3.4, PAL.blue).at(3.9, -0.5, 0),
+    P.box(3, 1.7, 2.8, PAL.white).at(-0.6, 1.0, 0), P.box(1.6, 0.9, 2.4, PAL.glass).at(-0.3, 2.7, 0),
+    P.cyl(0.4, 0.4, 1.4, PAL.red, 6).at(-1.7, 2.7, 0), P.box(1.0, 1.4, 2.4, PAL.dark).at(3.2, 1.0, 0)
+  ]);
+}
+function makeConvoy(len = 18) {
+  const g = new THREE.Group();
+  const b = makeBarge(len);
+  const t = makeTug();
+  t.position.x = -len / 2 - 3.5;
+  g.add(b, t);
+  g.userData = { cargo: b.userData.cargo, len: len + 7 };
+  return g;
+}
+function makeShip(len = 42, wid = 7.2) {
+  const g = new THREE.Group();
+  const hull = meshOf([
+    P.box(len * 0.82, 4.4, wid, PAL.navy).at(0, -1.4, 0),
+    new Part(new THREE.ExtrudeGeometry(new THREE.Shape([new THREE.Vector2(0, -wid / 2), new THREE.Vector2(len * 0.2, 0), new THREE.Vector2(0, wid / 2)]), { depth: 4.4, bevelEnabled: false }).rotateX(-Math.PI / 2).translate(len * 0.41, -1.4, 0), PAL.navy),
+    P.box(len * 0.82, 0.9, wid + 0.05, 0xb5433a).at(0, -1.4, 0),
+    P.box(len * 0.82, 0.3, wid - 0.4, PAL.steel).at(0, 3.0, 0)
+  ], MAT.glossy);
+  const hatches = [];
+  for (let i = 0; i < 5; i++) hatches.push(P.box(len * 0.11, 0.7, wid * 0.62, PAL.blue).at(len * (0.28 - i * 0.135), 3.3, 0));
+  const deck = meshOf(hatches);
+  const acc = meshOf([
+    P.box(len * 0.13, 5.6, wid * 0.85, PAL.white).at(-len * 0.34, 3.3, 0), P.box(len * 0.07, 1.4, wid * 0.8, PAL.white).at(-len * 0.35, 8.9, 0),
+    P.box(len * 0.07, 0.8, wid * 0.85, PAL.glass).at(-len * 0.31, 7.9, 0), P.cyl(0.6, 0.7, 2.6, PAL.red, 8).at(-len * 0.39, 8.9, 0)
+  ]);
+  const cranes = [];
+  for (let i = 0; i < 4; i++) {
+    const x = len * (0.2 - i * 0.16);
+    cranes.push(P.cyl(0.32, 0.4, 5.4, PAL.steelL, 6).at(x, 3.3, wid * 0.38), P.box(0.3, 0.3, 7.5, PAL.steelL).at(x, 8.4, wid * 0.38).rot(0.55, 0, 0).at(0, 0, 0));
+  }
+  g.add(hull, deck, acc, meshOf(cranes));
+  g.userData = { len };
+  return g;
+}
+function makeFloatingCrane() {
+  const g = new THREE.Group();
+  const pont = meshOf([P.box(15, 2, 8.6, PAL.yellow).at(0, -1, 0), P.box(15.2, 0.3, 8.8, PAL.dark2).at(0, 0.9, 0)]);
+  const base = meshOf([P.box(4.4, 3, 4.4, PAL.orange).at(-2, 1.2, 0), P.box(2.8, 1.8, 2.8, PAL.white).at(-1.6, 4.2, 0)]);
+  const boom = new THREE.Group();
+  boom.position.set(-1.6, 5.6, 0);
+  boom.add(meshOf([P.box(16, 0.7, 0.9, PAL.yellow).at(6.5, 0, 0).rot(0, 0, 0.62).at(-2, 0, 0), P.box(0.14, 9, 0.14, PAL.dark).at(10.4, -9.1, 0)]));
+  boom.add(meshOf([P.box(2.2, 1.4, 2.2, PAL.dark2).at(10.6, -9.3, 0)]));
+  g.add(pont, base, boom);
+  g.userData = { boom };
+  return g;
+}
+function makeFTU() {
+  return meshOf([
+    P.box(13, 2, 7.6, PAL.orange).at(0, -1, 0), P.box(4.2, 3.4, 4.2, PAL.steelL).at(-3, 0.9, 0), P.cone(2.6, 2.2, PAL.steel, 4).at(-3, 4.3, 0),
+    P.box(12, 0.7, 1.3, PAL.dark2).at(3, 3.2, 0).rot(0, 0, 0.3), P.box(2, 1.6, 2, PAL.white).at(-5, 0.9, 2)
+  ]);
+}
+function makeCommandVessel() {
+  return meshOf([
+    P.box(15, 2.2, 6.4, PAL.white).at(0, -1.1, 0), P.wedge(3, 2.2, 6.4, PAL.white).at(9, -1.1, 0),
+    P.box(6, 4, 5, PAL.cream).at(-2, 1.1, 0), P.box(6.4, 0.5, 5.4, PAL.roofRed).at(-2, 5.1, 0),
+    P.box(3, 2, 3.6, PAL.glass).at(-2, 5.6, 0), P.cyl(0.12, 0.12, 4.4, PAL.steel, 6).at(-2, 7.6, 0),
+    P.box(2.2, 0.16, 0.7, PAL.steelL).at(-2, 11.7, 0)
+  ], MAT.glossy);
+}
+function makeShipLoader() {
+  const g = new THREE.Group();
+  const frame = meshOf([
+    P.box(2, 14, 2, PAL.yellow).at(0, 0, -7), P.box(2, 14, 2, PAL.yellow).at(0, 0, 7), P.box(2.4, 1.4, 16.4, PAL.yellow).at(0, 14, 0),
+    P.box(2.2, 0.6, 2.2, PAL.dark).at(0, -0.3, -7), P.box(2.2, 0.6, 2.2, PAL.dark).at(0, -0.3, 7)
+  ]);
+  const boom = new THREE.Group();
+  boom.position.set(0, 14.7, 0);
+  boom.add(meshOf([P.box(1.4, 1.2, 22, PAL.steelL).at(0, 0, 4), P.box(1.2, 4, 1.2, PAL.dark).at(0, -4, 12)]));
+  g.add(frame, boom);
+  g.userData = { boom };
+  return g;
+}
+
+/* ---------- Alam ---------- */
+function treePineGeo() {
+  return bundle([
+    P.cyl(0.35, 0.45, 1.4, 0x6b4a2b, 5), P.cone(2.0, 3.2, 0x2f6b3a, 6).at(0, 1.1, 0),
+    P.cone(1.5, 2.6, 0x38803f, 6).at(0, 2.9, 0), P.cone(0.95, 2.1, 0x43964a, 6).at(0, 4.4, 0)
+  ]);
+}
+function treeRoundGeo() {
+  return bundle([P.cyl(0.35, 0.45, 1.8, 0x6b4a2b, 5), P.ico(2.0, 0x5faa4f, 1).scl(1, 0.9, 1).at(0, 3.2, 0), P.ico(1.3, 0x74be5f, 0).at(0.9, 4.2, 0.3)]);
+}
+function rockGeo() { return bundle([P.ico(1.3, 0x8b8f96, 0).scl(1.2, 0.7, 1).at(0, 0.5, 0)]); }
+function shrubGeo() { return bundle([P.ico(1.0, 0x4d9a4a, 0).scl(1.2, 0.7, 1.1).at(0, 0.5, 0)]); }
+
+/* ---------- Penampang seam (ilustrasi) ---------- */
+function makeSeamBlock(seams) {
+  const layers = [];
+  const coal = i => seams[i % seams.length].color;
+  const spec = [
+    [1.2, 0x8b6b47, 0], [2.4, PAL.tan, 0], [0.9, coal(0), 0.5], [1.6, 0xa9a49a, 0], [1.3, coal(1), 0.5], [1.8, 0xb59a70, 0],
+    [0.7, coal(2), 0.5], [1.4, 0x9b968c, 0], [1.1, coal(3), 0.5], [1.6, 0xa78f68, 0], [0.8, coal(4), 0.5], [2.2, 0x807b73, 0]
+  ];
+  let y = 0;
+  const marks = [];
+  for (let i = spec.length - 1; i >= 0; i--) {
+    const [h, c, out] = spec[i];
+    layers.push(P.box(15 + out * 0.6, h, 9 + out, c).at(0, y, out / 2));
+    marks.push({ i, y: y + h / 2, h, coal: out > 0 });
+    y += h;
+  }
+  return { mesh: meshOf(layers), height: y, marks: marks.reverse() };
+}
+
+/* ---------- Dermaga negara tujuan (CIF) ---------- */
+function makePortQuay(flag) {
+  const flags = {
+    id: [[0xd8322c, 0.5], [0xf3f4f6, 0.5]],
+    in: [[0xe8862c, 0.34], [0xf3f4f6, 0.33], [0x2f9a4d, 0.33]],
+    my: [[0xd8322c, 0.25], [0xf3f4f6, 0.25], [0xd8322c, 0.25], [0xf3f4f6, 0.25]],
+    cn: [[0xd8322c, 1]]
+  };
+  const p = [
+    P.box(16, 1.4, 9, PAL.concrete).at(0, -0.4, 0), P.box(16, 0.3, 1, PAL.dark).at(0, 1.0, 4.2),
+    P.box(0.7, 9, 0.7, PAL.yellow).at(2, 1, -2), P.box(0.7, 9, 0.7, PAL.yellow).at(2, 1, 2), P.box(1, 0.8, 5, PAL.yellow).at(2, 10, 0),
+    P.box(9, 0.6, 0.8, PAL.yellow).at(6.5, 10, 0).rot(0, 0, -0.1),
+    P.box(3, 2, 3, PAL.steelL).at(-5, 1, -2), P.cyl(0.14, 0.14, 8, PAL.white, 6).at(-6.5, 1, 3)
+  ];
+  let yy = 8.6;
+  (flags[flag] || flags.cn).forEach(([c, fh]) => { p.push(P.box(0.1, 2 * fh, 3.4, c).at(-6.5, yy - 2 * fh + 0.4, 5)); yy -= 2 * fh; });
+  return meshOf(p);
+}
+/*</Models>*/
+
+/*<World>*/
+/* ================= World: tata letak peta dan perakitan scene =================
+   Sumbu: +X = ke kanan-bawah layar, +Z = ke kiri-bawah layar. Satuan skematik (tidak sesuai skala). */
+const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+
+/* Stasiun: posisi pin, kamera (target, jarak), dan zona klik */
+const STATION_LAYOUT = Object.freeze({
+  pit:     { pin: [-282, 16, 4],  cam: { t: [-272, -3, 6], d: 175 } },
+  rom:     { pin: [-232, 10, -6], cam: { t: [-232, 0, -4], d: 105 } },
+  haul:    { pin: [-104, 14, 20], cam: { t: [-96, 0, 6], d: 340 } },
+  kelanis: { pin: [96, 26, 2],    cam: { t: [128, 0, 14], d: 195 } },
+  blend:   { pin: [142, 18, 14],  cam: { t: [142, 3, 14], d: 108 } },
+  barge:   { pin: [200, 10, 30],  cam: { t: [208, 0, 26], d: 240 } },
+  taboneo: { pin: [332, 20, 136], cam: { t: [334, 0, 136], d: 165 } },
+  ibt:     { pin: [410, 20, 176], cam: { t: [412, 0, 172], d: 165 } },
+  dest:    { pin: [486, 18, 122], cam: { t: [452, 0, 128], d: 330 } }
+});
+
+/* Sub-proses yang bisa diklik: id -> [label, [x,y,z], jarak kamera, catatan kecil, ilustrasi?] */
+const PART_LAYOUT = Object.freeze({
+  pit: {
+    benches: ['Teras (bench)', [-290, -6, 12], 70, 'dinding berlapis = seam', false],
+    excavator: ['Excavator', [-286, -9, -8], 55, 'menggali batubara', false],
+    ramp: ['Ramp angkut', [-252, -2, 0], 60, 'jalan keluar pit', false],
+    seamBlock: ['Penampang seam', [-258, 10, -44], 60, 'ilustrasi seam A–E', true]
+  },
+  rom: {
+    romPile: ['ROM', [-240, 3, -4], 45, 'tumpukan mentah', false],
+    loader: ['Wheel loader', [-228, 3, 2], 40, 'memuat trailer', false]
+  },
+  haul: {
+    weighbridge: ['Jembatan timbang', [-166, 3, -6], 55, 'timbang tonase', false],
+    dispatch1: ['Kantor dispatch 1', [-152, 4, 16], 55, 'pantau GPS', false],
+    border: ['Batas Kalsel–Kalteng', [-60, 10, -8], 60, 'provinsi berganti', false],
+    fuel: ['Depo BBM KM 73', [-30, 4, 16], 55, 'AL · 4.400 kL', false],
+    dispatch2: ['Kantor dispatch 2', [30, 4, 32], 55, 'menjelang Kelanis', false]
+  },
+  kelanis: {
+    hoppers: ['Hopper ×7', [102, 4, 14], 60, 'trailer membongkar', false],
+    crushers: ['Crusher', [110, 6, 14], 60, '10.500 tph', false],
+    conveyors: ['Konveyor', [138, 10, 14], 90, '53 jalur · 16.500 tph', false],
+    stockpile: ['Stockpile + tripper', [140, 8, 14], 80, 'kendali jarak jauh', false],
+    sampler: ['Sampler + belt scale', [160, 5, 14], 50, 'mutu dan tonase', false],
+    jetty: ['Jetty ×2', [188, 3, 14], 70, 'muat tongkang', false]
+  },
+  blend: {
+    pileA: ['Tumpukan A (Tutupan)', [140, 5, 4], 45, 'kalori tinggi', false],
+    reclaimer: ['Reclaimer', [140, 4, 14], 45, 'ambil ulang campuran', false]
+  },
+  barge: {
+    b2b: ['B to B Kelanis Utara', [196, 3, -40], 70, '5.000 → 15.000 dwt', false],
+    river: ['Alur Barito 15 km', [200, 0, 40], 120, 'dikeruk SDM · SMT', false]
+  },
+  taboneo: {
+    mothers: ['Kapal induk', [346, 4, 146], 80, 'Handymax–Capesize', false],
+    bargeAlong: ['Tongkang merapat', [338, 3, 129], 60, 'ship-to-ship', false],
+    fcrane: ['Floating crane', [344, 6, 139], 55, '4 crane + 3 FTU', false],
+    command: ['Pusat komando terapung', [300, 6, 110], 65, 'IMPT', false]
+  },
+  ibt: {
+    ibtPiles: ['Stockpile IBT', [398, 4, 172], 70, 'timbun + blending', false],
+    ibtLoader: ['Ship loader', [438, 8, 172], 65, 'deteksi logam', false],
+    ibtShip: ['Kapal ≤ 80.000 dwt', [458, 4, 172], 75, 'muat < 2 hari', false]
+  },
+  dest: {
+    shipDepart: ['Kapal berangkat', [376, 4, 132], 90, 'titik FOB', false],
+    route: ['Rute laut', [440, 2, 112], 140, 'ongkos + risiko CIF', false],
+    ports: ['Pelabuhan bongkar', [492, 4, 150], 150, 'India · Malaysia · China · RI', false]
+  }
+});
+
+function buildWorld() {
+  const root = new THREE.Group();
+  const anim = { excavators: [], stackers: [], reclaimers: [], cranes: [], loaders: [], bobbers: [] };
+  const zones = [];
+  const parts = {};
+  const blockers = [];
+  const add = (obj, x = 0, y = 0, z = 0, ry = 0) => { obj.position.set(x, y, z); obj.rotation.y = ry; root.add(obj); return obj; };
+
+  /* ---------- Warna pulau ---------- */
+  const GRASS = [0x8fca6a, 0x86c161, 0x9ad176, 0x7fba5a];
+  const FOREST = [0x74b95c, 0x69ae54, 0x7cc264, 0x62a34d];
+  const SAND = [0xe6c08a, 0xdcb173, 0xeecb97, 0xd2a865];
+  const YARD = [0xd1d5da, 0xc6cbd1, 0xdadde1, 0xbfc4ca];
+  const palColor = (pal, edge = 0x86c161) => ctx => (ctx.f > 0.93 ? shade(edge, (ctx.rnd - 0.5) * 0.06) : pick(pal, ctx.rnd));
+
+  /* ---------- Pulau tambang Tutupan: pit berundak + ramp ---------- */
+  const RAMP_COLS = new Set([59, 0, 1]);
+  const PIT_PROFILE = [[0, -12], [0.16, -12], [0.16, -9.6], [0.235, -9.6], [0.235, -7.2], [0.31, -7.2], [0.31, -4.8], [0.385, -4.8], [0.385, -2.4], [0.46, -2.4], [0.46, 0], [0.55, 0], [0.78, 0], [1, 0]];
+  const WALL_COLS = [0x23252a, 0x8f8b83, 0x1d1f24, 0xc9a878, 0x8b6b47];
+  const pitColor = ctx => {
+    const ramp = (ctx.j === 59 || ctx.j === 0) && ctx.f > 0.14 && ctx.f < 0.56;
+    if (ramp) return shade(0x5b5e66, (ctx.rnd - 0.5) * 0.04);
+    if (ctx.i === 0) return shade(0x1b1d22, (ctx.rnd - 0.5) * 0.05);
+    if (ctx.i <= 9) {
+      const isWall = ctx.i % 2 === 1;
+      const k = isWall ? (ctx.i - 1) / 2 : (ctx.i - 2) / 2;
+      if (isWall) return shade(WALL_COLS[k], (ctx.rnd - 0.5) * 0.05);
+      return k % 2 === 0 ? shade(0x34363c, (ctx.rnd - 0.5) * 0.05) : shade(0xd2b07a, (ctx.rnd - 0.5) * 0.06);
+    }
+    return pick(SAND, ctx.rnd);
+  };
+  const mine = buildIsland({
+    cx: -280, cz: 0, rx: 62, rz: 50, seed: 3, seg: 60, profile: PIT_PROFILE, color: pitColor,
+    ramp: { cols: RAMP_COLS, y: (f, y) => (f <= 0.16 ? -12 : f >= 0.52 ? 0 : -12 + 12 * (f - 0.16) / 0.36) }
+  });
+  root.add(mine.mesh);
+
+  const waraColor = ctx => {
+    if (ctx.i === 0) return shade(0x1b1d22, (ctx.rnd - 0.5) * 0.05);
+    if (ctx.i <= 5) return ctx.i % 2 === 1 ? shade([0x1d1f24, 0xc9a878, 0x8b6b47][(ctx.i - 1) / 2], (ctx.rnd - 0.5) * 0.05) : shade(0xd8b27b, (ctx.rnd - 0.5) * 0.06);
+    return pick([0xe8b877, 0xdda762, 0xf0c88b, 0xd39d58], ctx.rnd);
+  };
+  const wara = buildIsland({
+    cx: -268, cz: 84, rx: 32, rz: 27, seed: 5, seg: 40, color: waraColor,
+    profile: [[0, -7], [0.22, -7], [0.22, -4.7], [0.36, -4.7], [0.36, -2.3], [0.5, -2.3], [0.5, 0], [0.75, 0], [1, 0]]
+  });
+  root.add(wara.mesh);
+
+  const paringin = buildIsland({ cx: -214, cz: 92, rx: 27, rz: 22, seed: 7, seg: 40, color: palColor(GRASS) });
+  root.add(paringin.mesh);
+  root.add(meshOf([P.cyl(9.5, 9.5, 0.5, 0x5aa9dc, 18).at(-214, -0.1, 92), P.cyl(11.2, 11.2, 0.3, 0xe6d3a8, 18).at(-214, -0.15, 92)], MAT.water, false));
+
+  const balangan = buildIsland({
+    cx: -262, cz: -90, rx: 34, rz: 28, seed: 9, seg: 40,
+    color: ctx => (ctx.i <= 3 ? (ctx.i % 2 === 1 ? shade(0x8b6b47, (ctx.rnd - 0.5) * 0.05) : shade(0x2a2c31, (ctx.rnd - 0.5) * 0.05)) : pick(SAND, ctx.rnd)),
+    profile: [[0, -6], [0.2, -6], [0.2, -3], [0.34, -3], [0.34, 0], [0.7, 0], [1, 0]]
+  });
+  root.add(balangan.mesh);
+
+  /* ---------- Pulau sepanjang jalan hauling ---------- */
+  const isl = (cx, cz, rx, rz, seed, pal) => { const o = buildIsland({ cx, cz, rx, rz, seed, seg: 44, color: palColor(pal) }); root.add(o.mesh); return o; };
+  const h1 = isl(-172, 0, 28, 26, 11, GRASS);
+  const h2 = isl(-108, 18, 28, 26, 13, GRASS);
+  const h3 = isl(-44, -4, 32, 28, 15, FOREST);
+  const h4 = isl(22, 14, 30, 27, 17, FOREST);
+
+  /* ---------- Kelanis ---------- */
+  const kelanisIsland = buildIsland({
+    cx: 122, cz: 14, rx: 50, rz: 40, seed: 19, seg: 56,
+    color: ctx => (ctx.f > 0.9 ? shade(0x86c161, (ctx.rnd - 0.5) * 0.06) : pick(YARD, ctx.rnd))
+  });
+  root.add(kelanisIsland.mesh);
+
+  /* ---------- Laut, sungai, Pulau Laut ---------- */
+  const SEA_SKIRT = ['#4a94c4', '#3f84b4', '#356f9a', '#2d5f86', '#264f70', '#264f70'];
+  const sea = buildIsland({
+    cx: 392, cz: 150, rx: 172, rz: 104, seed: 21, seg: 64, jitter: 0.25, material: MAT.water, skirtColors: SEA_SKIRT,
+    skirt: [[0.995, -1.4], [0.96, -3.4], [0.88, -6], [0.7, -8.6], [0.4, -10.8], [0, -12.5]],
+    profile: [[0, -0.6], [0.4, -0.6], [0.75, -0.6], [1, -0.6]],
+    color: ctx => shade(0x5aa9dc, (ctx.rnd - 0.5) * 0.07 - ctx.f * 0.05)
+  });
+  root.add(sea.mesh);
+
+  const riverCurve = curveOf([[196, -112], [198, -72], [194, -30], [194, 10], [200, 44], [216, 72], [240, 90], [266, 104], [292, 116], [336, 129]], -0.34);
+  root.add(buildRibbon(riverCurve, {
+    width: u => 24 + 8 * u * u, y: -0.34, thick: 3, step: 3, material: MAT.water,
+    top: c => shade(0x63b1e3, (c.rnd - 0.5) * 0.06), side: 0x3f84b4, edgeLine: { k: 0.02, color: 0xdff0fa }
+  }));
+
+  const laut = buildIsland({
+    cx: 412, cz: 174, rx: 46, rz: 34, seed: 23, seg: 48,
+    color: ctx => (ctx.f > 0.86 ? pick([0xe6d3a8, 0xdcc593], ctx.rnd) : ctx.f < 0.6 ? pick(YARD, ctx.rnd) : pick(GRASS, ctx.rnd))
+  });
+  root.add(laut.mesh);
+
+  /* ---------- Jalan ---------- */
+  const haulCurve = curveOf([[-236, -4], [-212, 4], [-190, 6], [-170, -8], [-150, -2], [-128, 12], [-108, 24], [-88, 14], [-70, -2], [-50, -10], [-28, -4], [-8, 10], [12, 22], [34, 14], [54, 6], [74, 10], [90, 12]]);
+  const roadStyle = { thick: 0.7, side: 0x6c7078, top: c => shade(0x40434b, (c.rnd - 0.5) * 0.03), edgeLine: { k: 0.06, color: 0xf3f4f6 }, dash: { every: 3, w: 0.03, color: 0xf1c84a } };
+  root.add(buildRibbon(haulCurve, { ...roadStyle, width: 7, y: 0.16, step: 2.2 }));
+  const supplyCurve = curveOf([[-256, -84], [-250, -64], [-244, -46], [-240, -28], [-238, -10], [-236, -4]]);
+  root.add(buildRibbon(supplyCurve, { ...roadStyle, width: 5, y: 0.16, step: 2.2, dash: { every: 3, w: 0.03, color: 0xdad3c0 } }));
+  const seaRoute = curveOf([[376, 132], [410, 120], [444, 112], [470, 118]], 0.05);
+  const ibtRoute = curveOf([[466, 150], [468, 134], [470, 118]], 0.05);
+  const portPos = { id: [478, 88], in: [508, 130], my: [508, 168], cn: [488, 206] };
+  const portRoutes = Object.fromEntries(Object.entries(portPos).map(([k, [x, z]]) => [k, curveOf([[470, 118], [(470 + x) / 2, (118 + z) / 2], [x, z]], 0.05)]));
+
+  haulCurve.getSpacedPoints(60).forEach(p => blockers.push({ x: p.x, z: p.z, r: 7 }));
+  supplyCurve.getSpacedPoints(12).forEach(p => blockers.push({ x: p.x, z: p.z, r: 5 }));
+
+  /* ---------- Tambang: alat, ROM, seam ---------- */
+  const exLantai = add(makeExcavator(1.0), -286, -12, -8, 0.6);
+  anim.excavators.push({ o: exLantai, ph: 0 });
+  const exBench = add(makeExcavator(1.0), ...mine.pointAt(0.27, 2.3, -7.2).toArray(), 2.2 + Math.PI);
+  anim.excavators.push({ o: exBench, ph: 2.1 });
+  const trukParkir = new THREE.Mesh(truckRigidGeo(), MAT.solid);
+  trukParkir.castShadow = true;
+  add(trukParkir, -272, -12, -14, 0.4);
+  const moundParkir = new THREE.Mesh(truckRigidMoundGeo(), MAT.solid);
+  add(moundParkir, -272, -12, -14, 0.4);
+  root.add(meshOf([P.ico(10, 0x9a7a52, 1).scl(1.4, 0.6, 1.1).at(-304, 0, 34), P.ico(7, 0xa98858, 1).scl(1.3, 0.55, 1).at(-296, 0, 44)]));
+  add(makeStockpile(16, 9, 4.2, PAL.coal, 5), -240, 0, -4, 0.2);
+  add(makeStockpile(12, 7, 3.4, PAL.coalB, 9), -240, 0, 8, -0.1);
+  add(makeLoader(), -228, 0, 2, 2.6);
+  const seamBlock = makeSeamBlock(DATA.seams);
+  add(seamBlock.mesh, -258, 0.4, -44, 0);
+  anim.excavators.push({ o: add(makeExcavator(0.8), -270, -7, 86, 0.9), ph: 1.2 });
+  anim.excavators.push({ o: add(makeExcavator(0.8), -262, -6, -92, -0.5), ph: 3.3 });
+  const balTruck = new THREE.Mesh(truckRigidGeo(), MAT.solid);
+  balTruck.castShadow = true;
+  add(balTruck, -246, 0.2, -70, 1.2);
+  blockers.push({ x: -214, z: 92, r: 14 }, { x: -280, z: 0, r: 40 }, { x: -268, z: 84, r: 24 }, { x: -262, z: -90, r: 22 }, { x: -240, z: -4, r: 16 }, { x: -258, z: -44, r: 14 });
+
+  /* ---------- Fasilitas di jalan hauling ---------- */
+  const roadAngle = u => { const t = haulCurve.getTangentAt(u); return Math.atan2(-t.z, t.x); };
+  const uAt = (x, z) => {
+    let best = 0, bd = 1e9;
+    for (let i = 0; i <= 400; i++) {
+      const u = i / 400, p = haulCurve.getPointAt(u);
+      const d = (p.x - x) ** 2 + (p.z - z) ** 2;
+      if (d < bd) { bd = d; best = u; }
+    }
+    return best;
+  };
+  const wbU = uAt(-166, -6), wbP = haulCurve.getPointAt(wbU);
+  add(makeWeighbridge(), wbP.x, 0.16, wbP.z, roadAngle(wbU));
+  add(makeDispatchOffice(), -152, 0, 16, -0.4);
+  const gateU = uAt(-60, -8), gateP = haulCurve.getPointAt(gateU);
+  add(makeBorderGate(), gateP.x, 0, gateP.z, roadAngle(gateU));
+  add(makeFuelDepot(), -30, 0, 16, 0.1);
+  add(makeDispatchOffice(), 30, 0, 32, 0.3);
+  blockers.push({ x: -152, z: 16, r: 8 }, { x: -30, z: 16, r: 10 }, { x: 30, z: 32, r: 8 });
+
+  /* ---------- Kelanis (CPBL) ---------- */
+  const entU = uAt(78, 10), entP = haulCurve.getPointAt(entU);
+  add(makeWeighbridge(), entP.x, 0.16, entP.z, roadAngle(entU));
+  [-7.6, -0.4, 6.8, 14, 21.2, 28.4, 35.6].forEach(z => add(makeHopperSet(), 100, 0, z, 0));
+  const collector = makeConveyor([[114, -8], [114, 36]], 3.6);
+  const beltA = makeConveyor([[114, 4], [166, 4]], 11);
+  const beltB = makeConveyor([[114, 24], [166, 24]], 11);
+  const outA = makeConveyor([[166, 4], [186, 4]], 5);
+  const outB = makeConveyor([[166, 24], [186, 24]], 5);
+  [collector, beltA, beltB, outA, outB].forEach(c => root.add(c.mesh));
+  add(makeStockpile(48, 13, 7, PAL.coal, 11), 140, 0, 4);
+  add(makeStockpile(48, 13, 7, PAL.coalB, 13), 140, 0, 24);
+  const stackA = makeStacker(15, 12); stackA.position.set(130, 0, 4); root.add(stackA); anim.stackers.push({ o: stackA, x0: 122, x1: 158, ph: 0 });
+  const stackB = makeStacker(15, 12); stackB.position.set(150, 0, 24); root.add(stackB); anim.stackers.push({ o: stackB, x0: 122, x1: 158, ph: 2.4 });
+  const recl = makeReclaimer(); recl.position.set(140, 0, 14); root.add(recl); anim.reclaimers.push({ o: recl, x0: 126, x1: 154, ph: 1 });
+  add(makeSamplerHouse(), 160, 0, 14, 0);
+  add(makeControlRoom(), 146, 0, -12, 0);
+  add(makeFuelDepot(), 100, 0, 42, 0);
+  const jetty1 = add(makeJetty(24, 6), 190, 0, 4, 0);
+  const jetty2 = add(makeJetty(24, 6), 190, 0, 24, 0);
+  add(buildingsCluster(), 128, 0, 44, 0.05);
+  blockers.push({ x: 122, z: 14, r: 38 });
+
+  /* ---------- Kelanis Utara: B to B transfer ---------- */
+  const b2bA = makeBarge(14, 4.6); b2bA.rotation.y = Math.PI / 2; b2bA.position.set(190, -0.05, -40);
+  const b2bB = makeBarge(20, 6.0); b2bB.rotation.y = Math.PI / 2; b2bB.position.set(201, -0.05, -40);
+  root.add(b2bA, b2bB);
+  const b2bCrane = makeFloatingCrane(); b2bCrane.position.set(196, -0.4, -54); b2bCrane.rotation.y = Math.PI / 2; b2bCrane.scale.setScalar(0.85);
+  root.add(b2bCrane); anim.cranes.push({ o: b2bCrane, ph: 0.6 });
+
+  /* ---------- Taboneo ---------- */
+  const shipM1 = add(makeShip(44, 7.4), 342, -0.2, 148, 0.35);
+  const fc1 = makeFloatingCrane(); fc1.position.set(3, -0.4, -8.8); fc1.scale.setScalar(0.9);
+  shipM1.add(fc1); anim.cranes.push({ o: fc1, ph: 0 });
+  const ftu1 = makeFTU(); ftu1.position.set(-9, -0.3, 9.6); shipM1.add(ftu1);
+  const shipM2 = add(makeShip(56, 8.6), 300, -0.2, 176, 0.35);
+  const fc2 = makeFloatingCrane(); fc2.position.set(6, -0.4, -9.8); fc2.scale.setScalar(0.9);
+  shipM2.add(fc2); anim.cranes.push({ o: fc2, ph: 1.7 });
+  const shipM3 = add(makeShip(62, 9.2), 350, -0.2, 200, 0.35);
+  const command = add(makeCommandVessel(), 300, -0.2, 110, 0.9);
+  anim.bobbers.push(shipM1, shipM2, shipM3, command);
+
+  /* ---------- Pulau Laut / IBT ---------- */
+  [[394, 160], [394, 172], [394, 184], [412, 166]].forEach(([x, z], i) => add(makeStockpile(16, 8.5, 4.6, i % 2 ? PAL.coalB : PAL.coal, 20 + i), x, 0, z, 0.1 * i));
+  const loaderIbt = makeShipLoader(); loaderIbt.position.set(438, 0, 172); root.add(loaderIbt); anim.loaders.push({ o: loaderIbt, ph: 0.4 });
+  root.add(makeConveyor([[416, 176], [438, 176]], 4).mesh);
+  const ibtBerth = add(makeShip(50, 8), 458, -0.2, 172, Math.PI / 2);
+  anim.bobbers.push(ibtBerth);
+  add(makeFuelDepot(), 404, 0, 150, 0);
+  blockers.push({ x: 404, z: 170, r: 26 });
+
+  /* ---------- Dermaga negara tujuan (bagian rute CIF) ---------- */
+  const portMeta = {};
+  Object.entries(portPos).forEach(([k, [x, z]]) => {
+    const islet = buildIsland({ cx: x, cz: z, rx: 15, rz: 12, seed: 40 + (x % 7), seg: 24, color: () => 0xcfd3d9 });
+    root.add(islet.mesh);
+    const q = makePortQuay(k);
+    q.position.set(x, 0, z);
+    q.rotation.y = k === 'cn' ? -0.4 : 0.2;
+    root.add(q);
+    portMeta[k] = V3(x, 6, z);
+  });
+
+  /* ---------- Dekorasi alam ---------- */
+  const decorate = (island, n, seed, pine) => {
+    const items = scatter(island, n, seed, blockers);
+    const pines = items.filter(i => i.k < (pine ? 0.7 : 0.25));
+    const rounds = items.filter(i => !pines.includes(i));
+    const tint = it => shade(0xffffff, (it.k - 0.5) * 0.1);
+    if (pines.length) root.add(instanced(treePineGeo(), MAT.solid, pines, tint));
+    if (rounds.length) root.add(instanced(treeRoundGeo(), MAT.solid, rounds, tint));
+  };
+  decorate(h1, 26, 1, false); decorate(h2, 30, 2, false); decorate(h3, 70, 3, true); decorate(h4, 64, 4, true);
+  decorate(paringin, 22, 5, false); decorate(laut, 14, 6, false); decorate(kelanisIsland, 4, 7, false);
+  const rocksAt = (island, n, seed) => { const it = scatter(island, n, seed, blockers, 0.2); if (it.length) root.add(instanced(rockGeo(), MAT.solid, it)); };
+  rocksAt(mine, 16, 8); rocksAt(wara, 6, 9); rocksAt(balangan, 6, 10);
+
+  /* ---------- Penangkap bayangan ---------- */
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000), new THREE.ShadowMaterial({ opacity: 0.22 }));
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = -17;
+  ground.receiveShadow = true;
+  root.add(ground);
+
+  /* ---------- Stasiun: zona klik, cincin sorot ---------- */
+  const zoneMat = new THREE.MeshBasicMaterial({ visible: false });
+  const addZone = (id, x, z, r, prio = 1) => {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 16, 14), zoneMat);
+    m.position.set(x, 4, z);
+    m.userData = { station: id, prio };
+    root.add(m);
+    zones.push(m);
+  };
+  addZone('pit', -280, 0, 42); addZone('pit', -268, 84, 26); addZone('pit', -262, -90, 26); addZone('pit', -214, 92, 18);
+  addZone('rom', -238, -2, 15, 3);
+  for (let u = 0.06; u < 1; u += 0.055) { const p = haulCurve.getPointAt(u); if (p.x < 70) addZone('haul', p.x, p.z, 11); }
+  addZone('kelanis', 122, 14, 44); addZone('blend', 142, 14, 13, 4);
+  for (let u = 0.02; u < 1; u += 0.06) { const p = riverCurve.getPointAt(u); addZone('barge', p.x, p.z, 17); }
+  addZone('taboneo', 330, 148, 40); addZone('taboneo', 300, 176, 26); addZone('taboneo', 300, 110, 14, 2);
+  addZone('ibt', 412, 174, 42);
+  Object.values(portPos).forEach(([x, z]) => addZone('dest', x, z, 18, 2));
+  for (let u = 0.1; u < 1; u += 0.25) { const p = seaRoute.getPointAt(u); addZone('dest', p.x, p.z, 14); }
+
+  const stations = {};
+  Object.entries(STATION_LAYOUT).forEach(([id, s]) => {
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xf0a443, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide });
+    const ring = new THREE.Mesh(new THREE.RingGeometry(1, 1.1, 64), ringMat);
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(s.cam.t[0], 0.45, s.cam.t[2]);
+    root.add(ring);
+    stations[id] = { id, pin: V3(...s.pin), camT: V3(...s.cam.t), camD: s.cam.d, ring, ringMat, parts: [] };
+  });
+  Object.entries(PART_LAYOUT).forEach(([sid, list]) => {
+    Object.entries(list).forEach(([pid, [label, pos, dist, sub, ilus]]) => {
+      const part = { id: pid, station: sid, label, pos: V3(...pos), dist, sub, ilus };
+      parts[pid] = part;
+      stations[sid].parts.push(part);
+    });
+  });
+  const areaTags = [
+    { id: 'tutupan', label: 'Tutupan', sub: 'TM 27–29%', pos: V3(-280, 4, 34), station: 'pit' },
+    { id: 'wara', label: 'Wara I & II', sub: 'TM 39–43%', pos: V3(-268, 6, 84), station: 'pit' },
+    { id: 'paringin', label: 'Paringin', sub: 'selesai Okt 2022', pos: V3(-214, 6, 92), station: 'pit' },
+    { id: 'balangan', label: 'Balangan Coal', sub: '4.200–4.500 GAR', pos: V3(-262, 6, -90), station: 'pit' }
+  ];
+
+  const nearestU = (curve, x, z) => {
+    let best = 0, bd = 1e9;
+    for (let i = 0; i <= 300; i++) { const u = i / 300, p = curve.getPointAt(u); const d = (p.x - x) ** 2 + (p.z - z) ** 2; if (d < bd) { bd = d; best = u; } }
+    return best;
+  };
+
+  return {
+    root, anim, zones, stations, parts, areaTags, seamBlock, portMeta, portRoutes, portPos,
+    curves: { haul: haulCurve, supply: supplyCurve, river: riverCurve, sea: seaRoute, ibt: ibtRoute },
+    conveyors: { collector, beltA, beltB, outA, outB },
+    islands: { mine, wara, paringin, balangan, kelanis: kelanisIsland, sea, laut },
+    barges: { jetty: [jetty1, jetty2], b2b: [b2bA, b2bB] },
+    ships: { m1: shipM1, m2: shipM2, m3: shipM3, ibt: ibtBerth },
+    ground,
+    jettyU: nearestU(riverCurve, 199, 14),
+    romPos: V3(-238, 0.16, -4)
+  };
+}
+
+function buildingsCluster() {
+  return meshOf([
+    ...buildingParts(9, 6, 4, PAL.white, PAL.roofBlue),
+    ...buildingParts(7, 5, 3.2, PAL.cream, PAL.roofRed).map(p => p.at(12, 0, 2)),
+    ...buildingParts(6, 5, 3.2, PAL.white, PAL.roofRed).map(p => p.at(-2, 0, 9))
+  ]);
+}
+/*</World>*/
+
+/*<Flow>*/
+/* ================= Flow: agen bergerak, strip alur, penanda FOB/CIF ================= */
+class Polyline {
+  constructor(pts) {
+    this.pts = pts;
+    this.cum = [0];
+    for (let i = 1; i < pts.length; i++) this.cum.push(this.cum[i - 1] + pts[i].distanceTo(pts[i - 1]));
+    this.len = this.cum[this.cum.length - 1];
+  }
+  getLength() { return this.len; }
+  seg(u) {
+    const d = clamp01(u) * this.len;
+    let i = 1;
+    while (i < this.cum.length - 1 && this.cum[i] < d) i++;
+    const span = this.cum[i] - this.cum[i - 1] || 1;
+    return { i, t: (d - this.cum[i - 1]) / span };
+  }
+  getPointAt(u, out = new THREE.Vector3()) {
+    const { i, t } = this.seg(u);
+    return out.lerpVectors(this.pts[i - 1], this.pts[i], t);
+  }
+  getTangentAt(u, out = new THREE.Vector3()) {
+    const { i } = this.seg(u);
+    return out.subVectors(this.pts[i], this.pts[i - 1]).normalize();
+  }
+  getSpacedPoints(n) { return Array.from({ length: n + 1 }, (_, k) => this.getPointAt(k / n)); }
+}
+const polyOf = (arr, y) => new Polyline(arr.map(a => (a.length === 3 ? V3(...a) : V3(a[0], y, a[1]))));
+const joinPaths = (...curves) => new Polyline(curves.flatMap((c, k) => c.getSpacedPoints(28).slice(k ? 1 : 0)));
+
+function makeDashTexture() {
+  const cv = document.createElement('canvas');
+  cv.width = 64; cv.height = 32;
+  const g = cv.getContext('2d');
+  g.clearRect(0, 0, 64, 32);
+  g.fillStyle = '#fff';
+  g.beginPath();
+  g.moveTo(6, 4); g.lineTo(40, 4); g.lineTo(58, 16); g.lineTo(40, 28); g.lineTo(6, 28); g.lineTo(24, 16); g.closePath();
+  g.fill();
+  const tex = new THREE.CanvasTexture(cv);
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return tex;
+}
+
+/* Strip panah yang mengalir sepanjang lintasan */
+function makeStrip(path, width, y, tex) {
+  const n = Math.max(4, Math.ceil(path.getLength() / 3));
+  const pts = path.getSpacedPoints(n);
+  const pos = [], uv = [], idx = [];
+  let dist = 0;
+  for (let i = 0; i <= n; i++) {
+    const a = pts[Math.max(0, i - 1)], b = pts[Math.min(n, i + 1)];
+    let tx = b.x - a.x, tz = b.z - a.z;
+    const m = Math.hypot(tx, tz) || 1;
+    tx /= m; tz /= m;
+    if (i > 0) dist += pts[i].distanceTo(pts[i - 1]);
+    const yy = (pts[i].y || 0) + y;
+    pos.push(pts[i].x - tz * width / 2, yy, pts[i].z + tx * width / 2, pts[i].x + tz * width / 2, yy, pts[i].z - tx * width / 2);
+    uv.push(dist / (width * 1.9), 0, dist / (width * 1.9), 1);
+    if (i < n) { const k = i * 2; idx.push(k, k + 1, k + 2, k + 1, k + 3, k + 2); }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setIndex(idx);
+  const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide, color: 0xf0a443, opacity: 0.95 });
+  const m = new THREE.Mesh(g, mat);
+  m.visible = false;
+  m.renderOrder = 5;
+  return m;
+}
+
+function makeFlag(colorHex) {
+  return meshOf([P.cyl(0.18, 0.18, 12, PAL.white, 6), P.box(0.15, 3, 5.2, colorHex).at(0, 8.6, 2.7), P.cyl(2.4, 2.4, 0.3, colorHex, 20)], MAT.solid, false);
+}
+
+function createFlow(world) {
+  const group = new THREE.Group();
+  const dummy = new THREE.Object3D();
+  dummy.rotation.order = 'YZX';
+  const tmpT = new THREE.Vector3();
+  const WHITE = new THREE.Color(1, 1, 1);
+  const HOT = new THREE.Color(1.0, 0.66, 0.28);
+
+  /* ----- lintasan ----- */
+  const rampY = f => (f <= 0.16 ? -12 : f >= 0.52 ? 0 : -12 + 12 * (f - 0.16) / 0.36);
+  const mine = world.islands.mine;
+  const pitPts = [0.06, 0.16, 0.235, 0.31, 0.385, 0.46, 0.52, 0.56].map(f => mine.pointAt(f, 0, rampY(f) + 0.25));
+  pitPts.push(V3(-247, 0.2, -3));
+  const pitPath = new Polyline(pitPts);
+  const conveyPaths = [
+    polyOf([[114, 3.9, -8], [114, 3.9, -1], [116, 10.2, 4], [166, 10.2, 4], [176, 5.6, 4], [186, 5.6, 4]]),
+    polyOf([[114, 3.9, 36], [114, 3.9, 29], [116, 10.2, 24], [166, 10.2, 24], [176, 5.6, 24], [186, 5.6, 24]])
+  ];
+
+  /* ----- shuttle generik ----- */
+  const shuttles = [];
+  function shuttle(cfg) {
+    const s = {
+      path: cfg.path, len: cfg.path.getLength(), u: cfg.u ?? 0, state: cfg.state ?? 'go', t: cfg.t ?? 0,
+      uA: cfg.uA ?? 0, uB: cfg.uB ?? 1, lane: cfg.lane ?? 1.8, laneNow: cfg.lane ?? 1.8,
+      speedL: cfg.speedL, speedE: cfg.speedE, waitA: cfg.waitA ?? 3, waitB: cfg.waitB ?? 3,
+      loadFrac: cfg.state === 'go' || cfg.state === 'dump' ? 1 : 0, yOff: cfg.yOff ?? 0,
+      tag: cfg.tag, hot: false, pos: new THREE.Vector3(), heading: 0, pitch: 0, obj: null
+    };
+    shuttles.push(s);
+    return s;
+  }
+  function step(s, dt, mul) {
+    const perUnit = 1 / s.len;
+    if (s.state === 'load') {
+      s.t -= dt; s.loadFrac = clamp01(1 - s.t / s.waitA);
+      if (s.t <= 0) { s.state = 'go'; s.loadFrac = 1; }
+    } else if (s.state === 'go') {
+      s.u += s.speedL * mul * dt * perUnit;
+      if (s.u >= s.uB) { s.u = s.uB; s.state = 'dump'; s.t = s.waitB; }
+    } else if (s.state === 'dump') {
+      s.t -= dt; s.loadFrac = clamp01(s.t / s.waitB);
+      if (s.t <= 0) { s.state = 'back'; s.loadFrac = 0; }
+    } else {
+      s.u -= s.speedE * mul * dt * perUnit;
+      if (s.u <= s.uA) { s.u = s.uA; s.state = 'load'; s.t = s.waitA; }
+    }
+    const loaded = s.state === 'go' || s.state === 'dump';
+    s.laneNow += ((loaded ? s.lane : -s.lane) - s.laneNow) * Math.min(1, dt * 2.5);
+    lanePoint(s.path, s.u, s.laneNow, s.pos, tmpT);
+    const rev = s.state === 'back';
+    s.heading = Math.atan2(rev ? tmpT.z : -tmpT.z, rev ? -tmpT.x : tmpT.x);
+    s.pitch = Math.atan2(rev ? -tmpT.y : tmpT.y, Math.hypot(tmpT.x, tmpT.z));
+  }
+
+  /* ----- truk tambang di ramp pit ----- */
+  const pitTrucks = Array.from({ length: 4 }, (_, i) => shuttle({
+    path: pitPath, tag: 'pit', lane: 0.7, speedL: 7, speedE: 10, waitA: 3.2, waitB: 2.2, yOff: 0.05,
+    state: ['go', 'load', 'back', 'dump'][i], u: [0.45, 0, 0.6, 1][i], t: 1.2
+  }));
+  const pitMesh = new THREE.InstancedMesh(truckRigidGeo(), MAT.solid, pitTrucks.length);
+  const pitMound = new THREE.InstancedMesh(truckRigidMoundGeo(), MAT.solid, pitTrucks.length);
+  [pitMesh, pitMound].forEach(m => { m.castShadow = true; m.frustumCulled = false; group.add(m); });
+
+  /* ----- trailer hauling ----- */
+  const rigs = Array.from({ length: 16 }, (_, i) => {
+    const k = i / 16;
+    const states = ['go', 'go', 'back', 'go', 'back', 'load'];
+    return shuttle({
+      path: world.curves.haul, tag: 'rig', lane: 2.0, speedL: 15, speedE: 20, waitA: 2.6, waitB: 2.8,
+      state: states[i % states.length], u: 0.04 + k * 0.92, t: 1, yOff: 0.02
+    });
+  });
+  const rigMesh = new THREE.InstancedMesh(trailerRigGeo(), MAT.solid, rigs.length);
+  const rigMound = new THREE.InstancedMesh(trailerMoundGeo(), MAT.solid, rigs.length);
+  [rigMesh, rigMound].forEach(m => { m.castShadow = true; m.frustumCulled = false; group.add(m); });
+
+  const writeInstances = (body, mound, list) => {
+    list.forEach((s, i) => {
+      dummy.position.copy(s.pos); dummy.position.y += s.yOff;
+      dummy.rotation.set(0, s.heading, s.pitch);
+      dummy.scale.setScalar(1);
+      dummy.updateMatrix();
+      body.setMatrixAt(i, dummy.matrix);
+      dummy.scale.set(1, Math.max(0.001, s.loadFrac), 1);
+      dummy.updateMatrix();
+      mound.setMatrixAt(i, dummy.matrix);
+    });
+    body.instanceMatrix.needsUpdate = true;
+    mound.instanceMatrix.needsUpdate = true;
+  };
+  const paintInstances = (body, mound, list) => {
+    list.forEach((s, i) => { const c = s.hot ? HOT : WHITE; body.setColorAt(i, c); mound.setColorAt(i, s.hot ? HOT : WHITE); });
+    if (body.instanceColor) body.instanceColor.needsUpdate = true;
+    if (mound.instanceColor) mound.instanceColor.needsUpdate = true;
+  };
+
+  /* ----- tongkang di Sungai Barito ----- */
+  const bargeShuttles = Array.from({ length: 5 }, (_, i) => {
+    const s = shuttle({
+      path: world.curves.river, tag: 'barge', lane: 5.2, speedL: 8, speedE: 11, waitA: 4, waitB: 5,
+      uA: world.jettyU, uB: 0.985, state: ['go', 'go', 'back', 'load', 'back'][i], u: [0.35, 0.65, 0.5, world.jettyU, 0.8][i], t: 1.5
+    });
+    s.obj = makeConvoy(18);
+    s.obj.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
+    group.add(s.obj);
+    return s;
+  });
+
+  /* ----- kapal laut (rute CIF) ----- */
+  const ghostMats = [];
+  const shipCfg = [
+    { key: 'id', len: 36, base: joinPaths(world.curves.sea, world.portRoutes.id), from: 'go', u: 0.3 },
+    { key: 'in', len: 40, base: joinPaths(world.curves.sea, world.portRoutes.in), from: 'load', u: 0 },
+    { key: 'my', len: 38, base: joinPaths(world.curves.ibt, world.portRoutes.my), from: 'back', u: 0.7 },
+    { key: 'cn', len: 42, base: joinPaths(world.curves.ibt, world.portRoutes.cn), from: 'dump', u: 1 }
+  ];
+  const seaShips = shipCfg.map(c => {
+    const s = shuttle({ path: c.base, tag: 'ship', lane: 0, speedL: 9, speedE: 13, waitA: 9, waitB: 6, state: c.from, u: c.u, t: 3, yOff: -0.2 });
+    s.obj = makeShip(c.len, 6.4);
+    s.obj.traverse(o => { if (o.isMesh) { o.material = o.material.clone(); o.material.transparent = true; ghostMats.push(o.material); o.castShadow = true; } });
+    group.add(s.obj);
+    return s;
+  });
+
+  /* ----- batubara di konveyor ----- */
+  const BLOBS = 26;
+  const blobs = [];
+  conveyPaths.forEach((path, pi) => { for (let i = 0; i < BLOBS; i++) blobs.push({ path, u: i / BLOBS + pi * 0.02, hot: false }); });
+  const blobMesh = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.62, 0), new THREE.MeshStandardMaterial({ color: 0x15171b, roughness: 0.6, flatShading: true }), blobs.length);
+  blobMesh.castShadow = true;
+  blobMesh.frustumCulled = false;
+  group.add(blobMesh);
+
+  /* ----- strip alur dan penanda ----- */
+  const dashTex = makeDashTexture();
+  const strips = {
+    pit: makeStrip(pitPath, 3.4, 0.35, dashTex),
+    haul: makeStrip(world.curves.haul, 4.4, 0.42, dashTex),
+    river: makeStrip(world.curves.river, 5, 0.12, dashTex),
+    sea: makeStrip(joinPaths(world.curves.sea), 5.5, 0.35, dashTex),
+    ibt: makeStrip(joinPaths(world.curves.ibt), 5.5, 0.35, dashTex),
+    port_id: makeStrip(joinPaths(world.portRoutes.id), 5, 0.35, dashTex),
+    port_in: makeStrip(joinPaths(world.portRoutes.in), 5, 0.35, dashTex),
+    port_my: makeStrip(joinPaths(world.portRoutes.my), 5, 0.35, dashTex),
+    port_cn: makeStrip(joinPaths(world.portRoutes.cn), 5, 0.35, dashTex)
+  };
+  Object.values(strips).forEach(s => group.add(s));
+
+  const fobMarks = [makeFlag(0xf0a443), makeFlag(0xf0a443)];
+  fobMarks[0].position.set(376, 0, 128);
+  fobMarks[1].position.set(464, 0, 150);
+  const cifMarks = ['id', 'in', 'my', 'cn'].map(k => { const f = makeFlag(0x3f7fc4); f.position.set(world.portPos[k][0] - 1, 0.2, world.portPos[k][1] - 6); return f; });
+  [...fobMarks, ...cifMarks].forEach(m => { m.visible = false; group.add(m); });
+
+  /* ----- fokus: agen dan strip yang disorot per stasiun ----- */
+  const FOCUS = {
+    pit: { tags: ['pit', 'rig'], strips: ['pit', 'haul'], mul: 1.5 },
+    rom: { tags: ['pit', 'rig'], strips: ['haul'], mul: 1.5 },
+    haul: { tags: ['rig'], strips: ['haul'], mul: 1.6 },
+    kelanis: { tags: [], strips: [], mul: 1, belts: true },
+    blend: { tags: [], strips: [], mul: 1, belts: true },
+    barge: { tags: ['barge'], strips: ['river'], mul: 1.5 },
+    taboneo: { tags: ['barge'], strips: ['river'], mul: 1.3 },
+    ibt: { tags: [], strips: ['ibt'], mul: 1 },
+    dest: { tags: ['ship'], strips: ['sea', 'ibt'], mul: 1.4, sea: true }
+  };
+  let focusKey = null;
+  let mode = 'fob';
+  let beltsHot = false;
+
+  function applyVisuals() {
+    const f = focusKey ? FOCUS[focusKey] : null;
+    shuttles.forEach(s => { s.hot = !!(f && f.tags.includes(s.tag)); });
+    beltsHot = !!(f && f.belts);
+    Object.entries(strips).forEach(([k, m]) => {
+      const inFocus = !!(f && f.strips.includes(k));
+      const seaStrip = k === 'sea' || k === 'ibt' || k.startsWith('port_');
+      const cifShow = mode === 'cif' && (focusKey === 'dest' || focusKey === 'ibt' || focusKey === 'taboneo') && seaStrip && k !== 'ibt';
+      m.visible = inFocus || cifShow || (mode === 'cif' && focusKey === 'dest' && k.startsWith('port_'));
+      m.material.color.setHex(seaStrip && mode === 'fob' ? 0x8fa4b8 : 0xf0a443);
+      m.material.opacity = seaStrip && mode === 'fob' ? 0.45 : 0.95;
+    });
+    paintInstances(pitMesh, pitMound, pitTrucks);
+    paintInstances(rigMesh, rigMound, rigs);
+    const shipOpacity = mode === 'cif' ? 1 : 0.4;
+    ghostMats.forEach(m => { m.opacity = shipOpacity; });
+    fobMarks.forEach(m => { m.visible = mode === 'fob'; });
+    cifMarks.forEach(m => { m.visible = mode === 'cif'; });
+  }
+
+  const bobbers = world.anim.bobbers;
+  const bobBase = new Map(bobbers.map(b => [b, b.position.y]));
+
+  function update(dt, t, opts) {
+    const motion = opts.motion;
+    const f = focusKey ? FOCUS[focusKey] : null;
+    const mulFor = s => (f && f.tags.includes(s.tag) ? f.mul : 1);
+    if (motion) shuttles.forEach(s => step(s, dt, mulFor(s)));
+    writeInstances(pitMesh, pitMound, pitTrucks);
+    writeInstances(rigMesh, rigMound, rigs);
+    bargeShuttles.forEach(s => {
+      s.obj.position.copy(s.pos); s.obj.position.y = -0.1;
+      s.obj.rotation.set(0, s.heading, 0);
+      s.obj.userData.cargo.scale.setScalar(1);
+      s.obj.userData.cargo.scale.y = 0.05 + 0.95 * s.loadFrac;
+    });
+    seaShips.forEach(s => { s.obj.position.copy(s.pos); s.obj.position.y = s.yOff; s.obj.rotation.set(0, s.heading, 0); });
+
+    /* batubara di konveyor */
+    const speed = (beltsHot ? 0.22 : 0.11) * (motion ? 1 : 0);
+    blobs.forEach((b, i) => {
+      b.u = (b.u + speed * dt) % 1;
+      b.path.getPointAt(b.u, tmpT);
+      dummy.position.copy(tmpT);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.setScalar(beltsHot ? 1.35 : 1);
+      dummy.updateMatrix();
+      blobMesh.setMatrixAt(i, dummy.matrix);
+    });
+    blobMesh.instanceMatrix.needsUpdate = true;
+
+    /* animasi alat */
+    const a = world.anim;
+    a.excavators.forEach(({ o, ph }) => {
+      const { swing, boom, stick } = o.userData;
+      swing.rotation.y = 0.7 * Math.sin(t * 0.7 + ph);
+      boom.rotation.z = 0.08 + 0.16 * Math.sin(t * 1.4 + ph);
+      stick.rotation.z = -0.25 * Math.sin(t * 1.4 + ph + 1.2);
+    });
+    a.stackers.forEach(({ o, x0, x1, ph }) => { o.position.x = lerp(x0, x1, 0.5 + 0.5 * Math.sin(t * 0.18 + ph)); });
+    a.reclaimers.forEach(({ o, x0, x1, ph }) => {
+      o.position.x = lerp(x0, x1, 0.5 + 0.5 * Math.sin(t * 0.15 + ph));
+      o.userData.wheel.rotation.z = t * 1.6;
+    });
+    a.cranes.forEach(({ o, ph }) => { const b = o.children[2]; if (b) b.rotation.y = 0.9 * Math.sin(t * 0.5 + ph); });
+    a.loaders.forEach(({ o, ph }) => { o.userData.boom.rotation.y = 0.12 * Math.sin(t * 0.4 + ph); });
+    bobbers.forEach((b, i) => {
+      b.position.y = bobBase.get(b) + 0.14 * Math.sin(t * 0.9 + i * 1.7);
+      b.rotation.z = 0.012 * Math.sin(t * 0.7 + i);
+    });
+    dashTex.offset.x -= dt * 0.8;
+  }
+
+  function setFocus(key) { focusKey = key; applyVisuals(); }
+  function setMode(m) { mode = m; applyVisuals(); }
+  applyVisuals();
+
+  return {
+    group, update, setFocus, setMode, rigs, pitTrucks, bargeShuttles, seaShips,
+    lead: () => rigs[0]
+  };
+}
+/*</Flow>*/
+
+/*<BlendUI>*/
+/* ================= BlendUI: Blend Lab (slider komposisi + simulator blend) ================= */
+const BlendUI = (() => {
+  const { analyze, normalize, effectiveIm, rankName, createBlendModel, SIM, CONTRACT, clamp } = BlendCore;
+  const $ = id => document.getElementById(id);
+  const setText = (id, txt) => { const n = $(id); if (n) n.textContent = txt; };
+  const fmt0 = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 });
+  const fmt1 = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  const srcOf = s => Object.freeze({ tm: s.tm, im: s.im, ashAd: s.ashAd, rank: s.rank });
+  const SRC_A = srcOf(DATA.blend.tutupan);
+  const SRC_B = srcOf(DATA.blend.wara);
+  const model = createBlendModel({ sourceA: SRC_A, sourceB: SRC_B });
+
+  let comp = normalize(SRC_A);
+  let cond = Object.freeze({ ratio: Math.round(model.linearRatio() * 100), days: 0, rain: 0, sigma: 60 });
+  let lastFocus = null;
+  let queued = false;
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  function svgEl(tag, attrs, parent) {
+    const n = document.createElementNS(SVG_NS, tag);
+    Object.entries(attrs || {}).forEach(([k, v]) => n.setAttribute(k, v));
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  const scale = (d0, d1, r0, r1) => { const m = (r1 - r0) / (d1 - d0); return v => r0 + (v - d0) * m; };
+  function niceTicks(lo, hi, count) {
+    const raw = (hi - lo) / count;
+    const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(st => st >= raw) || raw;
+    const out = [];
+    for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(v);
+    return out;
+  }
+  function drawAxes(svg, box, xs, ys, spec) {
+    const g = svgEl('g', { class: 'ax' }, svg);
+    spec.yTicks.forEach(v => {
+      svgEl('line', { x1: box.l, x2: box.r, y1: ys(v), y2: ys(v), class: 'grid-line' }, g);
+      svgEl('text', { x: box.l - 8, y: ys(v) + 4, 'text-anchor': 'end' }, g).textContent = spec.yFmt(v);
+    });
+    spec.xTicks.forEach(v => { svgEl('text', { x: xs(v), y: box.b + 18, 'text-anchor': 'middle' }, g).textContent = spec.xFmt(v); });
+    svgEl('line', { x1: box.l, x2: box.r, y1: box.b, y2: box.b }, g);
+    svgEl('text', { x: (box.l + box.r) / 2, y: box.b + 36, 'text-anchor': 'middle', class: 'axis-title' }, g).textContent = spec.xTitle;
+    svgEl('text', { x: 0, y: 0, 'text-anchor': 'middle', class: 'axis-title', transform: 'translate(' + (box.l - 48) + ',' + ((box.t + box.b) / 2) + ') rotate(-90)' }, g).textContent = spec.yTitle;
+  }
+
+  /* ----- bagian 1: komposisi -> GAR ----- */
+  const COMP_SLIDERS = Object.freeze([
+    { id: 'bl-tm', key: 'tm', out: 'bl-out-tm', show: v => fmt1.format(v) + ' %' },
+    { id: 'bl-im', key: 'im', out: 'bl-out-im', show: v => fmt1.format(v) + ' %' },
+    { id: 'bl-ash', key: 'ashAd', out: 'bl-out-ash', show: v => fmt1.format(v) + ' %' },
+    { id: 'bl-rank', key: 'rank', out: 'bl-out-rank', show: v => rankName(v) }
+  ]);
+  const setComp = patch => { comp = normalize({ ...comp, ...patch }); renderComp(); };
+
+  function renderComp() {
+    const a = analyze(comp);
+    COMP_SLIDERS.forEach(sl => {
+      const input = $(sl.id);
+      if (parseFloat(input.value) !== comp[sl.key]) input.value = comp[sl.key];
+      setText(sl.out, sl.show(comp[sl.key]));
+    });
+    $('bl-im-hint').textContent = comp.imClamped
+      ? 'IM dibatasi di bawah TM, karena air bawaan tidak mungkin melebihi air total.'
+      : 'Air yang tertinggal setelah sampel dikeringkan di udara. Selalu lebih kecil dari TM.';
+    setText('bl-gar', fmt0.format(a.gar));
+    const parts = [['tm', comp.tm, 'TM', 'seg-tm'], ['ash', a.ashAr, 'Abu', 'seg-ash'], ['vm', a.vmAr, 'Zat terbang', 'seg-vm'], ['fc', a.fcAr, 'Karbon tetap', 'seg-fc']];
+    $('bl-kgbar').innerHTML = parts.map(([, v, , cls]) => '<span class="' + cls + '" style="width:' + v.toFixed(2) + '%"></span>').join('');
+    $('bl-kglegend').innerHTML = parts.map(([, v, name, cls]) => '<span><i class="' + cls + '"></i>' + name + ' ' + fmt1.format(v) + '%</span>').join('');
+    const d = a.daf;
+    const split = c => [d.VM * c / 100, (100 - d.VM) * c / 100];
+    const [vmDb, fcDb] = split(a.combDb);
+    const [vmAd, fcAd] = split(a.combAd);
+    const rows = [
+      { key: 'daf', name: 'Dry ash-free', sub: 'hanya bagian yang terbakar', segs: [['seg-vm', d.VM], ['seg-fc', 100 - d.VM]], val: a.qDaf, lbl: 'Gross daf' },
+      { key: 'db', name: 'Dry basis', sub: 'ditambah abu', segs: [['seg-ash', a.ashDb], ['seg-vm', vmDb], ['seg-fc', fcDb]], val: a.gdb, lbl: 'GDB' },
+      { key: 'ad', name: 'Air-dried', sub: 'ditambah inherent moisture', segs: [['seg-im', comp.im], ['seg-ash', comp.ashAd], ['seg-vm', vmAd], ['seg-fc', fcAd]], val: a.gad, lbl: 'GAD' },
+      { key: 'ar', name: 'As received', sub: 'seperti yang diterima pembeli', segs: [['seg-tm', comp.tm], ['seg-ash', a.ashAr], ['seg-vm', a.vmAr], ['seg-fc', a.fcAr]], val: a.gar, lbl: 'GAR' }
+    ];
+    $('bl-bases').innerHTML = rows.map(r =>
+      '<div class="base-row' + (r.key === 'ar' ? ' is-ar' : '') + '"><div class="base-name"><b>' + r.name + '</b><span>' + r.sub + '</span></div>' +
+      '<div class="base-bar">' + r.segs.map(([cls, v]) => '<span class="' + cls + '" style="width:' + v.toFixed(2) + '%"></span>').join('') + '</div>' +
+      '<div class="base-val">' + fmt0.format(r.val) + '<small>' + r.lbl + ', kcal/kg</small></div></div>').join('');
+    const at = tm => analyze({ ...comp, tm, im: effectiveIm(tm, comp.im) }).dGarDAsh;
+    $('bl-sens').innerHTML = 'Pada setelan ini, abu naik 1% menurunkan GAR sebesar <b>' + fmt0.format(-a.dGarDAsh) + '</b> kcal/kg. ' +
+      'Dengan batubara yang sama, angka itu menjadi <b>' + fmt0.format(-at(15)) + '</b> pada TM 15% dan <b>' + fmt0.format(-at(45)) +
+      '</b> pada TM 45%. Efek satu variabel bergantung pada variabel lain, sehingga tidak bisa ditulis sebagai x + y = z.';
+  }
+
+  /* ----- bagian 2: simulasi blend ----- */
+  const BLEND_SLIDERS = Object.freeze([
+    { id: 'bl-ratio', key: 'ratio', out: 'bl-out-ratio', show: v => v + ' %' },
+    { id: 'bl-days', key: 'days', out: 'bl-out-days', show: v => v + ' hari' },
+    { id: 'bl-rain', key: 'rain', out: 'bl-out-rain', show: v => v + ' mm' },
+    { id: 'bl-sigma', key: 'sigma', out: 'bl-out-sigma', show: v => '±' + v + ' kcal/kg' }
+  ]);
+  function setBlend(patch) {
+    cond = Object.freeze({ ...cond, ...patch });
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; renderBlend(); });
+  }
+  function renderSources() {
+    const card = (label, src, g, note) =>
+      '<div class="srcc"><div class="hd"><b>' + label + '</b><span class="eyebrow">' + note + '</span></div><dl>' +
+      '<dt>GAR</dt><dd>' + fmt0.format(g) + '</dd><dt>TM</dt><dd>' + fmt1.format(src.tm) + ' %</dd>' +
+      '<dt>Abu (ad)</dt><dd>' + fmt1.format(src.ashAd) + ' %</dd></dl><p>' + rankName(src.rank) + '</p></div>';
+    $('bl-sources').innerHTML = card('A · ' + DATA.blend.tutupan.label, SRC_A, model.garA, DATA.blend.tutupan.tag) + card('B · ' + DATA.blend.wara.label, SRC_B, model.garB, DATA.blend.wara.tag);
+  }
+  function renderBlend() {
+    BLEND_SLIDERS.forEach(sl => {
+      const input = $(sl.id);
+      if (parseFloat(input.value) !== cond[sl.key]) input.value = cond[sl.key];
+      setText(sl.out, sl.show(cond[sl.key]));
+    });
+    const w = cond.ratio / 100;
+    const arr = model.simulate(w, cond);
+    const sum = model.summarize(arr);
+    const linPred = w * model.garA + (1 - w) * model.garB;
+    const curve = model.rejectCurve(cond);
+    const wLin = model.linearRatio();
+    const pLin = model.summarize(model.simulate(wLin, cond)).pReject;
+    const robust = model.robustPoint(curve);
+    drawHistogram(arr, linPred, sum.mean);
+    drawCurve(curve, { wLin, pLin, robust, wCur: w });
+    const stat = (k, v) => '<div class="stat"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+    const bias = sum.mean - linPred;
+    $('bl-stats').innerHTML =
+      stat('Prediksi linier', fmt0.format(linPred)) +
+      stat('Rata-rata realisasi', fmt0.format(sum.mean) + ' (' + (bias >= 0 ? '+' : '−') + fmt0.format(Math.abs(bias)) + ')') +
+      stat('Peluang ditolak', fmt0.format(sum.pReject * 100) + ' %') +
+      stat('Give-away rata-rata', fmt1.format(sum.giveaway) + ' kcal/kg');
+    renderDecision(wLin, pLin, robust);
+  }
+  function drawHistogram(arr, linPred, mean) {
+    const svg = $('bl-hist');
+    svg.replaceChildren();
+    const box = { l: 52, r: 556, t: 26, b: 250 };
+    const lo = Math.floor(Math.min(mean - 380, CONTRACT.reject - 150) / 50) * 50;
+    const hi = Math.ceil(Math.max(mean + 380, CONTRACT.cap + 150) / 50) * 50;
+    const bw = 25;
+    const bins = new Array(Math.round((hi - lo) / bw)).fill(0);
+    for (let j = 0; j < arr.length; j++) bins[Math.floor((clamp(arr[j], lo, hi - 1e-6) - lo) / bw)]++;
+    const xs = scale(lo, hi, box.l, box.r);
+    const ys = scale(0, Math.max(...bins, 1) * 1.1, box.b, box.t);
+    [[box.l, xs(CONTRACT.reject), 'zone-bad', 'bad', 'DITOLAK'], [xs(CONTRACT.reject), xs(CONTRACT.cap), 'zone-ok', 'ok', 'DITERIMA'], [xs(CONTRACT.cap), box.r, 'zone-over', 'over', 'GIVE-AWAY']].forEach(([x0, x1, cls, lcls, label]) => {
+      svgEl('rect', { x: x0, y: box.t, width: Math.max(0, x1 - x0), height: box.b - box.t, class: cls }, svg);
+      svgEl('text', { x: x0 + 6, y: box.t - 8, class: 'zone-lbl ' + lcls }, svg).textContent = label;
+    });
+    bins.forEach((n, k) => {
+      if (!n) return;
+      const x0 = xs(lo + k * bw);
+      svgEl('rect', { x: x0 + 1, y: ys(n), width: xs(lo + (k + 1) * bw) - x0 - 2, height: box.b - ys(n), class: 'bin' }, svg);
+    });
+    const g = svgEl('g', { class: 'ax' }, svg);
+    svgEl('line', { x1: box.l, x2: box.r, y1: box.b, y2: box.b }, g);
+    niceTicks(lo, hi, 6).forEach(v => { svgEl('text', { x: xs(v), y: box.b + 18, 'text-anchor': 'middle' }, g).textContent = fmt0.format(v); });
+    svgEl('text', { x: (box.l + box.r) / 2, y: box.b + 38, 'text-anchor': 'middle', class: 'axis-title' }, g).textContent = 'GAR saat dimuat, kcal/kg';
+    const vx = v => xs(clamp(v, lo, hi));
+    svgEl('line', { x1: vx(linPred), x2: vx(linPred), y1: box.t + 4, y2: box.b, class: 'vline-lin' }, svg);
+    svgEl('line', { x1: vx(mean), x2: vx(mean), y1: box.t + 22, y2: box.b, class: 'vline-mean' }, svg);
+  }
+  function drawCurve(curve, marks) {
+    const svg = $('bl-curve');
+    svg.replaceChildren();
+    const box = { l: 66, r: 880, t: 16, b: 250 };
+    const xs = scale(0, 1, box.l, box.r);
+    const ys = scale(0, 1, box.b, box.t);
+    const pct = v => Math.round(v * 100) + '%';
+    drawAxes(svg, box, xs, ys, { xTicks: [0, 0.2, 0.4, 0.6, 0.8, 1], yTicks: [0, 0.25, 0.5, 0.75, 1], xFmt: pct, yFmt: pct, xTitle: 'Porsi A (Tutupan) dalam campuran', yTitle: 'Peluang ditolak' });
+    const line = curve.map((pt, i) => (i ? 'L' : 'M') + xs(pt.w).toFixed(1) + ' ' + ys(pt.p).toFixed(1)).join(' ');
+    svgEl('path', { d: line + ' L' + box.r + ' ' + box.b + ' L' + box.l + ' ' + box.b + ' Z', class: 'curve-area' }, svg);
+    svgEl('path', { d: line, class: 'curve' }, svg);
+    svgEl('line', { x1: box.l, x2: box.r, y1: ys(SIM.targetP), y2: ys(SIM.targetP), class: 'hline-target' }, svg);
+    svgEl('text', { x: box.r, y: ys(SIM.targetP) - 6, 'text-anchor': 'end', class: 'lbl-target' }, svg).textContent = 'batas 5%';
+    svgEl('circle', { cx: xs(marks.wLin), cy: ys(marks.pLin), r: 6.5, class: 'pt-lin' }, svg);
+    svgEl('text', { x: xs(marks.wLin) - 10, y: ys(marks.pLin) - 10, 'text-anchor': 'end', class: 'pt-lbl lin' }, svg).textContent = 'linier ' + pct(marks.wLin);
+    if (marks.robust) {
+      svgEl('circle', { cx: xs(marks.robust.w), cy: ys(marks.robust.p), r: 6.5, class: 'pt-rob' }, svg);
+      svgEl('text', { x: xs(marks.robust.w) + 10, y: ys(marks.robust.p) - 12, class: 'pt-lbl rob' }, svg).textContent = 'robust ' + pct(marks.robust.w);
+    }
+    const cur = curve[Math.round(marks.wCur * 100)];
+    svgEl('circle', { cx: xs(cur.w), cy: ys(cur.p), r: 5, class: 'pt-cur' }, svg);
+  }
+  function renderDecision(wLin, pLin, robust) {
+    const pctA = v => Math.round(v * 100);
+    const linCard = '<div class="dcard lin"><h3>Optimizer linier</h3><span class="big">A = ' + pctA(wLin) + '% · ditolak ' + fmt0.format(pLin * 100) + '%</span>' +
+      '<p>Menghitung GAR campuran sebagai rata-rata tertimbang, lalu memakai sumber A sesedikit mungkin sampai tepat menyentuh 4.600. Jawabannya tepat di batas kontrak, jadi realisasi yang sedikit lebih rendah langsung ditolak.</p>' +
+      '<button class="btn" type="button" data-set-ratio="' + pctA(wLin) + '">Pakai rasio ini</button></div>';
+    const robCard = robust
+      ? '<div class="dcard rob"><h3>Optimizer dengan ketidakpastian</h3><span class="big">A = ' + pctA(robust.w) + '% · ditolak ' + fmt0.format(robust.p * 100) + '%</span>' +
+        '<p>Memakai distribusi realisasi dari simulasi dan memilih porsi A terkecil yang peluang tolaknya di bawah 5%. Harga keamanannya ' + Math.max(0, pctA(robust.w) - pctA(wLin)) + ' poin persen batubara premium tambahan.</p>' +
+        '<button class="btn" type="button" data-set-ratio="' + pctA(robust.w) + '">Pakai rasio ini</button></div>'
+      : '<div class="dcard rob"><h3>Optimizer dengan ketidakpastian</h3><span class="big">Tidak ada rasio aman</span><p>Pada kondisi ini, bahkan 100% sumber A masih punya peluang tolak di atas 5%. Keputusan yang masuk akal adalah menunda pemuatan atau mencari sumber lain.</p></div>';
+    $('bl-decision').innerHTML = linCard + robCard;
+    $('bl-decision').querySelectorAll('[data-set-ratio]').forEach(b => b.addEventListener('click', () => setBlend({ ratio: parseInt(b.dataset.setRatio, 10) })));
+  }
+
+  /* ----- buka/tutup ----- */
+  function open() {
+    lastFocus = document.activeElement;
+    $('lab-back').hidden = false;
+    $('lab').scrollTop = 0;
+    renderComp(); renderSources(); renderBlend();
+    $('lab-close').focus();
+  }
+  function close() {
+    $('lab-back').hidden = true;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  const isOpen = () => !$('lab-back').hidden;
+
+  function init() {
+    COMP_SLIDERS.forEach(sl => $(sl.id).addEventListener('input', e => setComp({ [sl.key]: parseFloat(e.target.value) })));
+    BLEND_SLIDERS.forEach(sl => $(sl.id).addEventListener('input', e => setBlend({ [sl.key]: parseFloat(e.target.value) })));
+    $('bl-reset-comp').addEventListener('click', () => { comp = normalize(SRC_A); renderComp(); });
+    $('bl-load-wara').addEventListener('click', () => { comp = normalize(SRC_B); renderComp(); });
+    $('lab-close').addEventListener('click', close);
+    $('lab-back').addEventListener('click', e => { if (e.target === $('lab-back')) close(); });
+  }
+  return Object.freeze({ init, open, close, isOpen, model, getCond: () => cond, getComp: () => comp });
+})();
+/*</BlendUI>*/
+
+/*<App>*/
+/* ================= App: renderer, kamera, interaksi, panel ================= */
+(function main() {
+  const $ = id => document.getElementById(id);
+  const clamp = BlendCore.clamp;
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NARROW_MQ = matchMedia('(max-width: 760px), (max-aspect-ratio: 1/1) and (max-width: 1000px)');
+  const isNarrow = () => NARROW_MQ.matches;
+  const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+  const SRC_TITLES = {
+    umum: 'Praktik lazim di industri batubara, bukan pernyataan Adaro.',
+    ilustrasi: 'Contoh untuk memudahkan membayangkan. Bukan data.',
+    arsip: 'Dari laporan atau halaman Adaro yang lebih lama. Angka bisa sudah berubah.',
+    'konteks skripsi': 'Konteks proyek skripsi, bukan pernyataan resmi Adaro.',
+    'arsip AR Adaro Energy': 'Dari Laporan Tahunan Adaro Energy yang lebih lama.'
+  };
+  const srcTag = s => '<span class="src' + (s === 'ilustrasi' ? ' ilus' : '') + '"' + (SRC_TITLES[s] ? ' title="' + esc(SRC_TITLES[s]) + '"' : '') + '>' + esc(s) + '</span>';
+
+  BlendUI.init();
+  $('fb-lab').addEventListener('click', () => BlendUI.open());
+  const stage = $('stage');
+  const showFallback = err => {
+    console.error(err);
+    $('loading').hidden = true;
+    $('fallback').hidden = false;
+  };
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+  } catch (err) { showFallback(err); return; }
+  let world, flow;
+  const scene = new THREE.Scene();
+  try {
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.75));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    stage.appendChild(renderer.domElement);
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    world = buildWorld();
+    scene.add(world.root);
+    flow = createFlow(world);
+    scene.add(flow.group);
+  } catch (err) { showFallback(err); return; }
+
+  /* ---------- kamera ---------- */
+  const camera = new THREE.PerspectiveCamera(26, 1, 2, 9000);
+  const DEF_POL = 0.98;
+  const defAz = () => (isNarrow() ? 1.2 : Math.PI / 4);
+  const OVERVIEW = { t: V3(95, 0, 62) };
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.09;
+  controls.minDistance = 40; controls.maxDistance = 1700;
+  controls.minPolarAngle = 0.35; controls.maxPolarAngle = 1.2;
+  controls.minAzimuthAngle = 0.05; controls.maxAzimuthAngle = 1.55;
+  controls.screenSpacePanning = false;
+  controls.zoomSpeed = 0.9;
+  const PAN_BOX = { x: [-380, 580], z: [-150, 270] };
+
+  const leftInset = () => (isNarrow() ? 0 : 214);
+  /* jarak kamera agar seluruh peta muat di area yang tidak tertutup stepper */
+  const OVERVIEW_PTS = [[-350, 0, -6], [-268, 0, 122], [-262, 0, -124], [520, 0, 220], [548, 0, 96], [420, 0, 250], [200, 22, -118], [-214, 0, 112], [488, 0, 76]].map(p => V3(...p));
+  const overviewDist = () => {
+    const w = stage.clientWidth || 1000, h = stage.clientHeight || 600;
+    const cam = new THREE.PerspectiveCamera(26, w / h, 2, 5000);
+    const rx = Math.max(0.5, (w - leftInset() - 24) / w);
+    const ry = isNarrow() ? 0.66 : 0.9;
+    let d = 900;
+    for (let i = 0; i < 8; i++) {
+      cam.position.set(OVERVIEW.t.x + d * Math.sin(DEF_POL) * Math.sin(defAz()), d * Math.cos(DEF_POL), OVERVIEW.t.z + d * Math.sin(DEF_POL) * Math.cos(defAz()));
+      cam.lookAt(OVERVIEW.t);
+      cam.updateMatrixWorld(); cam.updateProjectionMatrix();
+      let need = 0;
+      OVERVIEW_PTS.forEach(p => { const n = p.clone().project(cam); need = Math.max(need, Math.abs(n.x) / rx, Math.abs(n.y) / ry); });
+      d *= need;
+    }
+    return Math.min(4200, Math.max(300, d));
+  };
+  const setView = (t, d, az = defAz(), pol = DEF_POL) => {
+    controls.target.copy(t);
+    camera.position.set(t.x + d * Math.sin(pol) * Math.sin(az), t.y + d * Math.cos(pol), t.z + d * Math.sin(pol) * Math.cos(az));
+    controls.update();
+  };
+
+  let tween = null;
+  let clock = 0;
+  const nowS = () => performance.now() / 1000;
+  const ease = k => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  function flyTo(t, d, az = defAz(), pol = DEF_POL, dur = 1.6) {
+    const rel = camera.position.clone().sub(controls.target);
+    const sp = new THREE.Spherical().setFromVector3(rel);
+    tween = {
+      t0: nowS(), dur: reduced ? 0.001 : dur,
+      fT: controls.target.clone(), tT: t.clone(), fR: sp.radius, tR: d,
+      fA: sp.theta, tA: clamp01((az - controls.minAzimuthAngle) / (controls.maxAzimuthAngle - controls.minAzimuthAngle)) * (controls.maxAzimuthAngle - controls.minAzimuthAngle) + controls.minAzimuthAngle,
+      fP: sp.phi, tP: pol
+    };
+  }
+  const cancelTween = () => { tween = null; };
+  function stepTween() {
+    if (!tween) return;
+    const k = ease(clamp01((nowS() - tween.t0) / tween.dur));
+    controls.target.lerpVectors(tween.fT, tween.tT, k);
+    const r = lerp(tween.fR, tween.tR, k), a = lerp(tween.fA, tween.tA, k), p = lerp(tween.fP, tween.tP, k);
+    camera.position.set(controls.target.x + r * Math.sin(p) * Math.sin(a), controls.target.y + r * Math.cos(p), controls.target.z + r * Math.sin(p) * Math.cos(a));
+    if (k >= 1) tween = null;
+  }
+
+  /* pergeseran pandang agar objek tidak tertutup panel */
+  let shiftX = 0, shiftY = 0, wantX = 0, wantY = 0;
+  function applyShift() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (Math.abs(shiftX) < 0.3 && Math.abs(shiftY) < 0.3) camera.clearViewOffset();
+    else camera.setViewOffset(w, h, shiftX, shiftY, w, h);
+  }
+  function setShift() {
+    const open = document.body.classList.contains('panel-open');
+    const w = stage.clientWidth, h = stage.clientHeight;
+    const panelW = open && !isNarrow() ? Math.min(420, w) : 0;
+    wantX = (panelW - leftInset()) / 2;
+    wantY = isNarrow() ? (open ? h * 0.31 : 8) : 0;
+  }
+
+  /* ---------- cahaya dan tema ---------- */
+  const hemi = new THREE.HemisphereLight(0xffffff, 0xcfd6e0, 1.0);
+  const sun = new THREE.DirectionalLight(0xfff1dc, 2.4);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.5;
+  scene.add(hemi, sun, sun.target);
+  const SUN_DIR = V3(0.8, 1.6, -1.0).normalize();
+  let shadowS = 0;
+  function applyTheme() {
+    const dark = isDark();
+    const bg = getComputedStyle(document.documentElement).getPropertyValue('--scene-bg').trim() || (dark ? '#12151c' : '#e9ecf0');
+    scene.background = new THREE.Color(bg);
+    hemi.color.set(dark ? 0x8fa4d0 : 0xffffff); hemi.groundColor.set(dark ? 0x2a2f3c : 0xcfd6e0);
+    hemi.intensity = dark ? 0.55 : 1.0;
+    sun.color.set(dark ? 0xb7c8ff : 0xfff1dc); sun.intensity = dark ? 1.7 : 2.4;
+    renderer.toneMappingExposure = dark ? 0.95 : 1.0;
+    scene.environmentIntensity = dark ? 0.22 : 0.35;
+    world.ground.material.opacity = dark ? 0.55 : 0.22;
+    $('btn-theme').setAttribute('aria-label', dark ? 'Ganti ke tema terang' : 'Ganti ke tema gelap');
+  }
+  applyTheme();
+  new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); } catch (e) { console.warn('Deteksi tema tidak didukung', e); }
+  $('btn-theme').addEventListener('click', () => {
+    const next = isDark() ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('peta-adaro-theme', next); } catch (e) { /* penyimpanan tidak tersedia */ }
+  });
+  try { const saved = localStorage.getItem('peta-adaro-theme'); if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved; } catch (e) { /* abaikan */ }
+
+  /* ---------- state ---------- */
+  const IDS = DATA.stations.map(s => s.id);
+  const stOf = id => DATA.stations.find(s => s.id === id);
+  const state = { mode: 'fob', active: null, part: null, motion: !reduced, tour: null, follow: null };
+
+  /* ---------- pin, stepper ---------- */
+  const pinsEl = $('pins'), ptagsEl = $('ptags');
+  const pinEls = {};
+  DATA.stations.forEach(st => {
+    const b = document.createElement('button');
+    b.className = 'pin'; b.type = 'button'; b.dataset.id = st.id;
+    b.style.setProperty('--stem', ({ kelanis: 52, blend: 18, barge: 34, dest: 40, ibt: 26, taboneo: 22, haul: 20, rom: 30, pit: 20 })[st.id] + 'px');
+    b.setAttribute('aria-label', 'Tahap ' + st.n + ': ' + st.name);
+    b.innerHTML = '<span class="tag"><span class="num">' + st.n + '</span><span class="nm">' + esc(st.short) + '</span><span class="co">' + esc(st.cos.slice(0, 2).join(' · ')) + '</span></span><span class="stem"></span><span class="dot"></span>';
+    b.addEventListener('click', () => { stopTour(); select(st.id); });
+    pinsEl.appendChild(b);
+    pinEls[st.id] = b;
+  });
+  const stepper = $('stepper');
+  const stepEls = {};
+  DATA.stations.forEach(st => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'step';
+    b.innerHTML = '<span class="n">' + st.n + '</span><span><span class="t">' + esc(st.short) + '</span><span class="s">' + esc(st.cos.slice(0, 3).join(' · ')) + '</span></span>';
+    b.addEventListener('click', () => { stopTour(); select(st.id); });
+    stepper.appendChild(b);
+    stepEls[st.id] = b;
+  });
+  const tourBtn = document.createElement('button');
+  tourBtn.type = 'button'; tourBtn.className = 'tour-btn'; tourBtn.setAttribute('aria-pressed', 'false');
+  tourBtn.textContent = 'Putar perjalanan';
+  stepper.appendChild(tourBtn);
+
+  /* ---------- tag bagian (sub-proses) ---------- */
+  let ptagList = [];
+  const clearPtags = () => { ptagsEl.replaceChildren(); ptagList = []; };
+  function addPtag(cfg) {
+    const el = document.createElement(cfg.click ? 'button' : 'div');
+    el.className = 'ptag' + (cfg.ilus ? ' ilus' : '');
+    if (cfg.click) { el.type = 'button'; el.addEventListener('click', cfg.click); }
+    el.innerHTML = esc(cfg.label) + (cfg.sub ? '<small>' + esc(cfg.sub) + '</small>' : '');
+    if (cfg.id) el.dataset.id = cfg.id;
+    ptagsEl.appendChild(el);
+    ptagList.push({ el, pos: cfg.pos, dy: cfg.dy ?? 0 });
+    return el;
+  }
+  function rebuildPtags() {
+    clearPtags();
+    const id = state.active;
+    if (id) {
+      world.stations[id].parts.forEach(p => addPtag({ id: p.id, label: p.label, sub: p.sub, pos: p.pos, ilus: p.ilus, click: () => { stopTour(); selectPart(p.id); } }));
+      if (id === 'pit') world.areaTags.forEach(a => addPtag({ label: a.label, sub: a.sub, pos: a.pos, dy: 0 }));
+      if (id === 'pit' && state.part === 'seamBlock') {
+        world.seamBlock.marks.filter(m => m.coal).forEach((m, k) => addPtag({ label: DATA.seams[k % DATA.seams.length].code, sub: 'ilustrasi', ilus: true, pos: V3(-249, 0.4 + m.y, -39) }));
+      }
+    }
+    if (['taboneo', 'ibt', 'dest'].includes(id)) {
+      if (state.mode === 'fob') {
+        addPtag({ label: 'Titik FOB', sub: 'hak milik pindah saat terpasang di kapal', pos: V3(376, 13, 128) });
+        addPtag({ label: 'Titik FOB', sub: 'kapal di Pulau Laut', pos: V3(464, 13, 150) });
+      } else {
+        Object.entries(world.portMeta).forEach(([k, p]) => addPtag({ label: { id: 'Indonesia', in: 'India', my: 'Malaysia', cn: 'China' }[k], sub: 'titik CIF: lewat pelabuhan bongkar', pos: p.clone().setY(12) }));
+      }
+    }
+    refreshChrome();
+  }
+
+  function refreshChrome() {
+    IDS.forEach(id => {
+      const on = state.active === id;
+      stepEls[id].toggleAttribute('aria-current', on);
+      if (on) stepEls[id].setAttribute('aria-current', 'true'); else stepEls[id].removeAttribute('aria-current');
+      if (on) pinEls[id].setAttribute('aria-current', 'true'); else pinEls[id].removeAttribute('aria-current');
+      pinEls[id].classList.toggle('dim', !!state.active && !on);
+    });
+    stepEls.dest.classList.toggle('dim', state.mode === 'fob');
+    ptagList.forEach(({ el }) => { if (el.dataset.id) el.toggleAttribute('aria-current', el.dataset.id === state.part); });
+    $('panel').querySelectorAll('.steps button').forEach(b => { if (b.dataset.part === state.part) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+  }
+
+  /* ---------- panel info ---------- */
+  function coRow(code) {
+    const c = DATA.companies[code];
+    return '<div class="co-row"><span class="chip" style="--c:' + c.color + '"><i></i>' + code + '</span><p><span class="full">' + esc(c.name) + '</span>' + esc(c.role) + '</p></div>';
+  }
+  function panelHTML(st) {
+    const i = IDS.indexOf(st.id);
+    const prev = DATA.stations[i - 1], next = DATA.stations[i + 1];
+    let h = '<div class="panel-head"><span class="num">' + st.n + '</span><div><h2>' + esc(st.name) + '</h2><p class="eyebrow">' + esc(st.kicker) + '</p></div>' +
+      '<button class="panel-close" type="button" id="panel-close" aria-label="Tutup panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>';
+    h += '<div class="sec"><h3>Apa ini?</h3><p>' + esc(st.what) + '</p></div>';
+    if (st.cta === 'lab') h += '<div class="sec"><button class="btn accent" type="button" id="open-lab">Buka Blend Lab</button></div>';
+    if (['pit', 'rom', 'haul'].includes(st.id)) h += '<div class="sec"><button class="btn ghost" type="button" id="follow-btn">Ikuti truk sampai Kelanis</button></div>';
+    h += '<div class="sec"><h3>Siapa yang mengurus</h3><div class="cos">' + st.cos.map(coRow).join('') + '</div></div>';
+    if (st.id === 'pit') {
+      h += '<div class="sec"><h3>Pit dan kadar air <span class="src">AR25 p.56, 58</span></h3><div class="pit-list">' +
+        DATA.pits.map(p => '<div class="pit-row' + (p.gone ? ' gone' : '') + '"><span><b>' + esc(p.name) + '</b><small>' + esc(p.note) + '</small></span><span class="v">TM ' + String(p.tm).replace('.', ',') + '%</span></div>').join('') +
+        '</div><p class="foot" style="margin:0;border:0;padding:0">TM = total moisture, % as received, rata-rata estimasi sumber daya. Semakin tinggi TM, semakin rendah GAR.</p></div>';
+    }
+    h += '<div class="sec"><h3>Yang terjadi di sini · klik untuk zoom</h3><ol class="steps">' +
+      st.steps.map(s => '<li><button type="button" data-part="' + s.part + '"><span class="txt"><b>' + esc(s.t) + '</b><span class="d">' + esc(s.d) + srcTag(s.src) + '</span></span></button></li>').join('') + '</ol></div>';
+    if (st.id === 'dest') {
+      h += '<div class="sec"><h3>Batas tanggung jawab Adaro</h3><div class="callout' + (state.mode === 'fob' ? '' : ' info') + '">' + DATA.sales[state.mode].text + '</div>' +
+        '<div class="pit-list">' + DATA.sales.destinations.map(d => '<div class="pit-row"><span><b>' + d.name + '</b><small>' + (d.note || '&nbsp;') + '</small></span><span class="v">' + d.share + '</span></div>').join('') + '</div></div>';
+    }
+    h += '<div class="sec"><h3>Angka publik</h3><dl class="facts">' + st.facts.map(f => '<div><dt>' + esc(f.k) + '</dt><dd>' + esc(f.v) + srcTag(f.src) + '</dd></div>').join('') + '</dl></div>';
+    if (st.dp.length) h += '<div class="sec"><h3>Data mutu yang lahir di sini</h3><div class="dps">' + st.dp.map(k => '<div class="dp"><b>' + k + '</b><span>' + esc(DATA.dataPoints[k]) + '</span></div>').join('') + '</div></div>';
+    if (st.note) h += '<div class="sec"><div class="callout">' + esc(st.note) + '</div></div>';
+    h += '<div class="panel-nav">' + (prev ? '<button class="btn ghost" type="button" data-go="' + prev.id + '">← ' + esc(prev.short) + '</button>' : '') + (next ? '<button class="btn" type="button" data-go="' + next.id + '">' + esc(next.short) + ' →</button>' : '') + '</div>';
+    h += '<p class="foot">Sumber utama: Laporan Tahunan PT Adaro Andalan Indonesia Tbk 2025 (AR25, halaman cetak). Tag "umum" = praktik lazim industri, "ilustrasi" = contoh. Peta tidak sesuai skala dan hanya memuat data publik.</p>';
+    return h;
+  }
+  function renderPanel(id) {
+    const st = stOf(id);
+    const p = $('panel');
+    p.innerHTML = panelHTML(st);
+    p.scrollTop = 0;
+    $('panel-close').addEventListener('click', () => { stopTour(); deselect(); });
+    p.querySelectorAll('[data-part]').forEach(b => b.addEventListener('click', () => { stopTour(); selectPart(b.dataset.part); }));
+    p.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => { stopTour(); select(b.dataset.go); }));
+    const lab = $('open-lab'); if (lab) lab.addEventListener('click', () => BlendUI.open());
+    const fol = $('follow-btn'); if (fol) fol.addEventListener('click', () => startFollow());
+  }
+
+  /* ---------- aksi ---------- */
+  function select(id, opts = {}) {
+    const st = world.stations[id];
+    if (!st) return;
+    state.follow = null;
+    state.active = id; state.part = null;
+    document.body.classList.add('panel-open');
+    renderPanel(id);
+    flow.setFocus(id);
+    rebuildPtags();
+    setShift();
+    if (opts.fly !== false) flyTo(st.camT, st.camD);
+    try { history.replaceState(null, '', '#' + id); } catch (e) { /* file:// tertentu menolak */ }
+  }
+  function selectPart(pid) {
+    const part = world.parts[pid];
+    if (!part) return;
+    if (state.active !== part.station) select(part.station, { fly: false });
+    state.part = pid;
+    refreshChrome();
+    flyTo(part.pos.clone().setY(Math.max(0, part.pos.y - 3)), part.dist, defAz(), 0.86, 1.3);
+    if (pid === 'seamBlock' || state.active === 'pit') rebuildPtags();
+  }
+  function deselect() {
+    state.follow = null;
+    state.active = null; state.part = null;
+    document.body.classList.remove('panel-open');
+    flow.setFocus(null);
+    clearPtags();
+    refreshChrome();
+    setShift();
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* abaikan */ }
+  }
+  function home() {
+    stopTour();
+    deselect();
+    flyTo(OVERVIEW.t, overviewDist(), defAz(), DEF_POL, 1.8);
+  }
+  $('btn-home').addEventListener('click', home);
+
+  /* ---------- FOB / CIF ---------- */
+  function setMode(m) {
+    state.mode = m;
+    $('mode-fob').setAttribute('aria-pressed', String(m === 'fob'));
+    $('mode-cif').setAttribute('aria-pressed', String(m === 'cif'));
+    $('term-note').innerHTML = DATA.sales[m].text;
+    flow.setMode(m);
+    if (state.active) { renderPanel(state.active); rebuildPtags(); if (state.part) refreshChrome(); }
+    refreshChrome();
+  }
+  $('mode-fob').addEventListener('click', () => setMode('fob'));
+  $('mode-cif').addEventListener('click', () => setMode('cif'));
+  setMode('fob');
+
+  /* ---------- animasi on/off ---------- */
+  const motionBtn = $('btn-motion');
+  const ICON_PAUSE = '<path d="M8 5v14M16 5v14"/>', ICON_PLAY = '<path d="M7 4.5v15l12-7.5z"/>';
+  function setMotion(on) {
+    state.motion = on;
+    motionBtn.setAttribute('aria-pressed', String(on));
+    motionBtn.setAttribute('aria-label', on ? 'Jeda animasi' : 'Jalankan animasi');
+    motionBtn.firstElementChild.innerHTML = on ? ICON_PAUSE : ICON_PLAY;
+  }
+  motionBtn.addEventListener('click', () => setMotion(!state.motion));
+  setMotion(state.motion);
+
+  /* ---------- tur perjalanan ---------- */
+  const DWELL = 8.5;
+  function startTour() {
+    state.tour = { i: 0, t0: nowS() };
+    tourBtn.setAttribute('aria-pressed', 'true'); tourBtn.textContent = 'Hentikan perjalanan';
+    select(IDS[0]);
+  }
+  function stopTour() {
+    if (!state.tour) return;
+    state.tour = null;
+    tourBtn.setAttribute('aria-pressed', 'false'); tourBtn.textContent = 'Putar perjalanan';
+  }
+  tourBtn.addEventListener('click', () => (state.tour ? stopTour() : startTour()));
+  function stepTour() {
+    const t = state.tour;
+    if (!t || nowS() - t.t0 < DWELL) return;
+    t.i += 1; t.t0 = nowS();
+    if (t.i >= IDS.length) { stopTour(); return; }
+    if (IDS[t.i] === 'dest' && state.mode === 'fob') setMode('cif');
+    select(IDS[t.i]);
+  }
+
+  /* ---------- ikuti truk ---------- */
+  function startFollow() {
+    if (state.active !== 'haul') select('haul', { fly: false });
+    let lead = null;
+    flow.rigs.forEach(r => { if (r.state === 'go' && (!lead || r.u < lead.u)) lead = r; });
+    lead = lead || flow.rigs[0];
+    state.follow = { s: lead };
+    cancelTween();
+    flyTo(lead.pos.clone(), 110, defAz(), 0.95, 1.1);
+  }
+  function stepFollow(dt) {
+    const f = state.follow;
+    if (!f) return;
+    if (!tween) {
+      const want = f.s.pos.clone(); want.y = 1;
+      const delta = want.clone().sub(controls.target).multiplyScalar(Math.min(1, dt * 5));
+      controls.target.add(delta);
+      camera.position.add(delta);
+    }
+    if (f.s.state === 'dump' || f.s.state === 'back') { state.follow = null; select('kelanis'); }
+  }
+  ['wheel', 'pointerdown'].forEach(ev => renderer.domElement.addEventListener(ev, () => { cancelTween(); state.follow = null; if (ev === 'pointerdown') stopTour(); }, { passive: true }));
+
+  /* ---------- picking ---------- */
+  const ray = new THREE.Raycaster();
+  const ndc = new THREE.Vector2();
+  let down = null;
+  function zoneAt(ev) {
+    const r = renderer.domElement.getBoundingClientRect();
+    ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    const hits = ray.intersectObjects(world.zones, false);
+    if (!hits.length) return null;
+    const top = Math.max(...hits.map(h => h.object.userData.prio));
+    return hits.find(h => h.object.userData.prio === top).object.userData.station;
+  }
+  renderer.domElement.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+  renderer.domElement.addEventListener('pointerup', e => {
+    if (!down) return;
+    const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y), dt = performance.now() - down.t;
+    down = null;
+    if (moved > 6 || dt > 600) return;
+    const id = zoneAt(e);
+    if (id) { stopTour(); select(id); }
+  });
+  renderer.domElement.addEventListener('pointermove', e => { if (e.buttons) return; renderer.domElement.style.cursor = zoneAt(e) ? 'pointer' : 'grab'; });
+
+  /* ---------- keyboard ---------- */
+  addEventListener('keydown', e => {
+    if (e.target.matches && e.target.matches('input, textarea, select')) return;
+    if (e.key === 'Escape') {
+      if (BlendUI.isOpen()) BlendUI.close(); else if (state.tour) stopTour(); else if (state.active) deselect();
+    } else if (!BlendUI.isOpen() && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+      const i = state.active ? IDS.indexOf(state.active) : -1;
+      const n = e.key === 'ArrowRight' ? Math.min(IDS.length - 1, i + 1) : Math.max(0, i - 1);
+      stopTour(); select(IDS[n]);
+    }
+  });
+
+  /* ---------- ukuran ---------- */
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    controls.maxDistance = Math.max(1700, overviewDist() * 1.15);
+    setShift();
+  }
+  addEventListener('resize', resize);
+  new ResizeObserver(resize).observe(stage);
+  resize();
+
+  /* ---------- loop ---------- */
+  const _p = new THREE.Vector3();
+  function project(pos) {
+    _p.copy(pos).project(camera);
+    return { x: (_p.x * 0.5 + 0.5) * stage.clientWidth, y: (-_p.y * 0.5 + 0.5) * stage.clientHeight, z: _p.z };
+  }
+  function place(el, pos, dy = 0) {
+    const s = project(pos);
+    const vis = s.z < 1 && s.z > -1 && s.x > -80 && s.x < stage.clientWidth + 80 && s.y > -40 && s.y < stage.clientHeight + 60;
+    if (!vis) { if (!el.hidden) el.hidden = true; return; }
+    if (el.hidden) el.hidden = false;
+    el.style.transform = 'translate3d(' + s.x.toFixed(1) + 'px,' + (s.y + dy).toFixed(1) + 'px,0) translate(-50%,-100%)';
+    el.style.zIndex = String(Math.round((1 - s.z) * 10000));
+  }
+
+  const sunLook = V3(0, 0, 0);
+  let last = performance.now(), avg = 0.016, slow = 0, lowQ = false, first = true;
+  function frame(now) {
+    requestAnimationFrame(frame);
+    if (document.hidden) { last = now; return; }
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    tick(dt);
+  }
+  function tick(dt) {
+    clock += dt;
+
+    if (state.tour) stepTour();
+    stepTween();
+    stepFollow(dt);
+    controls.target.x = clamp(controls.target.x, PAN_BOX.x[0], PAN_BOX.x[1]);
+    controls.target.z = clamp(controls.target.z, PAN_BOX.z[0], PAN_BOX.z[1]);
+    controls.update();
+
+    shiftX += (wantX - shiftX) * Math.min(1, dt * 6); shiftY += (wantY - shiftY) * Math.min(1, dt * 6);
+    applyShift();
+
+    const dist = camera.position.distanceTo(controls.target);
+    const S = clamp(dist * 0.62, 90, 620);
+    if (Math.abs(S - shadowS) > shadowS * 0.06) {
+      shadowS = S;
+      const c = sun.shadow.camera;
+      c.left = -S; c.right = S; c.top = S; c.bottom = -S; c.near = 1; c.far = 2200;
+      c.updateProjectionMatrix();
+    }
+    sunLook.copy(controls.target);
+    sun.target.position.copy(sunLook);
+    sun.position.copy(sunLook).addScaledVector(SUN_DIR, 900);
+
+    flow.update(dt, clock, { motion: state.motion });
+
+    Object.values(world.stations).forEach(st => {
+      const on = state.active === st.id;
+      st.ringMat.opacity += ((on ? 0.9 : 0) - st.ringMat.opacity) * Math.min(1, dt * 6);
+      const r = st.camD * 0.11 * (1 + (on ? 0.06 * Math.sin(clock * 3) : 0));
+      st.ring.scale.setScalar(Math.max(0.01, r));
+      st.ring.visible = st.ringMat.opacity > 0.01;
+    });
+
+    DATA.stations.forEach(s => place(pinEls[s.id], world.stations[s.id].pin));
+    ptagList.forEach(p => place(p.el, p.pos, p.dy));
+
+    renderer.render(scene, camera);
+
+    if (first) {
+      first = false;
+      $('loading').classList.add('fade');
+      setTimeout(() => { $('loading').hidden = true; }, 600);
+    }
+    avg = avg * 0.95 + dt * 0.05;
+    if (!lowQ && avg > 0.036) { slow += 1; if (slow > 120) reduceQuality(); } else slow = 0;
+  }
+  function reduceQuality() {
+    lowQ = true;
+    renderer.setPixelRatio(1);
+    sun.shadow.mapSize.set(1024, 1024);
+    sun.shadow.map?.dispose();
+    sun.shadow.map = null;
+    resize();
+    console.info('Kualitas grafis diturunkan otomatis karena frame rate rendah.');
+  }
+
+  /* ---------- awal ---------- */
+  setView(OVERVIEW.t, overviewDist());
+  const fromHash = decodeURIComponent((location.hash || '').replace('#', ''));
+  if (IDS.includes(fromHash)) select(fromHash);
+  requestAnimationFrame(frame);
+  setTimeout(() => { if (first) showFallback(new Error('Render pertama belum selesai setelah 12 detik')); }, 12000);
+  window.__peta = Object.freeze({ select, selectPart, setMode, home, state, world, flow, camera, controls, startTour, startFollow, tick, BlendUI, renderer, scene });
+})();
+/*</App>*/
+</script>
