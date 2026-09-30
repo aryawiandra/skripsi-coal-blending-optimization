@@ -1,0 +1,1950 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anatomi GAR Batubara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #ECEEF1;
+  --surface: #F8F9FB;
+  --surface-2: #E2E5EA;
+  --ink: #14161B;
+  --ink-2: #3B414C;
+  --muted: #5E6573;
+  --line: #C8CDD5;
+  --line-soft: #DADDE3;
+  --accent: #A95C0C;
+  --accent-strong: #8B4A07;
+  --accent-soft: #F3E2CA;
+  --c-tm: #2A62C4;
+  --c-ash: #8A8698;
+  --c-vm: #C47A14;
+  --c-fc: #1A1C21;
+  --s1: #8DB0E6;
+  --s2: #3A6FC4;
+  --s3: #173E7A;
+  --div-neg: #2F64B5;
+  --div-pos: #B8432F;
+  --div-mid: #F8F9FB;
+  --bad: #B3372B;
+  --bad-soft: #F2D9D5;
+  --good: #2E7A4C;
+  --good-soft: #D7EBDF;
+  --warn-soft: #F1E4CC;
+  --stage-a: #F9FAFB;
+  --stage-b: #D8DCE3;
+  --shadow: 0 1px 0 rgba(20, 22, 27, 0.04), 0 14px 34px -20px rgba(20, 22, 27, 0.28);
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0E1014;
+    --surface: #161920;
+    --surface-2: #1E222A;
+    --ink: #E7E9EE;
+    --ink-2: #C4C9D2;
+    --muted: #8E96A4;
+    --line: #2C313B;
+    --line-soft: #232730;
+    --accent: #F0A443;
+    --accent-strong: #F6B865;
+    --accent-soft: #3A2A15;
+    --c-tm: #62A0FF;
+    --c-ash: #A9A5B8;
+    --c-vm: #F0A443;
+    --c-fc: #E7E9EE;
+    --s1: #B3CDFF;
+    --s2: #62A0FF;
+    --s3: #2E62C2;
+    --div-neg: #5C9BFF;
+    --div-pos: #FF7F66;
+    --div-mid: #161920;
+    --bad: #FF7A6B;
+    --bad-soft: #3A1D1A;
+    --good: #5CC48A;
+    --good-soft: #15291F;
+    --warn-soft: #33260F;
+    --stage-a: #1C2029;
+    --stage-b: #0E1014;
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 18px 40px -22px rgba(0, 0, 0, 0.75);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E1014;
+  --surface: #161920;
+  --surface-2: #1E222A;
+  --ink: #E7E9EE;
+  --ink-2: #C4C9D2;
+  --muted: #8E96A4;
+  --line: #2C313B;
+  --line-soft: #232730;
+  --accent: #F0A443;
+  --accent-strong: #F6B865;
+  --accent-soft: #3A2A15;
+  --c-tm: #62A0FF;
+  --c-ash: #A9A5B8;
+  --c-vm: #F0A443;
+  --c-fc: #E7E9EE;
+  --s1: #B3CDFF;
+  --s2: #62A0FF;
+  --s3: #2E62C2;
+  --div-neg: #5C9BFF;
+  --div-pos: #FF7F66;
+  --div-mid: #161920;
+  --bad: #FF7A6B;
+  --bad-soft: #3A1D1A;
+  --good: #5CC48A;
+  --good-soft: #15291F;
+  --warn-soft: #33260F;
+  --stage-a: #1C2029;
+  --stage-b: #0E1014;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 18px 40px -22px rgba(0, 0, 0, 0.75);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 16px/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 4vw, 40px);
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--accent-strong); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.eyebrow {
+  font: 500 12px/1.3 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.basis {
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 2px 4px;
+  vertical-align: 2px;
+}
+.prose { max-width: 68ch; color: var(--ink-2); }
+.prose strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- Hero ---------- */
+.hero { padding-block: 40px 28px; display: grid; gap: 22px; }
+.hero-head { display: grid; gap: 12px; max-width: 72ch; }
+.hero h1 {
+  font-size: clamp(2.2rem, 5.2vw, 3.8rem);
+  font-weight: 800;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+.hero h1 em { font-style: normal; color: var(--accent); white-space: nowrap; }
+.dek { font-size: 1.1rem; color: var(--ink-2); max-width: 62ch; }
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(170px, 1fr) minmax(300px, 2.1fr) minmax(170px, 1fr);
+  grid-template-areas: "left center right";
+  align-items: center;
+  gap: 8px;
+  min-height: 470px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: radial-gradient(ellipse 60% 70% at 50% 46%, var(--stage-a), var(--stage-b));
+  overflow: hidden;
+}
+.callouts { display: grid; gap: 64px; position: relative; z-index: 2; }
+.callouts-left { grid-area: left; justify-items: end; text-align: right; }
+.callouts-right { grid-area: right; justify-items: start; text-align: left; }
+.callout {
+  display: grid;
+  gap: 2px;
+  max-width: 230px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  text-align: inherit;
+}
+.callout:hover, .callout[aria-pressed="true"] {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+.co-top { display: flex; gap: 8px; align-items: baseline; }
+.callouts-left .co-top { justify-content: flex-end; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--comp); flex: none; align-self: center; }
+.co-name { font: 700 15px/1.2 var(--font-display); font-stretch: 112%; font-variation-settings: "wdth" 112; }
+.co-val { font: 600 22px/1.2 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--comp); }
+.co-note { font-size: 13px; line-height: 1.45; color: var(--muted); }
+.coal-canvas {
+  grid-area: center;
+  position: relative;
+  height: 430px;
+  min-width: 0;
+  cursor: grab;
+}
+.coal-canvas:active { cursor: grabbing; }
+.coal-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
+.stage-tools {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  z-index: 3;
+  white-space: nowrap;
+}
+.btn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font: 500 13px/1 var(--font-body);
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--ink-2); }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.hint { font: 400 12px/1 var(--font-mono); color: var(--muted); }
+.stage-fallback {
+  position: absolute;
+  inset: 30% 10% auto;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+.leaders { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: visible; }
+.leaders path { fill: none; stroke-width: 1.2; }
+.leaders .dot { stroke: none; }
+.leaders .ring { fill: none; stroke-width: 1.2; transform-box: fill-box; transform-origin: center; animation: pulse 2.4s ease-out infinite; }
+@keyframes pulse { 0% { opacity: 0.9; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.8); } }
+
+.kgbar { display: grid; gap: 8px; }
+.kg-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.kg-track-wrap { position: relative; padding-top: 22px; }
+.kg-track { display: flex; height: 30px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); }
+.kg-track span { display: block; height: 100%; transition: width 0.15s linear; }
+.seg-tm { background: var(--c-tm); }
+.seg-ash { background: var(--c-ash); }
+.seg-vm { background: var(--c-vm); }
+.seg-fc { background: var(--c-fc); }
+.kg-bracket {
+  position: absolute;
+  top: 0;
+  height: 16px;
+  border: 1.5px solid var(--accent);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  transition: left 0.15s linear, width 0.15s linear;
+}
+.kg-bracket span {
+  position: absolute;
+  right: 0;
+  top: -18px;
+  font: 500 12px/1 var(--font-mono);
+  color: var(--accent);
+  white-space: nowrap;
+}
+.kg-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); }
+.kg-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.kg-legend b { font: 600 13px/1 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+
+.lab { display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px; align-items: start; }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.panel-title { font: 700 18px/1.2 var(--font-display); font-stretch: 112%; font-variation-settings: "wdth" 112; }
+.controls { display: grid; gap: 18px; }
+.ctl { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
+.ctl label { font-weight: 600; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.ctl label::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--c);
+  align-self: center;
+  flex: none;
+}
+.ctl output { font: 600 15px/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.ctl input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--c); margin: 4px 0 0; }
+.ctl-hint { grid-column: 1 / -1; font-size: 13px; color: var(--muted); }
+.note-inline { color: var(--accent-strong); }
+.sens {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+.sens b { color: var(--ink); font-family: var(--font-mono); font-weight: 600; }
+.row-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.coa { display: grid; gap: 14px; }
+.coa-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.gar-big { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.gar-label { font: 700 16px/1 var(--font-display); font-stretch: 125%; font-variation-settings: "wdth" 125; color: var(--muted); }
+.gar-num {
+  font: 600 clamp(2.8rem, 6vw, 3.8rem)/1 var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.gar-unit { font: 500 15px/1 var(--font-mono); color: var(--muted); }
+.coa-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.coa-table th {
+  text-align: left;
+  font: 500 11px/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 6px;
+  border-bottom: 1px solid var(--line);
+}
+.coa-table td { padding: 6px; border-bottom: 1px solid var(--line-soft); }
+.coa-table td.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.coa-table th.num { text-align: right; }
+.coa-table tr.hl td { background: var(--accent-soft); font-weight: 600; }
+.coa-table td.b { font-family: var(--font-mono); color: var(--muted); font-size: 13px; }
+.coa-note { font-size: 13px; color: var(--muted); }
+
+/* ---------- Argument summary ---------- */
+.argue { padding-block: 36px; display: grid; gap: 20px; }
+.argue-title { font-size: 1.5rem; font-weight: 800; font-stretch: 118%; font-variation-settings: "wdth" 118; line-height: 1.15; }
+.argue-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.arg { display: grid; gap: 8px; align-content: start; padding-top: 12px; border-top: 2px solid var(--ink); }
+.arg h3 { font-size: 17px; font-weight: 700; font-stretch: 112%; font-variation-settings: "wdth" 112; line-height: 1.25; }
+.arg p { font-size: 14.5px; color: var(--ink-2); }
+.arg .go { font: 500 12px/1 var(--font-mono); color: var(--muted); }
+.verdict {
+  font-size: 17px;
+  max-width: 78ch;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+/* ---------- Journey ---------- */
+.journey { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; position: relative; }
+.journey::before { content: ""; position: absolute; top: 17px; left: 18px; right: 18px; height: 2px; background: var(--line); }
+.stage { position: relative; display: grid; gap: 8px; align-content: start; }
+.stage-no { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--bg); font: 600 15px/1 var(--font-mono); position: relative; z-index: 1; }
+.stage h3 { font-size: 19px; font-weight: 800; font-stretch: 112%; font-variation-settings: "wdth" 112; }
+.stage-sub { font: 500 12px/1.3 var(--font-mono); color: var(--muted); letter-spacing: 0.04em; }
+.stage dl { margin: 0; display: grid; gap: 6px; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.stage dt { font: 500 11px/1.2 var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-strong); }
+.stage dd { margin: 0 0 6px; font-size: 14px; color: var(--ink-2); }
+
+/* ---------- Sections ---------- */
+.sec { border-top: 1px solid var(--line); padding-block: 52px; display: grid; gap: 24px; }
+.sec-head { display: grid; gap: 10px; max-width: 72ch; }
+.sec h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  font-weight: 800;
+  font-stretch: 118%;
+  font-variation-settings: "wdth" 118;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.fig {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+}
+.fig-title { font: 600 15px/1.3 var(--font-body); }
+.fig-cap { font-size: 13px; color: var(--muted); }
+.fig svg { width: 100%; height: auto; display: block; overflow: visible; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+
+.bases { display: grid; gap: 12px; }
+.base-row { display: grid; grid-template-columns: 170px minmax(0, 1fr) 150px; gap: 14px; align-items: center; }
+.base-name { display: grid; gap: 2px; }
+.base-name b { font: 700 15px/1.2 var(--font-display); font-stretch: 112%; font-variation-settings: "wdth" 112; }
+.base-name span { font-size: 12.5px; color: var(--muted); }
+.base-bar { display: flex; height: 26px; border-radius: 5px; overflow: hidden; border: 1px solid var(--line); }
+.base-bar span { height: 100%; transition: width 0.15s linear; }
+.base-bar .im { background: repeating-linear-gradient(135deg, var(--c-tm) 0 5px, color-mix(in srgb, var(--c-tm) 45%, var(--surface)) 5px 10px); }
+.base-val { text-align: right; font: 600 17px/1.1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.base-val small { display: block; font: 400 12px/1.3 var(--font-mono); color: var(--muted); }
+.base-row.is-ar .base-val { color: var(--accent); }
+
+.eqs { display: grid; gap: 16px; }
+.eq-item { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
+.eq-no { font: 500 13px/1 var(--font-mono); color: var(--muted); padding-top: 16px; }
+.eq-body { display: grid; gap: 6px; min-width: 0; }
+.eq { overflow-x: auto; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 10px; }
+.eq math { font-size: 1.15rem; }
+.eq .nl { color: var(--accent); }
+.eq-fallback { font-family: var(--font-mono); font-size: 13px; white-space: pre-wrap; color: var(--ink-2); }
+.eq-note { font-size: 14px; color: var(--ink-2); max-width: 72ch; }
+.eq-note .nlk { color: var(--accent); font-weight: 600; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 10px 28px; }
+.stat { display: grid; gap: 2px; }
+.stat .k { font-size: 12.5px; color: var(--muted); }
+.stat .v { font: 600 20px/1.2 var(--font-mono); font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); align-items: center; }
+.legend i { display: inline-block; width: 22px; height: 0; border-top: 2px solid var(--ink-2); vertical-align: middle; margin-right: 6px; }
+.legend i.dash { border-top-style: dashed; }
+.heat-wrap canvas { width: 100%; height: auto; display: block; aspect-ratio: 520 / 330; }
+.heat-scale { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; font: 400 12px/1 var(--font-mono); color: var(--muted); }
+.heat-scale .bar { height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--div-neg), var(--div-mid), var(--div-pos)); border: 1px solid var(--line); }
+
+/* chart classes (SVG) */
+.ax line { stroke: var(--line); }
+.ax text { fill: var(--muted); font: 400 11px var(--font-mono); }
+.ax .axis-title { fill: var(--muted); font: 500 11.5px var(--font-body); }
+.ax .grid-line { stroke: var(--line-soft); }
+.l1 { stroke: var(--s1); }
+.l2 { stroke: var(--s2); }
+.l3 { stroke: var(--s3); }
+.t1 { fill: var(--s1); }
+.t2 { fill: var(--s2); }
+.t3 { fill: var(--s3); }
+.solid { fill: none; stroke-width: 2.4; }
+.dashed { fill: none; stroke-width: 1.6; stroke-dasharray: 5 4; }
+.end-lbl { font: 600 11.5px var(--font-mono); }
+.marker { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.bin { fill: var(--ink-2); }
+.zone-bad { fill: var(--bad-soft); }
+.zone-ok { fill: var(--good-soft); }
+.zone-over { fill: var(--warn-soft); }
+.zone-lbl { font: 600 11px var(--font-mono); letter-spacing: 0.04em; }
+.zone-lbl.bad { fill: var(--bad); }
+.zone-lbl.ok { fill: var(--good); }
+.zone-lbl.over { fill: var(--accent-strong); }
+.vline-lin { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 4; }
+.vline-mean { stroke: var(--ink); stroke-width: 2; }
+.curve { fill: none; stroke: var(--ink); stroke-width: 2.2; }
+.curve-area { fill: color-mix(in srgb, var(--bad) 14%, transparent); }
+.hline-target { stroke: var(--good); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.lbl-target { fill: var(--good); font: 600 11px var(--font-mono); }
+.pt-lin { fill: var(--accent); }
+.pt-rob { fill: var(--good); }
+.pt-cur { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+.pt-lbl { font: 600 11px var(--font-mono); }
+.pt-lbl.lin { fill: var(--accent); }
+.pt-lbl.rob { fill: var(--good); }
+
+.blend { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 20px; align-items: start; }
+.sources { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.src { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 6px; background: var(--bg); }
+.src-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.src-head b { font: 800 20px/1 var(--font-display); font-stretch: 125%; font-variation-settings: "wdth" 125; }
+.src dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 13px; }
+.src dt { color: var(--muted); }
+.src dd { margin: 0; text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.src-rank { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line-soft); padding-top: 6px; }
+.contract { font-size: 13.5px; color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 12px; }
+.contract b { font-family: var(--font-mono); }
+.decision { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.dcard { border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; justify-items: start; }
+.dcard.lin { background: var(--accent-soft); }
+.dcard.rob { background: var(--good-soft); }
+.dcard h3 { font-size: 16px; font-weight: 700; font-stretch: 112%; font-variation-settings: "wdth" 112; }
+.dcard p { font-size: 14.5px; color: var(--ink-2); }
+.dcard .big { font: 600 22px/1.15 var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+.caveat { font-size: 13.5px; color: var(--muted); max-width: 80ch; }
+.caveat b { color: var(--ink-2); }
+
+.arch { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 12px; align-items: stretch; }
+.layer { border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; background: var(--surface); }
+.layer .eyebrow { color: var(--accent-strong); }
+.layer h3 { font-size: 18px; font-weight: 800; font-stretch: 112%; font-variation-settings: "wdth" 112; }
+.layer p { font-size: 14px; color: var(--ink-2); }
+.layer ul { margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--ink-2); display: grid; gap: 4px; }
+.layer .data { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line-soft); padding-top: 8px; }
+.arrow { align-self: center; font: 600 20px/1 var(--font-mono); color: var(--muted); }
+
+.refs { display: grid; gap: 8px; font-size: 14px; color: var(--ink-2); padding-left: 20px; margin: 0; }
+.assume { display: grid; gap: 8px; font-size: 14.5px; color: var(--ink-2); padding-left: 20px; margin: 0; max-width: 80ch; }
+footer { border-top: 1px solid var(--line); padding-block: 28px 44px; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 980px) {
+  .argue-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lab, .blend { grid-template-columns: 1fr; }
+  .arch { grid-template-columns: 1fr; }
+  .arrow { transform: rotate(90deg); justify-self: center; }
+}
+@media (max-width: 760px) {
+  .stage {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "center center" "left right";
+    min-height: 0;
+    padding: 12px;
+  }
+  .coal-canvas { height: 330px; }
+  .callouts { gap: 8px; }
+  .callouts-left, .callouts-right { justify-items: stretch; text-align: left; }
+  .callouts-left .co-top { justify-content: flex-start; flex-direction: row-reverse; }
+  .callout { max-width: none; border-color: var(--line); background: color-mix(in srgb, var(--surface) 70%, transparent); }
+  .co-note { display: none; }
+  .co-val { font-size: 18px; }
+  .leaders { display: none; }
+  .two, .decision, .sources { grid-template-columns: 1fr; }
+  .base-row { grid-template-columns: 1fr auto; }
+  .base-row .base-bar { grid-column: 1 / -1; grid-row: 2; }
+  .argue-grid { grid-template-columns: 1fr; }
+  .journey { grid-template-columns: 1fr; }
+  .journey::before { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .leaders .ring { animation: none; opacity: 0.4; }
+  .kg-track span, .kg-bracket, .base-bar span { transition: none; }
+}
+</style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+
+<main>
+  <header class="wrap hero">
+    <div class="hero-head">
+      <span class="eyebrow">Bahan bimbingan skripsi · Teknik Komputer FTUI</span>
+      <h1>Anatomi GAR batubara, dan kenapa ia bukan <em>x + y = z</em></h1>
+      <p class="dek">Satu kilogram batubara berisi air, abu, zat terbang, dan karbon tetap. Energinya hanya datang dari dua komponen terakhir, lalu dibagi dengan berat seluruhnya. Geser variabel di bawah dan perhatikan bagaimana efek satu variabel ikut berubah saat variabel lain bergeser.</p>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="callouts callouts-left">
+        <button class="callout" type="button" data-comp="tm" aria-pressed="false" style="--comp: var(--c-tm)">
+          <span class="co-top"><span class="co-name">Total Moisture</span><span class="sw"></span></span>
+          <span class="co-val" id="co-tm">0 %</span>
+          <span class="co-note">Air permukaan dan air bawaan. Menambah berat tanpa menambah energi.</span>
+        </button>
+        <button class="callout" type="button" data-comp="ash" aria-pressed="false" style="--comp: var(--c-ash)">
+          <span class="co-top"><span class="co-name">Abu</span><span class="sw"></span></span>
+          <span class="co-val" id="co-ash">0 %</span>
+          <span class="co-note">Mineral yang tersisa setelah dibakar. Pengencer, tidak menghasilkan panas.</span>
+        </button>
+      </div>
+
+      <div class="coal-canvas" id="coal-canvas" role="img" aria-label="Model 3D bongkahan batubara yang tampilannya berubah mengikuti variabel">
+        <p class="stage-fallback" id="stage-fallback" hidden>Tampilan 3D butuh koneksi internet untuk memuat Three.js. Semua perhitungan di halaman ini tetap berjalan.</p>
+        <div class="stage-tools">
+          <button class="btn" id="xray-toggle" type="button" aria-pressed="false">Lihat isi</button>
+          <span class="hint">Seret untuk memutar</span>
+        </div>
+      </div>
+
+      <div class="callouts callouts-right">
+        <button class="callout" type="button" data-comp="vm" aria-pressed="false" style="--comp: var(--c-vm)">
+          <span class="co-top"><span class="sw"></span><span class="co-name">Zat Terbang (VM)</span></span>
+          <span class="co-val" id="co-vm">0 %</span>
+          <span class="co-note">Gas yang lepas saat dipanaskan. Ikut terbakar dan menyumbang energi.</span>
+        </button>
+        <button class="callout" type="button" data-comp="fc" aria-pressed="false" style="--comp: var(--c-fc)">
+          <span class="co-top"><span class="sw"></span><span class="co-name">Karbon Tetap (FC)</span></span>
+          <span class="co-val" id="co-fc">0 %</span>
+          <span class="co-note">Arang padat yang tersisa. Sumber energi utama.</span>
+        </button>
+      </div>
+      <svg class="leaders" id="leaders" aria-hidden="true"></svg>
+    </div>
+
+    <div class="kgbar" aria-label="Komposisi satu kilogram batubara, basis as received">
+      <div class="kg-head">
+        <span class="eyebrow">1 kg batubara, basis as received (ar)</span>
+        <span class="eyebrow">Jumlah selalu 100%</span>
+      </div>
+      <div class="kg-track-wrap">
+        <div class="kg-bracket" id="kg-bracket"><span>energi hanya dari sini</span></div>
+        <div class="kg-track">
+          <span class="seg-tm" id="seg-tm"></span>
+          <span class="seg-ash" id="seg-ash"></span>
+          <span class="seg-vm" id="seg-vm"></span>
+          <span class="seg-fc" id="seg-fc"></span>
+        </div>
+      </div>
+      <div class="kg-legend">
+        <span><i class="sw" style="--comp: var(--c-tm)"></i>Total Moisture <b id="lg-tm"></b></span>
+        <span><i class="sw" style="--comp: var(--c-ash)"></i>Abu <b id="lg-ash"></b></span>
+        <span><i class="sw" style="--comp: var(--c-vm)"></i>Zat terbang <b id="lg-vm"></b></span>
+        <span><i class="sw" style="--comp: var(--c-fc)"></i>Karbon tetap <b id="lg-fc"></b></span>
+      </div>
+    </div>
+
+    <div class="lab">
+      <section class="panel controls" aria-labelledby="ctl-title">
+        <h2 class="panel-title" id="ctl-title">Variabel batubara</h2>
+        <div class="ctl" style="--c: var(--c-tm)">
+          <label for="in-tm">Total Moisture <span class="basis">ar</span></label>
+          <output id="out-tm" for="in-tm"></output>
+          <input id="in-tm" type="range" min="5" max="50" step="0.5" value="27">
+          <p class="ctl-hint">Air total saat batubara diterima pembeli. Hujan menaikkan, pengeringan menurunkan.</p>
+        </div>
+        <div class="ctl" style="--c: var(--s1)">
+          <label for="in-im">Inherent Moisture <span class="basis">ad</span></label>
+          <output id="out-im" for="in-im"></output>
+          <input id="in-im" type="range" min="2" max="25" step="0.5" value="14">
+          <p class="ctl-hint" id="im-hint">Air yang tertinggal setelah sampel dikeringkan di udara. Selalu lebih kecil dari TM.</p>
+        </div>
+        <div class="ctl" style="--c: var(--c-ash)">
+          <label for="in-ash">Abu <span class="basis">ad</span></label>
+          <output id="out-ash" for="in-ash"></output>
+          <input id="in-ash" type="range" min="1" max="30" step="0.5" value="3.5">
+          <p class="ctl-hint">Kandungan mineral. Diukur lab pada basis air-dried.</p>
+        </div>
+        <div class="ctl" style="--c: var(--c-vm)">
+          <label for="in-rank">Peringkat (rank)</label>
+          <output id="out-rank" for="in-rank"></output>
+          <input id="in-rank" type="range" min="0" max="1" step="0.01" value="0.38">
+          <p class="ctl-hint">Tingkat kematangan batubara, dari lignit ke antrasit. Menentukan kadar karbon, hidrogen, dan oksigen.</p>
+        </div>
+        <p class="sens" id="sens" aria-live="polite"></p>
+        <div class="row-actions">
+          <button class="btn" id="reset" type="button">Kembalikan nilai awal</button>
+        </div>
+      </section>
+
+      <section class="panel coa" aria-labelledby="coa-title">
+        <div class="coa-head">
+          <span class="eyebrow" id="coa-title">Hasil analisis (model)</span>
+          <span class="eyebrow">Spesimen: batubara umum</span>
+        </div>
+        <div class="gar-big">
+          <span class="gar-label">GAR</span>
+          <span class="gar-num" id="gar-num">0</span>
+          <span class="gar-unit">kcal/kg</span>
+        </div>
+        <table class="coa-table">
+          <thead>
+            <tr><th>Parameter</th><th>Basis</th><th class="num">Hasil</th><th>Satuan</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Total Moisture</td><td class="b">ar</td><td class="num" id="t-tm"></td><td>%</td></tr>
+            <tr><td>Inherent Moisture</td><td class="b">ad</td><td class="num" id="t-im"></td><td>%</td></tr>
+            <tr><td>Abu</td><td class="b">ar</td><td class="num" id="t-ash-ar"></td><td>%</td></tr>
+            <tr><td>Zat terbang</td><td class="b">ar</td><td class="num" id="t-vm"></td><td>%</td></tr>
+            <tr><td>Karbon tetap (by diff.)</td><td class="b">ar</td><td class="num" id="t-fc"></td><td>%</td></tr>
+            <tr class="hl"><td>Gross CV (GAR)</td><td class="b">ar</td><td class="num" id="t-gar"></td><td>kcal/kg</td></tr>
+            <tr><td>Gross CV (GAD)</td><td class="b">ad</td><td class="num" id="t-gad"></td><td>kcal/kg</td></tr>
+            <tr><td>Gross CV</td><td class="b">db</td><td class="num" id="t-gdb"></td><td>kcal/kg</td></tr>
+            <tr><td>Gross CV</td><td class="b">daf</td><td class="num" id="t-gdaf"></td><td>kcal/kg</td></tr>
+            <tr><td>Net CV (NAR)</td><td class="b">ar</td><td class="num" id="t-nar"></td><td>kcal/kg</td></tr>
+          </tbody>
+        </table>
+        <p class="coa-note">Angka dihitung dari persamaan di Langkah 2, bukan hasil uji laboratorium.</p>
+      </section>
+    </div>
+  </header>
+
+  <section class="wrap argue" aria-labelledby="argue-title">
+    <div class="sec-head">
+      <span class="eyebrow">Ringkasan argumen</span>
+      <h2 id="argue-title" class="argue-title">Kalau GAR campuran itu rata-rata tertimbang, kenapa perlu model?</h2>
+    </div>
+    <div class="argue-grid">
+      <article class="arg">
+        <h3>Rumusnya perkalian, bukan penjumlahan</h3>
+        <p>GAR adalah energi bagian yang terbakar dikali fraksi beratnya. Efek 1% abu terhadap GAR bergantung pada moisture, dan sebaliknya.</p>
+        <span class="go">Langkah 1 sampai 3</span>
+      </article>
+      <article class="arg">
+        <h3>Rata-rata tertimbang hanya benar saat pencampuran</h3>
+        <p>Setelah itu moisture berubah karena hujan dan pengeringan, dan batubara teroksidasi di stockpile. GAR yang diukur saat dimuat bergeser dari rencana.</p>
+        <span class="go">Langkah 4</span>
+      </article>
+      <article class="arg">
+        <h3>Kualitas sumber hanya diketahui dari sampel</h3>
+        <p>Angka kualitas tiap stockpile adalah estimasi dengan galat sampling dan segregasi. Rencana campuran dibuat di atas angka yang tidak pasti.</p>
+        <span class="go">Langkah 4</span>
+      </article>
+      <article class="arg">
+        <h3>Biaya kontrak tidak lurus</h3>
+        <p>Di bawah batas, kargo bisa ditolak. Di atas batas, energi lebih tidak dibayar. Optimizer linier menaruh campuran tepat di batas, dan peluang tolaknya sekitar 50%.</p>
+        <span class="go">Langkah 4</span>
+      </article>
+    </div>
+    <p class="verdict">Bagian fisika sudah punya rumus, jadi cukup dihitung. Yang tidak punya rumus adalah seberapa jauh realisasi menyimpang dari rencana dan seberapa besar ketidakpastiannya. Dua hal itu harus dipelajari dari data historis rencana vs realisasi, dan di situlah machine learning dipakai.</p>
+  </section>
+
+  <section class="wrap sec" id="perjalanan" aria-labelledby="journey-title">
+    <div class="sec-head">
+      <span class="eyebrow">Konteks · Perjalanan batubara</span>
+      <h2 id="journey-title">Dari tambang ke kapal, kualitasnya tidak diam</h2>
+      <p class="prose">GAR yang menentukan harga diukur di ujung perjalanan. Di tiap tahap ada sifat yang terbawa sejak awal, ada yang berubah, dan ada yang tercatat sebagai data. Model fisis di halaman ini hanya menghitung sifat yang terbawa.</p>
+    </div>
+    <ol class="journey">
+      <li class="stage">
+        <span class="stage-no">1</span>
+        <h3>Tambang</h3>
+        <p class="stage-sub">Pit, seam, ROM stockpile</p>
+        <dl>
+          <dt>Terbawa</dt>
+          <dd>Sifat geologi: peringkat (C, H, O), zat terbang, inherent moisture, abu mineral, dan sulfur. Nilainya berbeda per pit dan seam.</dd>
+          <dt>Bertambah</dt>
+          <dd>Air permukaan dari hujan dan air tanah. Batuan atau lempung yang ikut tergali (dilusi) menaikkan abu. Ukuran butir bercampur dari bongkah sampai fines.</dd>
+          <dt>Tercatat</dt>
+          <dd>Kualitas dari sampel bor dan sampel ROM. Nilainya perkiraan, bukan pengukuran seluruh tumpukan.</dd>
+        </dl>
+      </li>
+      <li class="stage">
+        <span class="stage-no">2</span>
+        <h3>Stockpile dan blending</h3>
+        <p class="stage-sub">Terminal, crushing, tongkang</p>
+        <dl>
+          <dt>Terjadi</dt>
+          <dd>Beberapa sumber dicampur sesuai rasio rencana. Rata-rata tertimbang hanya berlaku tepat saat dicampur.</dd>
+          <dt>Berubah</dt>
+          <dd>Butir besar dan kecil terpisah saat ditumpuk dan diambil kembali (segregasi), jadi campuran tidak rata. Selama menunggu, moisture bergeser karena pengeringan dan hujan, dan batubara teroksidasi pelan-pelan.</dd>
+          <dt>Tercatat</dt>
+          <dd>Rasio rencana, tonase dari timbangan belt, dan kualitas stok. Timbangan belt juga punya galat.</dd>
+        </dl>
+      </li>
+      <li class="stage">
+        <span class="stage-no">3</span>
+        <h3>Kapal dan pelabuhan bongkar</h3>
+        <p class="stage-sub">Pemuatan, pelayaran, pembeli</p>
+        <dl>
+          <dt>Berubah</dt>
+          <dd>Air turun ke dasar palka atau menguap, dan hujan saat muat menambah air, sehingga TM, tonase, dan GAR per kilogram ikut berubah. Batubara low-rank bisa memanas sendiri dan kehilangan sedikit kalori. Penanganan berulang menambah fines.</dd>
+          <dt>Tercatat</dt>
+          <dd>Certificate of Analysis di pelabuhan muat, dan sering juga di pelabuhan bongkar. Hasil keduanya bisa berbeda. Kontrak menentukan hasil mana yang dipakai untuk harga, bonus, penalti, atau penolakan.</dd>
+        </dl>
+      </li>
+    </ol>
+    <p class="caveat"><b>Artinya untuk model.</b> Tahap 1 menentukan kualitas awal, yang dihitung oleh Lapis 1 (fisika). Perubahan di tahap 2 dan 3 tidak punya rumus pasti, jadi dipelajari oleh Lapis 2 (machine learning) dari pasangan rencana campuran dan Certificate of Analysis. Pelabuhan yang dipakai kontrak menentukan angka mana yang menjadi target prediksi.</p>
+  </section>
+
+  <section class="wrap sec" id="basis" aria-labelledby="basis-title">
+    <div class="sec-head">
+      <span class="eyebrow">Langkah 1 dari 5 · Basis analisis</span>
+      <h2 id="basis-title">Satu batubara, empat angka kalori</h2>
+      <p class="prose">Lab tidak memberi satu angka kalori. Angkanya bergantung pada apa saja yang ikut dihitung dalam "satu kilogram". Keempat baris di bawah adalah batubara yang sama. Energi bagian yang terbakar tetap, yang berubah adalah pembaginya.</p>
+    </div>
+    <div class="fig">
+      <div class="bases" id="bases"></div>
+      <p class="fig-cap">Biru bergaris = inherent moisture (air yang masih ada setelah dikeringkan di udara). Biru penuh = total moisture. Pindah basis berarti mengalikan dengan rasio seperti (100 − TM)/(100 − IM), jadi selalu berupa pembagian, tidak pernah penjumlahan.</p>
+    </div>
+  </section>
+
+  <section class="wrap sec" id="model" aria-labelledby="model-title">
+    <div class="sec-head">
+      <span class="eyebrow">Langkah 2 dari 5 · Model matematis batubara umum</span>
+      <h2 id="model-title">Enam persamaan di balik angka GAR</h2>
+      <p class="prose">Suku berwarna adalah sumber non-linearitas: variabel yang saling mengali atau membagi. Model linier tidak punya suku seperti ini, jadi ia menganggap efek tiap variabel selalu sama besar.</p>
+    </div>
+    <div class="eqs">
+      <div class="eq-item">
+        <span class="eq-no">(1)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="\mathrm{TM} + A_{ar} + VM_{ar} + FC_{ar} = 100\%"></div>
+          <p class="eq-note">Analisis proksimat. Keempat komponen pada basis yang sama selalu berjumlah 100%. Karbon tetap dihitung sebagai sisa (by difference).</p>
+        </div>
+      </div>
+      <div class="eq-item">
+        <span class="eq-no">(2)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="Q_{daf} = \tfrac{1000}{4{,}1868}\,\bigl(0{,}3491\,C + 1{,}1783\,H + 0{,}1005\,S - 0{,}1034\,O - 0{,}0151\,N\bigr)"></div>
+          <p class="eq-note">Kalori bagian yang terbakar (dry ash-free, kcal/kg) dari analisis ultimat, memakai korelasi Channiwala dan Parikh (2002). C, H, O, N, S dalam % daf ditentukan oleh peringkat batubara.</p>
+        </div>
+      </div>
+      <div class="eq-item">
+        <span class="eq-no">(3)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="A_{ar} = A_{ad}\cdot\textcolor{#c47a14}{\dfrac{100-\mathrm{TM}}{100-\mathrm{IM}}}"></div>
+          <p class="eq-note">Konversi abu dari basis air-dried ke as received (ASTM D3180). Kadar abu yang dirasakan pembeli bergantung pada moisture.</p>
+        </div>
+      </div>
+      <div class="eq-item">
+        <span class="eq-no">(4)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="\mathrm{GAR} = Q_{daf}\cdot\dfrac{100-\mathrm{TM}-A_{ar}}{100} = \textcolor{#c47a14}{Q_{daf}\cdot\dfrac{(100-\mathrm{TM})\,(100-\mathrm{IM}-A_{ad})}{100\,(100-\mathrm{IM})}}"></div>
+          <p class="eq-note">Inti model. GAR = kalori bagian terbakar × fraksi bagian terbakar. Ruas kanan memperlihatkan <span class="nlk">perkalian (100 − TM) dengan (100 − IM − A)</span>: moisture dan abu saling mengali.</p>
+        </div>
+      </div>
+      <div class="eq-item">
+        <span class="eq-no">(5)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="\mathrm{NAR} \approx \mathrm{GAR} - 50{,}6\,H_{ar} - 5{,}85\,\mathrm{TM}"></div>
+          <p class="eq-note">Kalori bersih (net as received), dikurangi panas untuk menguapkan air bawaan dan air hasil pembakaran hidrogen. Pendekatan praktis ISO 1928 dalam kcal/kg.</p>
+        </div>
+      </div>
+      <div class="eq-item">
+        <span class="eq-no">(6)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="\dfrac{\partial\,\mathrm{GAR}}{\partial A_{ad}} = -\dfrac{Q_{daf}}{100}\cdot\textcolor{#c47a14}{\dfrac{100-\mathrm{TM}}{100-\mathrm{IM}}}"></div>
+          <p class="eq-note">Turunan parsial, yaitu seberapa besar GAR turun jika abu naik 1%. Hasilnya bergantung pada TM, IM, dan peringkat, sedangkan pada model linier angka ini konstan. Nilainya pada setelan sekarang: <b class="mono" id="eq6-val"></b> kcal/kg per 1% abu.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap sec" id="linear" aria-labelledby="linear-title">
+    <div class="sec-head">
+      <span class="eyebrow">Langkah 3 dari 5 · Uji model linier</span>
+      <h2 id="linear-title">Kalau GAR dipaksa jadi x + y = z</h2>
+      <p class="prose">Model linier GAR ≈ β₀ + β₁·TM + β₂·Abu + β₃·Rank di-fit langsung di browser ini ke seluruh rentang slider, lalu dibandingkan dengan model fisis dari persamaan (4). Model linier tidak salah hitung. Masalahnya ada pada bentuknya.</p>
+    </div>
+    <div class="stats" id="lin-stats"></div>
+    <div class="two">
+      <figure class="fig">
+        <figcaption class="fig-title">GAR terhadap abu, pada tiga tingkat moisture</figcaption>
+        <div class="legend"><span><i></i>model fisis</span><span><i class="dash"></i>model linier</span></div>
+        <svg id="fig-interaction" viewBox="0 0 540 330" role="img" aria-label="Grafik GAR terhadap abu untuk TM 15, 30, dan 45 persen"></svg>
+        <p class="fig-cap">Garis model fisis membentuk kipas: kemiringannya berbeda untuk tiap TM. Garis model linier selalu sejajar, karena ia menganggap efek abu sama di semua kadar moisture.</p>
+      </figure>
+      <figure class="fig">
+        <figcaption class="fig-title">Selisih model linier − model fisis (kcal/kg), peringkat sekarang</figcaption>
+        <div class="heat-wrap"><canvas id="fig-heat" width="520" height="330" role="img" aria-label="Peta selisih model linier terhadap model fisis pada bidang TM dan abu"></canvas></div>
+        <div class="heat-scale"><span id="heat-min"></span><span class="bar"></span><span id="heat-max"></span></div>
+        <p class="fig-cap">Biru: model linier terlalu rendah. Merah: terlalu tinggi. Lingkaran = setelan slider sekarang.</p>
+      </figure>
+    </div>
+    <p class="caveat" id="lin-caveat"></p>
+  </section>
+
+  <section class="wrap sec" id="blend" aria-labelledby="blend-title">
+    <div class="sec-head">
+      <span class="eyebrow">Langkah 4 dari 5 · Simulasi pencampuran</span>
+      <h2 id="blend-title">Saat dua batubara dicampur, lalu menunggu kapal</h2>
+      <p class="prose">Tepat saat dicampur, GAR campuran memang rata-rata tertimbang berdasarkan massa as received, karena energi total tidak berubah. Setelah itu tiga hal bekerja: moisture bergeser ke keseimbangan baru atau bertambah karena hujan, batubara teroksidasi pelan-pelan, dan kualitas tiap sumber sejak awal hanya diketahui dari sampel. Simulasi Monte Carlo di bawah menjalankan 3.000 kemungkinan untuk setiap rasio.</p>
+    </div>
+
+    <div class="eqs">
+      <div class="eq-item">
+        <span class="eq-no">(7)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="\mathrm{GAR}_{mix}(0) = \textstyle\sum_i w_i\,\mathrm{GAR}_i \qquad \mathrm{TM}_{mix}(0) = \textstyle\sum_i w_i\,\mathrm{TM}_i"></div>
+          <p class="eq-note">Keseimbangan massa dan energi saat pencampuran, dengan w<sub>i</sub> fraksi massa as received. Ini satu-satunya bagian yang benar-benar linier.</p>
+        </div>
+      </div>
+      <div class="eq-item">
+        <span class="eq-no">(8)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="\mathrm{TM}(t) = \mathrm{TM}_{eq} + \bigl(\mathrm{TM}(0)-\mathrm{TM}_{eq}\bigr)\,\textcolor{#c47a14}{e^{-kt}} + \Delta\mathrm{TM}_{hujan}"></div>
+          <p class="eq-note">Moisture bergerak ke keseimbangan dengan laju k, ditambah air hujan. Nilai k, TM<sub>eq</sub>, dan efek hujan berbeda per lokasi dan musim.</p>
+        </div>
+      </div>
+      <div class="eq-item">
+        <span class="eq-no">(9)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="\mathrm{GAR}_{mix}(t) = \mathrm{GAR}_{mix}(0)\cdot\textcolor{#c47a14}{\dfrac{100-\mathrm{TM}(t)}{100-\mathrm{TM}(0)}}\cdot(1-\delta t) + \varepsilon"></div>
+          <p class="eq-note">GAR saat dimuat. δ = laju kehilangan kalori karena oksidasi. ε = galat sampling dan segregasi.</p>
+        </div>
+      </div>
+      <div class="eq-item">
+        <span class="eq-no">(10)</span>
+        <div class="eq-body">
+          <div class="eq" data-tex="\min_{w}\ \text{biaya}(w) \quad\text{dengan}\quad \Pr\bigl[\mathrm{GAR}_{mix} \lt \mathrm{GAR}_{reject}\bigr] \le 5\%"></div>
+          <p class="eq-note">Optimisasi dengan chance constraint. Kendalanya berupa peluang, jadi optimizer butuh distribusi realisasi, bukan satu angka rata-rata.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="blend">
+      <section class="panel controls" aria-labelledby="blend-ctl-title">
+        <h3 class="panel-title" id="blend-ctl-title">Skenario</h3>
+        <div class="sources" id="sources"></div>
+        <div class="ctl" style="--c: var(--accent)">
+          <label for="in-ratio">Porsi sumber A</label>
+          <output id="out-ratio" for="in-ratio"></output>
+          <input id="in-ratio" type="range" min="0" max="100" step="1" value="49">
+          <p class="ctl-hint">Sisanya dari sumber B. A lebih mahal karena kalorinya lebih tinggi.</p>
+        </div>
+        <div class="ctl" style="--c: var(--c-fc)">
+          <label for="in-days">Hari di stockpile</label>
+          <output id="out-days" for="in-days"></output>
+          <input id="in-days" type="range" min="0" max="30" step="1" value="0">
+        </div>
+        <div class="ctl" style="--c: var(--c-tm)">
+          <label for="in-rain">Curah hujan selama menunggu</label>
+          <output id="out-rain" for="in-rain"></output>
+          <input id="in-rain" type="range" min="0" max="150" step="5" value="0">
+        </div>
+        <div class="ctl" style="--c: var(--c-ash)">
+          <label for="in-sigma">Galat sampling kualitas sumber (σ)</label>
+          <output id="out-sigma" for="in-sigma"></output>
+          <input id="in-sigma" type="range" min="20" max="150" step="5" value="60">
+        </div>
+        <p class="contract">Kontrak ilustratif: ditolak di bawah <b>4.600</b> kcal/kg GAR, harga pro-rata sampai <b>4.800</b>, kelebihan di atas itu tidak dibayar (give-away).</p>
+      </section>
+
+      <div class="fig">
+        <div class="fig-title">Sebaran GAR saat dimuat, pada porsi A sekarang</div>
+        <div class="legend"><span><i class="dash" style="border-color: var(--accent)"></i>prediksi linier</span><span><i style="border-color: var(--ink)"></i>rata-rata realisasi</span></div>
+        <svg id="fig-hist" viewBox="0 0 560 300" role="img" aria-label="Histogram GAR hasil simulasi dengan zona kontrak"></svg>
+        <div class="stats" id="blend-stats"></div>
+      </div>
+    </div>
+
+    <div class="fig">
+      <div class="fig-title">Peluang kargo ditolak untuk setiap porsi sumber A</div>
+      <svg id="fig-curve" viewBox="0 0 900 300" role="img" aria-label="Kurva peluang tolak terhadap porsi sumber A"></svg>
+      <div class="decision" id="decision" aria-live="polite"></div>
+    </div>
+    <p class="caveat"><b>Parameter ilustratif.</b> Laju pengeringan k, moisture keseimbangan, efek hujan, laju oksidasi δ, dan galat sampling di simulasi ini adalah angka contoh. Di lapangan nilainya tidak diketahui dan berbeda per lokasi, musim, dan cara penimbunan. Di skripsi, nilai-nilai ini dipelajari dari data historis rencana campuran vs hasil Certificate of Analysis.</p>
+  </section>
+
+  <section class="wrap sec" id="arsitektur" aria-labelledby="arch-title">
+    <div class="sec-head">
+      <span class="eyebrow">Langkah 5 dari 5 · Rancangan sistem</span>
+      <h2 id="arch-title">Model tiga lapis yang diusulkan</h2>
+      <p class="prose">Tiap lapis mengerjakan bagian yang sesuai sifatnya. Yang sudah ada rumusnya dihitung, yang belum ada rumusnya dipelajari, lalu keputusan diambil dengan memperhitungkan ketidakpastian.</p>
+    </div>
+    <div class="arch">
+      <article class="layer">
+        <span class="eyebrow">Lapis 1 · Fisika</span>
+        <h3>Konversi basis dan neraca campuran</h3>
+        <p>Persamaan (1) sampai (7). Deterministik dan sudah baku, jadi ditulis langsung sebagai fungsi, tidak dilatih.</p>
+        <ul><li>Konversi ar, ad, db, daf</li><li>Neraca massa dan energi saat pencampuran</li></ul>
+        <p class="data">Data: hasil analisis kualitas per sumber (tabel A pada permohonan data).</p>
+      </article>
+      <span class="arrow" aria-hidden="true">→</span>
+      <article class="layer">
+        <span class="eyebrow">Lapis 2 · Machine learning</span>
+        <h3>Penyimpangan realisasi dan ketidakpastiannya</h3>
+        <p>Mempelajari selisih GAR rencana vs GAR di Certificate of Analysis sebagai fungsi sumber, rasio, lama tunggu, dan cuaca. Keluarannya distribusi, bukan satu angka.</p>
+        <ul><li>Gradient boosting (baseline) dan quantile regression</li><li>Conformal prediction untuk interval yang terkalibrasi</li></ul>
+        <p class="data">Data: catatan pencampuran dan hasil muat (tabel C), stok (tabel B), curah hujan.</p>
+      </article>
+      <span class="arrow" aria-hidden="true">→</span>
+      <article class="layer">
+        <span class="eyebrow">Lapis 3 · Optimisasi</span>
+        <h3>Rasio campuran dengan objektif dua sisi</h3>
+        <p>Meminimalkan biaya sumber premium dan give-away sambil menjaga peluang tolak di bawah batas, sesuai persamaan (10).</p>
+        <ul><li>Linear programming sebagai baseline praktik saat ini</li><li>Chance-constrained dan NSGA-II sebagai metode utama</li></ul>
+        <p class="data">Data: batas spesifikasi produk (tabel D) dan ketersediaan stok.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap sec" id="asumsi" aria-labelledby="asumsi-title">
+    <div class="sec-head">
+      <span class="eyebrow">Asumsi, batasan, dan sumber</span>
+      <h2 id="asumsi-title">Yang disederhanakan di halaman ini</h2>
+    </div>
+    <ul class="assume">
+      <li>Abu dianggap sama dengan mineral matter. Koreksi Parr diabaikan, sehingga Q<sub>daf</sub> sedikit lebih tinggi dari nilai dmmf sebenarnya.</li>
+      <li>Komposisi daf (C, H, O, N, S, zat terbang) diinterpolasi dari nilai tipikal empat peringkat. Batubara nyata dari seam yang sama bisa berbeda.</li>
+      <li>Korelasi Channiwala dan Parikh berlaku umum untuk bahan bakar padat. Untuk data perusahaan, koefisiennya bisa dikalibrasi ulang dari hasil bomb calorimeter.</li>
+      <li>Parameter simulasi pencampuran (k, TM<sub>eq</sub>, efek hujan, δ, σ) adalah contoh. Tujuannya menunjukkan bentuk masalah, bukan memprediksi kargo tertentu.</li>
+      <li>Parameter lain seperti HGI dan ash fusion temperature juga diketahui tidak bercampur secara aditif. Keduanya tidak dimodelkan di sini.</li>
+    </ul>
+    <ol class="refs">
+      <li>ASTM D3180, Standard Practice for Calculating Coal and Coke Analyses from As-Determined to Different Bases.</li>
+      <li>ISO 1928, Coal and coke: Determination of gross calorific value (termasuk rumus kalori bersih).</li>
+      <li>SGS, <a href="https://www.sgs.com/en/services/coal-calculations">Coal Calculations</a> (rumus konversi basis dan NAR).</li>
+      <li>Channiwala, S.A. dan Parikh, P.P. (2002). A unified correlation for estimating HHV of solid, liquid and gaseous fuels. <i>Fuel</i> 81, 1051–1063.</li>
+      <li>ISO 13909, Coal and coke: Mechanical sampling (sumber galat sampling).</li>
+      <li>Reinforcement learning-enhanced multi-objective optimization for sustainable coal blending (2025). <i>PLOS ONE</i>, doi 10.1371/journal.pone.0331208.</li>
+      <li>Coal allocation optimization dengan hybrid residual prediction dan improved GA (2024). <i>Engineering Applications of AI</i>, doi 10.1016/j.engappai.2024.109072.</li>
+    </ol>
+  </section>
+</main>
+<footer class="wrap">Disusun oleh Muhammad Arya Wiandra Utomo untuk bimbingan skripsi, Teknik Komputer FTUI, September 2026. Model umum untuk ilustrasi, tidak memuat data perusahaan.</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================= Model fisis batubara ================= */
+  const RANK_ANCHORS = Object.freeze([
+    Object.freeze({ r: 0, C: 66.0, H: 4.8, O: 27.4, N: 1.0, S: 0.8, VM: 54 }),
+    Object.freeze({ r: 1 / 3, C: 73.0, H: 5.0, O: 20.3, N: 1.1, S: 0.6, VM: 47 }),
+    Object.freeze({ r: 2 / 3, C: 82.0, H: 5.4, O: 9.9, N: 1.7, S: 1.0, VM: 36 }),
+    Object.freeze({ r: 1, C: 92.5, H: 3.3, O: 2.5, N: 1.0, S: 0.7, VM: 6 })
+  ]);
+  const KCAL_PER_MJ = 1000 / 4.1868;
+  const IM_MARGIN = 0.5;
+  const LIMITS = Object.freeze({ tm: [5, 50], im: [2, 25], ashAd: [1, 30], rank: [0, 1] });
+  const DEFAULTS = Object.freeze({ tm: 27, im: 14, ashAd: 3.5, rank: 0.38, xray: false, focus: null });
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+  function dafComposition(rank) {
+    const r = clamp(rank, 0, 1);
+    for (let i = 0; i < RANK_ANCHORS.length - 1; i++) {
+      const a = RANK_ANCHORS[i];
+      const b = RANK_ANCHORS[i + 1];
+      if (r <= b.r + 1e-9) {
+        const t = (r - a.r) / (b.r - a.r);
+        return Object.freeze({
+          C: lerp(a.C, b.C, t), H: lerp(a.H, b.H, t), O: lerp(a.O, b.O, t),
+          N: lerp(a.N, b.N, t), S: lerp(a.S, b.S, t), VM: lerp(a.VM, b.VM, t)
+        });
+      }
+    }
+    return RANK_ANCHORS[RANK_ANCHORS.length - 1];
+  }
+
+  function rankName(rank) {
+    if (rank < 0.17) return 'Lignit';
+    if (rank < 0.5) return 'Sub-bituminus';
+    if (rank < 0.84) return 'Bituminus';
+    return 'Antrasit';
+  }
+
+  function grossDaf(d) {
+    return (0.3491 * d.C + 1.1783 * d.H + 0.1005 * d.S - 0.1034 * d.O - 0.0151 * d.N) * KCAL_PER_MJ;
+  }
+
+  function analyze(input) {
+    const { tm, im, ashAd, rank } = input;
+    const d = dafComposition(rank);
+    const qDaf = grossDaf(d);
+    const ashAr = ashAd * (100 - tm) / (100 - im);
+    const ashDb = ashAd * 100 / (100 - im);
+    const combAr = 100 - tm - ashAr;
+    const combAd = 100 - im - ashAd;
+    const combDb = 100 - ashDb;
+    const gar = qDaf * combAr / 100;
+    const hAr = d.H * combAr / 100;
+    return Object.freeze({
+      daf: d, qDaf, ashAr, ashDb, combAr, combAd, combDb, gar,
+      gad: qDaf * combAd / 100,
+      gdb: qDaf * combDb / 100,
+      nar: gar - 50.6 * hAr - 5.85 * tm,
+      vmAr: d.VM * combAr / 100,
+      fcAr: (100 - d.VM) * combAr / 100,
+      dGarDAsh: -qDaf / 100 * (100 - tm) / (100 - im),
+      dGarDTm: -qDaf / 100 * (100 - im - ashAd) / (100 - im),
+      rankName: rankName(rank)
+    });
+  }
+
+  function effectiveIm(tm, im) {
+    return Math.max(LIMITS.im[0], Math.min(im, tm - IM_MARGIN));
+  }
+
+  function normalize(s) {
+    const tm = clamp(s.tm, LIMITS.tm[0], LIMITS.tm[1]);
+    const imRaw = clamp(s.im, LIMITS.im[0], LIMITS.im[1]);
+    const im = effectiveIm(tm, imRaw);
+    return Object.freeze({
+      ...s, tm, im,
+      ashAd: clamp(s.ashAd, LIMITS.ashAd[0], LIMITS.ashAd[1]),
+      rank: clamp(s.rank, LIMITS.rank[0], LIMITS.rank[1]),
+      imClamped: im < imRaw
+    });
+  }
+
+  /* ================= Store ================= */
+  let coalState = normalize(DEFAULTS);
+  const listeners = new Set();
+  function emit() {
+    const a = analyze(coalState);
+    listeners.forEach(fn => fn(coalState, a));
+  }
+  function setCoalState(patch) {
+    coalState = normalize({ ...coalState, ...patch });
+    emit();
+  }
+  function subscribe(fn) {
+    listeners.add(fn);
+    fn(coalState, analyze(coalState));
+    return () => listeners.delete(fn);
+  }
+
+  /* ================= Tema ================= */
+  const themeListeners = new Set();
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+  function onThemeChange(fn) { themeListeners.add(fn); }
+  function fireTheme() { themeListeners.forEach(fn => fn()); }
+  try {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fireTheme);
+  } catch (e) {
+    console.warn('Deteksi perubahan tema tidak didukung browser ini.', e);
+  }
+  new MutationObserver(fireTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  window.CoalApp = Object.freeze({ analyze, subscribe, setCoalState, getState: () => coalState, cssVar, onThemeChange });
+
+  /* ================= Format angka ================= */
+  const fmt0 = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 });
+  const fmt1 = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const $ = id => document.getElementById(id);
+  const setText = (id, text) => { const n = $(id); if (n) n.textContent = text; };
+
+  /* ================= Hero: slider, callout, CoA ================= */
+  const SLIDERS = Object.freeze([
+    { id: 'in-tm', key: 'tm', out: 'out-tm', show: v => fmt1.format(v) + ' %' },
+    { id: 'in-im', key: 'im', out: 'out-im', show: v => fmt1.format(v) + ' %' },
+    { id: 'in-ash', key: 'ashAd', out: 'out-ash', show: v => fmt1.format(v) + ' %' },
+    { id: 'in-rank', key: 'rank', out: 'out-rank', show: v => rankName(v) }
+  ]);
+
+  function bindHeroControls() {
+    SLIDERS.forEach(s => {
+      $(s.id).addEventListener('input', e => setCoalState({ [s.key]: parseFloat(e.target.value) }));
+    });
+    $('reset').addEventListener('click', () => { coalState = normalize(DEFAULTS); emit(); });
+    $('xray-toggle').addEventListener('click', () => setCoalState({ xray: !coalState.xray, focus: null }));
+    document.querySelectorAll('.callout').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const comp = btn.dataset.comp;
+        const same = coalState.focus === comp && coalState.xray;
+        setCoalState({ xray: true, focus: same ? null : comp });
+      });
+    });
+  }
+
+  function renderHero(s, a) {
+    SLIDERS.forEach(sl => {
+      const input = $(sl.id);
+      if (parseFloat(input.value) !== s[sl.key]) input.value = s[sl.key];
+      setText(sl.out, sl.show(s[sl.key]));
+    });
+    $('im-hint').innerHTML = s.imClamped
+      ? '<span class="note-inline">IM dibatasi di bawah TM, karena air bawaan tidak mungkin melebihi air total.</span>'
+      : 'Air yang tertinggal setelah sampel dikeringkan di udara. Selalu lebih kecil dari TM.';
+    const parts = { tm: s.tm, ash: a.ashAr, vm: a.vmAr, fc: a.fcAr };
+    Object.entries(parts).forEach(([k, v]) => {
+      setText('co-' + k, fmt1.format(v) + ' %');
+      setText('lg-' + k, fmt1.format(v) + '%');
+      $('seg-' + k).style.width = v + '%';
+    });
+    const br = $('kg-bracket');
+    br.style.left = (s.tm + a.ashAr) + '%';
+    br.style.width = (a.vmAr + a.fcAr) + '%';
+    setText('gar-num', fmt0.format(a.gar));
+    setText('t-tm', fmt1.format(s.tm));
+    setText('t-im', fmt1.format(s.im));
+    setText('t-ash-ar', fmt1.format(a.ashAr));
+    setText('t-vm', fmt1.format(a.vmAr));
+    setText('t-fc', fmt1.format(a.fcAr));
+    setText('t-gar', fmt0.format(a.gar));
+    setText('t-gad', fmt0.format(a.gad));
+    setText('t-gdb', fmt0.format(a.gdb));
+    setText('t-gdaf', fmt0.format(a.qDaf));
+    setText('t-nar', fmt0.format(a.nar));
+    $('xray-toggle').setAttribute('aria-pressed', String(s.xray));
+    $('xray-toggle').textContent = s.xray ? 'Tampilan utuh' : 'Lihat isi';
+    document.querySelectorAll('.callout').forEach(btn => {
+      btn.setAttribute('aria-pressed', String(s.xray && s.focus === btn.dataset.comp));
+    });
+    renderSensitivity(s, a);
+  }
+
+  function renderSensitivity(s, a) {
+    const at = tm => analyze({ ...s, tm, im: effectiveIm(tm, s.im) }).dGarDAsh;
+    $('sens').innerHTML =
+      'Pada setelan ini, abu naik 1% menurunkan GAR sebesar <b>' + fmt0.format(-a.dGarDAsh) + '</b> kcal/kg. ' +
+      'Dengan batubara yang sama, angka itu menjadi <b>' + fmt0.format(-at(15)) + '</b> pada TM 15% dan <b>' + fmt0.format(-at(45)) +
+      '</b> pada TM 45%. Efek satu variabel bergantung pada variabel lain, sehingga tidak bisa ditulis sebagai x + y = z.';
+    setText('eq6-val', '−' + fmt0.format(-a.dGarDAsh));
+  }
+
+  /* ================= Langkah 1: basis ================= */
+  function renderBases(s, a) {
+    const d = a.daf;
+    const split = comb => [d.VM * comb / 100, (100 - d.VM) * comb / 100];
+    const [vmDb, fcDb] = split(a.combDb);
+    const [vmAd, fcAd] = split(a.combAd);
+    const rows = [
+      { key: 'daf', name: 'Dry ash-free', sub: 'hanya bagian yang terbakar', segs: [['vm', d.VM], ['fc', 100 - d.VM]], val: a.qDaf, lbl: 'Gross daf' },
+      { key: 'db', name: 'Dry basis', sub: 'ditambah abu', segs: [['ash', a.ashDb], ['vm', vmDb], ['fc', fcDb]], val: a.gdb, lbl: 'GDB' },
+      { key: 'ad', name: 'Air-dried', sub: 'ditambah inherent moisture', segs: [['im', s.im], ['ash', s.ashAd], ['vm', vmAd], ['fc', fcAd]], val: a.gad, lbl: 'GAD' },
+      { key: 'ar', name: 'As received', sub: 'seperti yang diterima pembeli', segs: [['tm', s.tm], ['ash', a.ashAr], ['vm', a.vmAr], ['fc', a.fcAr]], val: a.gar, lbl: 'GAR' }
+    ];
+    const cls = { tm: 'seg-tm', im: 'im', ash: 'seg-ash', vm: 'seg-vm', fc: 'seg-fc' };
+    $('bases').innerHTML = rows.map(r =>
+      '<div class="base-row' + (r.key === 'ar' ? ' is-ar' : '') + '">' +
+        '<div class="base-name"><b>' + r.name + ' <span class="basis">' + r.key + '</span></b><span>' + r.sub + '</span></div>' +
+        '<div class="base-bar">' + r.segs.map(([k, v]) => '<span class="' + cls[k] + '" style="width:' + v.toFixed(2) + '%"></span>').join('') + '</div>' +
+        '<div class="base-val">' + fmt0.format(r.val) + '<small>' + r.lbl + ', kcal/kg</small></div>' +
+      '</div>'
+    ).join('');
+  }
+
+  /* ================= Langkah 3: model linier ================= */
+  const WIDE = Object.freeze({ tm: [5, 50, 19], ash: [1, 30, 15], rank: [0, 1, 11] });
+  const NARROW = Object.freeze({ tm: [22, 38, 9], ash: [2, 10, 9], rank: [0.25, 0.55, 7] });
+  const fitCache = new Map();
+
+  function linspace(a, b, n) {
+    return Array.from({ length: n }, (_, i) => a + (b - a) * i / (n - 1));
+  }
+
+  function solveLinear(M, v) {
+    const n = v.length;
+    const A = M.map((row, i) => [...row, v[i]]);
+    for (let c = 0; c < n; c++) {
+      let p = c;
+      for (let r = c + 1; r < n; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+      [A[c], A[p]] = [A[p], A[c]];
+      for (let r = 0; r < n; r++) {
+        if (r === c) continue;
+        const f = A[r][c] / A[c][c];
+        for (let k = c; k <= n; k++) A[r][k] -= f * A[c][k];
+      }
+    }
+    return A.map((row, i) => row[n] / row[i]);
+  }
+
+  function gridPoints(domain, im) {
+    const pts = [];
+    linspace(...domain.tm).forEach(tm => linspace(...domain.ash).forEach(ash => linspace(...domain.rank).forEach(rank => {
+      pts.push([tm, ash, rank, analyze({ tm, im: effectiveIm(tm, im), ashAd: ash, rank }).gar]);
+    })));
+    return pts;
+  }
+
+  function fitLinear(domain, im) {
+    const key = (domain === WIDE ? 'w' : 'n') + im.toFixed(2);
+    if (fitCache.has(key)) return fitCache.get(key);
+    const pts = gridPoints(domain, im);
+    const XtX = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+    const Xty = [0, 0, 0, 0];
+    pts.forEach(([tm, ash, rank, y]) => {
+      const x = [1, tm, ash, rank];
+      for (let i = 0; i < 4; i++) {
+        Xty[i] += x[i] * y;
+        for (let j = 0; j < 4; j++) XtX[i][j] += x[i] * x[j];
+      }
+    });
+    const beta = solveLinear(XtX, Xty);
+    const predict = (tm, ash, rank) => beta[0] + beta[1] * tm + beta[2] * ash + beta[3] * rank;
+    let maxErr = 0;
+    let sse = 0;
+    pts.forEach(([tm, ash, rank, y]) => {
+      const e = predict(tm, ash, rank) - y;
+      maxErr = Math.max(maxErr, Math.abs(e));
+      sse += e * e;
+    });
+    const fit = Object.freeze({ beta, predict, maxErr, rmse: Math.sqrt(sse / pts.length) });
+    fitCache.set(key, fit);
+    return fit;
+  }
+
+  function renderLinearStats(s, a) {
+    const wide = fitLinear(WIDE, s.im);
+    const narrow = fitLinear(NARROW, s.im);
+    const errHere = wide.predict(s.tm, s.ashAd, s.rank) - a.gar;
+    const stat = (k, v) => '<div class="stat"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+    $('lin-stats').innerHTML =
+      stat('Selisih di setelan sekarang', (errHere >= 0 ? '+' : '−') + fmt0.format(Math.abs(errHere)) + ' kcal/kg') +
+      stat('Selisih terbesar, rentang penuh', '±' + fmt0.format(wide.maxErr) + ' kcal/kg') +
+      stat('RMSE, rentang penuh', fmt0.format(wide.rmse) + ' kcal/kg') +
+      stat('Selisih terbesar, rentang sempit', '±' + fmt0.format(narrow.maxErr) + ' kcal/kg');
+    $('lin-caveat').innerHTML =
+      '<b>Batas klaim.</b> Kalau model linier di-fit hanya di rentang operasi sempit (TM 22–38%, abu 2–10%, sub-bituminus), ' +
+      'selisihnya mengecil menjadi sekitar ±' + fmt0.format(narrow.maxErr) + ' kcal/kg. Angka ini masih sebanding dengan lebar pita spesifikasi ' +
+      'kontrak, yang sering hanya 50 sampai 200 kcal/kg, jadi cukup untuk mengubah kargo dari diterima menjadi ditolak. ' +
+      'Selisih akibat konversi basis ini juga masih kecil dibanding efek moisture dan ketidakpastian di Langkah 4.';
+  }
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  function svgEl(tag, attrs, parent) {
+    const n = document.createElementNS(SVG_NS, tag);
+    Object.entries(attrs || {}).forEach(([k, v]) => n.setAttribute(k, v));
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function scale(d0, d1, r0, r1) {
+    const m = (r1 - r0) / (d1 - d0);
+    return v => r0 + (v - d0) * m;
+  }
+  function niceTicks(lo, hi, count) {
+    const raw = (hi - lo) / count;
+    const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(st => st >= raw) || raw;
+    const out = [];
+    for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push(v);
+    return out;
+  }
+
+  function drawAxes(svg, box, xs, ys, spec) {
+    const g = svgEl('g', { class: 'ax' }, svg);
+    spec.yTicks.forEach(v => {
+      svgEl('line', { x1: box.l, x2: box.r, y1: ys(v), y2: ys(v), class: 'grid-line' }, g);
+      svgEl('text', { x: box.l - 8, y: ys(v) + 4, 'text-anchor': 'end' }, g).textContent = spec.yFmt(v);
+    });
+    spec.xTicks.forEach(v => {
+      svgEl('text', { x: xs(v), y: box.b + 18, 'text-anchor': 'middle' }, g).textContent = spec.xFmt(v);
+    });
+    svgEl('line', { x1: box.l, x2: box.r, y1: box.b, y2: box.b }, g);
+    svgEl('text', { x: (box.l + box.r) / 2, y: box.b + 36, 'text-anchor': 'middle', class: 'axis-title' }, g).textContent = spec.xTitle;
+    svgEl('text', {
+      x: 0, y: 0, 'text-anchor': 'middle', class: 'axis-title',
+      transform: 'translate(' + (box.l - 48) + ',' + ((box.t + box.b) / 2) + ') rotate(-90)'
+    }, g).textContent = spec.yTitle;
+  }
+
+  const TM_LEVELS = Object.freeze([{ tm: 15, c: '1' }, { tm: 30, c: '2' }, { tm: 45, c: '3' }]);
+
+  function renderInteraction(s) {
+    const svg = $('fig-interaction');
+    svg.replaceChildren();
+    const box = { l: 66, r: 470, t: 14, b: 282 };
+    const fit = fitLinear(WIDE, s.im);
+    const ashes = linspace(1, 30, 30);
+    const series = TM_LEVELS.map(lv => {
+      const im = effectiveIm(lv.tm, s.im);
+      return {
+        ...lv,
+        phys: ashes.map(ash => analyze({ tm: lv.tm, im, ashAd: ash, rank: s.rank }).gar),
+        lin: ashes.map(ash => fit.predict(lv.tm, ash, s.rank))
+      };
+    });
+    const all = series.flatMap(sr => [...sr.phys, ...sr.lin]);
+    const yLo = Math.floor(Math.min(...all) / 250) * 250;
+    const yHi = Math.ceil(Math.max(...all) / 250) * 250;
+    const xs = scale(1, 30, box.l, box.r);
+    const ys = scale(yLo, yHi, box.b, box.t);
+    drawAxes(svg, box, xs, ys, {
+      xTicks: [1, 5, 10, 15, 20, 25, 30], yTicks: niceTicks(yLo, yHi, 5),
+      xFmt: v => v, yFmt: v => fmt0.format(v), xTitle: 'Abu, % ad', yTitle: 'GAR, kcal/kg'
+    });
+    const path = arr => arr.map((y, i) => (i ? 'L' : 'M') + xs(ashes[i]).toFixed(1) + ' ' + ys(y).toFixed(1)).join(' ');
+    series.forEach(sr => {
+      svgEl('path', { d: path(sr.lin), class: 'dashed l' + sr.c }, svg);
+      svgEl('path', { d: path(sr.phys), class: 'solid l' + sr.c }, svg);
+      svgEl('text', { x: box.r + 8, y: ys(sr.phys[sr.phys.length - 1]) + 4, class: 'end-lbl t' + sr.c }, svg).textContent = 'TM ' + sr.tm + '%';
+    });
+    svgEl('circle', { cx: xs(s.ashAd), cy: ys(analyze(s).gar), r: 5.5, class: 'marker' }, svg);
+  }
+
+  function hexToRgb(hex) {
+    const h = (hex || '#888888').replace('#', '');
+    const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+    const n = parseInt(full, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  const mixRgb = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+
+  function heatErrors(s, fit, nx, ny) {
+    const errs = [];
+    let maxAbs = 1;
+    for (let j = 0; j < ny; j++) {
+      for (let i = 0; i < nx; i++) {
+        const tm = 5 + 45 * (i + 0.5) / nx;
+        const ash = 1 + 29 * (j + 0.5) / ny;
+        const e = fit.predict(tm, ash, s.rank) - analyze({ tm, im: effectiveIm(tm, s.im), ashAd: ash, rank: s.rank }).gar;
+        errs.push(e);
+        maxAbs = Math.max(maxAbs, Math.abs(e));
+      }
+    }
+    return { errs, maxAbs };
+  }
+
+  function renderHeatmap(s) {
+    const cv = $('fig-heat');
+    const W = 520, H = 330, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    if (cv.width !== W * dpr) { cv.width = W * dpr; cv.height = H * dpr; }
+    const ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    const box = { l: 58, r: W - 12, t: 10, b: H - 44 };
+    const NX = 90, NY = 58;
+    const { errs, maxAbs } = heatErrors(s, fitLinear(WIDE, s.im), NX, NY);
+    const neg = hexToRgb(cssVar('--div-neg'));
+    const mid = hexToRgb(cssVar('--div-mid'));
+    const pos = hexToRgb(cssVar('--div-pos'));
+    const cw = (box.r - box.l) / NX, ch = (box.b - box.t) / NY;
+    errs.forEach((e, k) => {
+      const i = k % NX, j = Math.floor(k / NX);
+      const c = mixRgb(mid, e < 0 ? neg : pos, Math.min(1, Math.abs(e) / maxAbs));
+      ctx.fillStyle = 'rgb(' + c.join(',') + ')';
+      ctx.fillRect(box.l + i * cw, box.b - (j + 1) * ch, cw + 0.6, ch + 0.6);
+    });
+    drawHeatAxes(ctx, box, s);
+    setText('heat-min', '−' + fmt0.format(maxAbs));
+    setText('heat-max', '+' + fmt0.format(maxAbs));
+  }
+
+  function drawHeatAxes(ctx, box, s) {
+    const ink = cssVar('--ink');
+    ctx.strokeStyle = cssVar('--line');
+    ctx.lineWidth = 1;
+    ctx.strokeRect(box.l, box.t, box.r - box.l, box.b - box.t);
+    ctx.fillStyle = cssVar('--muted');
+    ctx.font = '11px "IBM Plex Mono", ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    const xs = scale(5, 50, box.l, box.r);
+    const ys = scale(1, 30, box.b, box.t);
+    [5, 10, 20, 30, 40, 50].forEach(v => ctx.fillText(String(v), xs(v), box.b + 16));
+    ctx.textAlign = 'right';
+    [1, 10, 20, 30].forEach(v => ctx.fillText(String(v), box.l - 8, ys(v) + 4));
+    ctx.textAlign = 'center';
+    ctx.font = '500 11.5px "IBM Plex Sans", system-ui, sans-serif';
+    ctx.fillText('Total Moisture, % ar', (box.l + box.r) / 2, box.b + 34);
+    ctx.save();
+    ctx.translate(box.l - 38, (box.t + box.b) / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Abu, % ad', 0, 0);
+    ctx.restore();
+    const px = xs(s.tm), py = ys(s.ashAd);
+    ctx.strokeStyle = ink;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(px, py, 7, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = ink;
+    ctx.beginPath(); ctx.arc(px, py, 2.2, 0, Math.PI * 2); ctx.fill();
+  }
+
+  /* ================= Langkah 4: simulasi pencampuran ================= */
+  const SOURCE_A = Object.freeze({ key: 'A', tm: 25, im: 13, ashAd: 3.0, rank: 0.42 });
+  const SOURCE_B = Object.freeze({ key: 'B', tm: 37, im: 18, ashAd: 4.5, rank: 0.18 });
+  const CONTRACT = Object.freeze({ reject: 4600, cap: 4800 });
+  const SIM = Object.freeze({
+    draws: 3000, seed: 20260929, tmSd: 1.0, eqOffset: 12, kBase: 0.04, kSpread: 0.25,
+    rainMax: 5, rainScale: 120, oxBase: 0.0008, segFactor: 0.6, targetP: 0.05
+  });
+  const GAR_A = analyze(SOURCE_A).gar;
+  const GAR_B = analyze(SOURCE_B).gar;
+
+  function mulberry32(seed) {
+    let t = seed >>> 0;
+    return function () {
+      t += 0x6D2B79F5;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function standardNormals(n, rand) {
+    const out = new Float64Array(n);
+    for (let i = 0; i < n; i += 2) {
+      const u = Math.max(rand(), 1e-12), v = rand();
+      const m = Math.sqrt(-2 * Math.log(u));
+      out[i] = m * Math.cos(2 * Math.PI * v);
+      if (i + 1 < n) out[i + 1] = m * Math.sin(2 * Math.PI * v);
+    }
+    return out;
+  }
+  const DRAWS = (function () {
+    const rand = mulberry32(SIM.seed);
+    const mk = () => standardNormals(SIM.draws, rand);
+    return Object.freeze({ a: mk(), b: mk(), ta: mk(), tb: mk(), seg: mk(), k: mk() });
+  })();
+
+  function simulate(w, cond) {
+    const out = new Float64Array(SIM.draws);
+    const tmEq = w * SOURCE_A.im + (1 - w) * SOURCE_B.im + SIM.eqOffset;
+    const rain = SIM.rainMax * (1 - Math.exp(-cond.rain / SIM.rainScale));
+    const rankMix = w * SOURCE_A.rank + (1 - w) * SOURCE_B.rank;
+    const ox = 1 - SIM.oxBase * (1 - rankMix) * cond.days;
+    for (let j = 0; j < SIM.draws; j++) {
+      const ta = SOURCE_A.tm + SIM.tmSd * DRAWS.ta[j];
+      const tb = SOURCE_B.tm + SIM.tmSd * DRAWS.tb[j];
+      const ga = GAR_A * (100 - ta) / (100 - SOURCE_A.tm) + cond.sigma * DRAWS.a[j];
+      const gb = GAR_B * (100 - tb) / (100 - SOURCE_B.tm) + cond.sigma * DRAWS.b[j];
+      const tm0 = w * ta + (1 - w) * tb;
+      const g0 = w * ga + (1 - w) * gb;
+      const k = SIM.kBase * Math.exp(SIM.kSpread * DRAWS.k[j]);
+      const tmT = tmEq + (tm0 - tmEq) * Math.exp(-k * cond.days) + rain;
+      out[j] = g0 * (100 - tmT) / (100 - tm0) * ox + SIM.segFactor * cond.sigma * DRAWS.seg[j];
+    }
+    return out;
+  }
+
+  function summarize(arr) {
+    let rej = 0, sum = 0, give = 0;
+    for (let j = 0; j < arr.length; j++) {
+      const v = arr[j];
+      if (v < CONTRACT.reject) rej++;
+      if (v > CONTRACT.cap) give += v - CONTRACT.cap;
+      sum += v;
+    }
+    return { pReject: rej / arr.length, mean: sum / arr.length, giveaway: give / arr.length };
+  }
+
+  const linearRatio = () => clamp((CONTRACT.reject - GAR_B) / (GAR_A - GAR_B), 0, 1);
+
+  function rejectCurve(cond) {
+    return Array.from({ length: 101 }, (_, i) => ({ w: i / 100, p: summarize(simulate(i / 100, cond)).pReject }));
+  }
+
+  let blendCond = Object.freeze({ ratio: 49, days: 0, rain: 0, sigma: 60 });
+  const BLEND_SLIDERS = Object.freeze([
+    { id: 'in-ratio', key: 'ratio', out: 'out-ratio', show: v => v + ' %' },
+    { id: 'in-days', key: 'days', out: 'out-days', show: v => v + ' hari' },
+    { id: 'in-rain', key: 'rain', out: 'out-rain', show: v => v + ' mm' },
+    { id: 'in-sigma', key: 'sigma', out: 'out-sigma', show: v => '±' + v + ' kcal/kg' }
+  ]);
+
+  let blendQueued = false;
+  function setBlend(patch) {
+    blendCond = Object.freeze({ ...blendCond, ...patch });
+    if (blendQueued) return;
+    blendQueued = true;
+    requestAnimationFrame(() => { blendQueued = false; renderBlend(); });
+  }
+
+  function renderSources() {
+    const card = (src, g, note) =>
+      '<div class="src"><div class="src-head"><b>' + src.key + '</b><span class="eyebrow">' + note + '</span></div><dl>' +
+      '<dt>GAR</dt><dd>' + fmt0.format(g) + '</dd>' +
+      '<dt>TM</dt><dd>' + fmt1.format(src.tm) + ' %</dd>' +
+      '<dt>Abu (ad)</dt><dd>' + fmt1.format(src.ashAd) + ' %</dd></dl>' +
+      '<p class="src-rank">' + rankName(src.rank) + '</p></div>';
+    $('sources').innerHTML = card(SOURCE_A, GAR_A, 'premium') + card(SOURCE_B, GAR_B, 'murah');
+  }
+
+  function renderBlend() {
+    const c = blendCond;
+    BLEND_SLIDERS.forEach(sl => {
+      const input = $(sl.id);
+      if (parseFloat(input.value) !== c[sl.key]) input.value = c[sl.key];
+      setText(sl.out, sl.show(c[sl.key]));
+    });
+    const w = c.ratio / 100;
+    const sum = summarize(simulate(w, c));
+    const linPred = w * GAR_A + (1 - w) * GAR_B;
+    const curve = rejectCurve(c);
+    const wLin = linearRatio();
+    const pLin = summarize(simulate(wLin, c)).pReject;
+    const robust = curve.find(pt => pt.p <= SIM.targetP) || null;
+    drawHistogram(simulate(w, c), linPred, sum.mean);
+    drawCurve(curve, { wLin, pLin, robust, wCur: w });
+    renderBlendStats(sum, linPred);
+    renderDecision(wLin, pLin, robust);
+  }
+
+  function renderBlendStats(sum, linPred) {
+    const stat = (k, v) => '<div class="stat"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+    const bias = sum.mean - linPred;
+    $('blend-stats').innerHTML =
+      stat('Prediksi linier', fmt0.format(linPred)) +
+      stat('Rata-rata realisasi', fmt0.format(sum.mean) + ' (' + (bias >= 0 ? '+' : '−') + fmt0.format(Math.abs(bias)) + ')') +
+      stat('Peluang ditolak', fmt0.format(sum.pReject * 100) + ' %') +
+      stat('Give-away rata-rata', fmt1.format(sum.giveaway) + ' kcal/kg');
+  }
+
+  function drawHistogram(arr, linPred, mean) {
+    const svg = $('fig-hist');
+    svg.replaceChildren();
+    const box = { l: 52, r: 546, t: 26, b: 250 };
+    const lo = 4150, hi = 5250, bw = 25;
+    const bins = new Array(Math.round((hi - lo) / bw)).fill(0);
+    for (let j = 0; j < arr.length; j++) bins[Math.floor((clamp(arr[j], lo, hi - 1e-6) - lo) / bw)]++;
+    const xs = scale(lo, hi, box.l, box.r);
+    const ys = scale(0, Math.max(...bins, 1) * 1.1, box.b, box.t);
+    const zones = [
+      [box.l, xs(CONTRACT.reject), 'zone-bad', 'bad', 'DITOLAK'],
+      [xs(CONTRACT.reject), xs(CONTRACT.cap), 'zone-ok', 'ok', 'DITERIMA'],
+      [xs(CONTRACT.cap), box.r, 'zone-over', 'over', 'GIVE-AWAY']
+    ];
+    zones.forEach(([x0, x1, cls, lcls, label]) => {
+      svgEl('rect', { x: x0, y: box.t, width: x1 - x0, height: box.b - box.t, class: cls }, svg);
+      svgEl('text', { x: x0 + 6, y: box.t - 8, class: 'zone-lbl ' + lcls }, svg).textContent = label;
+    });
+    bins.forEach((n, k) => {
+      if (!n) return;
+      const x0 = xs(lo + k * bw);
+      svgEl('rect', { x: x0 + 1, y: ys(n), width: xs(lo + (k + 1) * bw) - x0 - 2, height: box.b - ys(n), class: 'bin' }, svg);
+    });
+    const g = svgEl('g', { class: 'ax' }, svg);
+    svgEl('line', { x1: box.l, x2: box.r, y1: box.b, y2: box.b }, g);
+    [4200, 4400, 4600, 4800, 5000, 5200].forEach(v => {
+      svgEl('text', { x: xs(v), y: box.b + 18, 'text-anchor': 'middle' }, g).textContent = fmt0.format(v);
+    });
+    svgEl('text', { x: (box.l + box.r) / 2, y: box.b + 38, 'text-anchor': 'middle', class: 'axis-title' }, g).textContent = 'GAR saat dimuat, kcal/kg';
+    const vx = v => xs(clamp(v, lo, hi));
+    svgEl('line', { x1: vx(linPred), x2: vx(linPred), y1: box.t + 4, y2: box.b, class: 'vline-lin' }, svg);
+    svgEl('line', { x1: vx(mean), x2: vx(mean), y1: box.t + 22, y2: box.b, class: 'vline-mean' }, svg);
+  }
+
+  function drawCurve(curve, marks) {
+    const svg = $('fig-curve');
+    svg.replaceChildren();
+    const box = { l: 66, r: 880, t: 16, b: 250 };
+    const xs = scale(0, 1, box.l, box.r);
+    const ys = scale(0, 1, box.b, box.t);
+    const pct = v => Math.round(v * 100) + '%';
+    drawAxes(svg, box, xs, ys, {
+      xTicks: [0, 0.2, 0.4, 0.6, 0.8, 1], yTicks: [0, 0.25, 0.5, 0.75, 1],
+      xFmt: pct, yFmt: pct, xTitle: 'Porsi sumber A dalam campuran', yTitle: 'Peluang ditolak'
+    });
+    const line = curve.map((pt, i) => (i ? 'L' : 'M') + xs(pt.w).toFixed(1) + ' ' + ys(pt.p).toFixed(1)).join(' ');
+    svgEl('path', { d: line + ' L' + box.r + ' ' + box.b + ' L' + box.l + ' ' + box.b + ' Z', class: 'curve-area' }, svg);
+    svgEl('path', { d: line, class: 'curve' }, svg);
+    svgEl('line', { x1: box.l, x2: box.r, y1: ys(SIM.targetP), y2: ys(SIM.targetP), class: 'hline-target' }, svg);
+    svgEl('text', { x: box.r, y: ys(SIM.targetP) - 6, 'text-anchor': 'end', class: 'lbl-target' }, svg).textContent = 'batas 5%';
+    svgEl('circle', { cx: xs(marks.wLin), cy: ys(marks.pLin), r: 6.5, class: 'pt-lin' }, svg);
+    svgEl('text', { x: xs(marks.wLin) - 10, y: ys(marks.pLin) - 10, 'text-anchor': 'end', class: 'pt-lbl lin' }, svg).textContent = 'linier ' + pct(marks.wLin);
+    if (marks.robust) {
+      svgEl('circle', { cx: xs(marks.robust.w), cy: ys(marks.robust.p), r: 6.5, class: 'pt-rob' }, svg);
+      svgEl('text', { x: xs(marks.robust.w) + 10, y: ys(marks.robust.p) - 12, class: 'pt-lbl rob' }, svg).textContent = 'robust ' + pct(marks.robust.w);
+    }
+    const cur = curve[Math.round(marks.wCur * 100)];
+    svgEl('circle', { cx: xs(cur.w), cy: ys(cur.p), r: 5, class: 'pt-cur' }, svg);
+  }
+
+  function renderDecision(wLin, pLin, robust) {
+    const pctA = v => Math.round(v * 100);
+    const linCard =
+      '<div class="dcard lin"><h3>Optimizer linier</h3><span class="big">A = ' + pctA(wLin) + '% · ditolak ' + fmt0.format(pLin * 100) + '%</span>' +
+      '<p>Menghitung GAR campuran sebagai rata-rata tertimbang, lalu memakai sumber A sesedikit mungkin sampai tepat menyentuh 4.600. Jawabannya berada tepat di batas kontrak, jadi realisasi yang sedikit lebih rendah langsung ditolak.</p>' +
+      '<button class="btn" type="button" data-set-ratio="' + pctA(wLin) + '">Pakai rasio ini</button></div>';
+    const robCard = robust
+      ? '<div class="dcard rob"><h3>Optimizer dengan ketidakpastian</h3><span class="big">A = ' + pctA(robust.w) + '% · ditolak ' + fmt0.format(robust.p * 100) + '%</span>' +
+        '<p>Memakai distribusi realisasi dari simulasi dan memilih porsi A terkecil yang peluang tolaknya di bawah 5%. Harga keamanannya ' +
+        Math.max(0, pctA(robust.w) - pctA(wLin)) + ' poin persen batubara premium tambahan.</p>' +
+        '<button class="btn" type="button" data-set-ratio="' + pctA(robust.w) + '">Pakai rasio ini</button></div>'
+      : '<div class="dcard rob"><h3>Optimizer dengan ketidakpastian</h3><span class="big">Tidak ada rasio aman</span>' +
+        '<p>Pada kondisi ini, bahkan 100% sumber A masih punya peluang tolak di atas 5%. Keputusan yang masuk akal adalah menunda pemuatan atau mencari sumber lain.</p></div>';
+    $('decision').innerHTML = linCard + robCard;
+    $('decision').querySelectorAll('[data-set-ratio]').forEach(b => {
+      b.addEventListener('click', () => setBlend({ ratio: parseInt(b.dataset.setRatio, 10) }));
+    });
+  }
+
+  function bindBlendControls() {
+    BLEND_SLIDERS.forEach(sl => {
+      $(sl.id).addEventListener('input', e => setBlend({ [sl.key]: parseFloat(e.target.value) }));
+    });
+  }
+
+  /* ================= KaTeX ================= */
+  function renderEquations() {
+    document.querySelectorAll('.eq[data-tex]').forEach(node => {
+      const tex = node.dataset.tex;
+      try {
+        if (!window.katex) throw new Error('KaTeX tidak termuat');
+        window.katex.render(tex, node, { output: 'mathml', displayMode: true, throwOnError: false });
+        node.querySelectorAll('[mathcolor]').forEach(m => { m.removeAttribute('mathcolor'); m.classList.add('nl'); });
+      } catch (err) {
+        console.warn('Persamaan ditampilkan sebagai teks:', err.message);
+        const pre = document.createElement('div');
+        pre.className = 'eq-fallback';
+        pre.textContent = tex;
+        node.replaceChildren(pre);
+      }
+    });
+  }
+
+  /* ================= Boot ================= */
+  let chartsQueued = false;
+  function onCoalChange(s, a) {
+    renderHero(s, a);
+    if (chartsQueued) return;
+    chartsQueued = true;
+    requestAnimationFrame(() => {
+      chartsQueued = false;
+      const st = coalState;
+      const an = analyze(st);
+      renderBases(st, an);
+      renderLinearStats(st, an);
+      renderInteraction(st);
+      renderHeatmap(st);
+    });
+  }
+
+  function boot() {
+    bindHeroControls();
+    bindBlendControls();
+    renderSources();
+    subscribe(onCoalChange);
+    renderBlend();
+    renderEquations();
+    onThemeChange(() => renderHeatmap(coalState));
+    setTimeout(() => {
+      if (!window.__coal3dReady) $('stage-fallback').hidden = false;
+    }, 8000);
+  }
+  boot();
+})();
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const app = window.CoalApp;
+const host = document.getElementById('coal-canvas');
+const stage = document.getElementById('stage');
+const leadersSvg = document.getElementById('leaders');
+const fallback = document.getElementById('stage-fallback');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const COMPONENTS = ['tm', 'ash', 'vm', 'fc'];
+const COMP_VAR = { tm: '--c-tm', ash: '--c-ash', vm: '--c-vm', fc: '--c-fc' };
+const LEFT_SIDE = new Set(['tm', 'ash']);
+const ANCHORS = {
+  tm: new THREE.Vector3(-0.52, 0.30, 0.34),
+  ash: new THREE.Vector3(-0.44, -0.30, 0.30),
+  vm: new THREE.Vector3(0.52, 0.30, 0.30),
+  fc: new THREE.Vector3(0.46, -0.26, 0.36)
+};
+const RANK_COLORS = [[0, '#2e2119'], [1 / 3, '#141211'], [2 / 3, '#0b0c0d'], [1, '#060708']];
+const ASH_COLOR = new THREE.Color('#57544f');
+const POINT_COUNT = 1400;
+const LUMP_SCALE = new THREE.Vector3(1.28, 0.92, 1.04);
+
+function seeded(seed) {
+  let t = seed >>> 0;
+  return () => {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rand = seeded(1402);
+const randomUnit = () => new THREE.Vector3(rand() * 2 - 1, rand() * 2 - 1, rand() * 2 - 1).normalize();
+
+const WAVES = Array.from({ length: 7 }, (_, i) => ({ dir: randomUnit(), freq: 1.6 + rand() * 2.4, phase: rand() * 6.28, amp: 0.05 / (1 + i * 0.35) }));
+const PLANES = Array.from({ length: 12 }, () => ({ n: randomUnit(), d: 0.8 + rand() * 0.14 }));
+
+function surfacePoint(dirIn) {
+  const dir = dirIn.clone().normalize();
+  const r = 1 + WAVES.reduce((acc, w) => acc + w.amp * Math.sin(w.freq * dir.dot(w.dir) * 3 + w.phase), 0);
+  const q = dir.multiplyScalar(r);
+  PLANES.forEach(pl => {
+    const d = q.dot(pl.n);
+    if (d > pl.d) q.addScaledVector(pl.n, pl.d - d);
+  });
+  return q.multiply(LUMP_SCALE);
+}
+
+function buildLumpGeometry() {
+  const geo = new THREE.IcosahedronGeometry(1, 6);
+  const pos = geo.attributes.position;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    const q = surfacePoint(v.fromBufferAttribute(pos, i));
+    pos.setXYZ(i, q.x, q.y, q.z);
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+
+function buildPoints() {
+  const positions = new Float32Array(POINT_COUNT * 3);
+  const order = new Float32Array(POINT_COUNT);
+  for (let i = 0; i < POINT_COUNT; i++) {
+    const p = surfacePoint(randomUnit()).multiplyScalar(Math.cbrt(rand()) * 0.84);
+    positions.set([p.x, p.y, p.z], i * 3);
+    order[i] = rand();
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(POINT_COUNT * 3), 3));
+  return { geo, order };
+}
+
+function dotTexture() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 64;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(32, 32, 0, 32, 32, 30);
+  grad.addColorStop(0, 'rgba(255,255,255,1)');
+  grad.addColorStop(0.65, 'rgba(255,255,255,1)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grad;
+  g.beginPath(); g.arc(32, 32, 30, 0, Math.PI * 2); g.fill();
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function rankColor(rank) {
+  for (let i = 0; i < RANK_COLORS.length - 1; i++) {
+    const [r0, c0] = RANK_COLORS[i];
+    const [r1, c1] = RANK_COLORS[i + 1];
+    if (rank <= r1 + 1e-9) return new THREE.Color(c0).lerp(new THREE.Color(c1), (rank - r0) / (r1 - r0));
+  }
+  return new THREE.Color(RANK_COLORS[RANK_COLORS.length - 1][1]);
+}
+
+function buildScene(renderer) {
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  const key = new THREE.DirectionalLight(0xffffff, 1.9);
+  key.position.set(3, 4, 5);
+  const rim = new THREE.DirectionalLight(0xbfd4ff, 1.4);
+  rim.position.set(-4, 1.5, -3);
+  scene.add(key, rim, new THREE.HemisphereLight(0xffffff, 0x222222, 0.12));
+
+  const lumpGeo = buildLumpGeometry();
+  const material = new THREE.MeshPhysicalMaterial({ color: 0x1a1a1a, roughness: 0.6, metalness: 0.08, clearcoat: 0.2, clearcoatRoughness: 0.3, flatShading: true, envMapIntensity: 0.22, specularIntensity: 0.55 });
+  const edges = new THREE.LineSegments(new THREE.EdgesGeometry(lumpGeo, 28), new THREE.LineBasicMaterial({ transparent: true, opacity: 0.35 }));
+  const { geo: pointGeo, order } = buildPoints();
+  const pointMat = new THREE.PointsMaterial({ size: 0.075, map: dotTexture(), vertexColors: true, transparent: true, alphaTest: 0.3, depthWrite: false, sizeAttenuation: true });
+  const points = new THREE.Points(pointGeo, pointMat);
+  const group = new THREE.Group();
+  group.add(new THREE.Mesh(lumpGeo, material), edges, points);
+  scene.add(group);
+  return { scene, group, material, edges, points, pointGeo, order };
+}
+
+function start() {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMappingExposure = 0.9;
+  host.prepend(renderer.domElement);
+
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+  camera.position.set(0, 0.35, 5.6);
+  const world = buildScene(renderer);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = false;
+  controls.enablePan = false;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.rotateSpeed = 0.7;
+
+  const leaders = buildLeaders();
+  let current = { state: app.getState(), analysis: app.analyze(app.getState()) };
+
+  function paintPoints(s, a) {
+    const cols = COMPONENTS.map(c => new THREE.Color(app.cssVar(COMP_VAR[c]) || '#888888'));
+    const fractions = [s.tm, a.ashAr, a.vmAr, a.fcAr].map(v => v / 100);
+    const cum = fractions.map((_, i) => fractions.slice(0, i + 1).reduce((x, y) => x + y, 0));
+    const bg = new THREE.Color(app.cssVar('--stage-a') || '#888888');
+    const attr = world.pointGeo.attributes.color;
+    for (let i = 0; i < POINT_COUNT; i++) {
+      const found = cum.findIndex(c => world.order[i] <= c);
+      const idx = found === -1 ? COMPONENTS.length - 1 : found;
+      const c = cols[idx].clone();
+      if (s.focus && COMPONENTS[idx] !== s.focus) c.lerp(bg, 0.85);
+      attr.setXYZ(i, c.r, c.g, c.b);
+    }
+    attr.needsUpdate = true;
+    world.edges.material.color.set(app.cssVar('--ink') || '#888888');
+  }
+
+  function applyState(s, a) {
+    current = { state: s, analysis: a };
+    const m = world.material;
+    const ashT = Math.min(1, a.ashAr / 30);
+    m.color.copy(rankColor(s.rank).lerp(ASH_COLOR, ashT * 0.6));
+    m.roughness = THREE.MathUtils.clamp(0.9 - s.rank * 0.72 + ashT * 0.25, 0.12, 1);
+    m.metalness = 0.04 + s.rank * 0.2;
+    const wet = THREE.MathUtils.smoothstep(s.tm, 8, 45);
+    m.clearcoat = wet * 0.7;
+    m.clearcoatRoughness = 0.4 - wet * 0.32;
+    m.transparent = s.xray;
+    m.opacity = s.xray ? 0.12 : 1;
+    m.depthWrite = !s.xray;
+    world.edges.visible = s.xray;
+    world.points.visible = s.xray;
+    paintPoints(s, a);
+  }
+
+  function resize() {
+    const w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(host);
+  resize();
+
+  app.subscribe(applyState);
+  app.onThemeChange(() => { paintPoints(current.state, current.analysis); leaders.recolor(); });
+
+  const clock = new THREE.Clock();
+  function frame() {
+    const t = clock.getElapsedTime();
+    if (!reduceMotion) {
+      world.group.position.y = Math.sin(t * 0.9) * 0.07;
+      world.group.rotation.y = Math.sin(t * 0.25) * 0.55;
+      world.group.rotation.x = Math.sin(t * 0.18) * 0.12;
+    }
+    controls.update();
+    renderer.render(world.scene, camera);
+    leaders.update(world.group, camera);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  window.__coal3dReady = true;
+  fallback.hidden = true;
+}
+
+function buildLeaders() {
+  const NS = 'http://www.w3.org/2000/svg';
+  const items = COMPONENTS.map(comp => {
+    const g = document.createElementNS(NS, 'g');
+    const path = document.createElementNS(NS, 'path');
+    const ring = document.createElementNS(NS, 'circle');
+    const dot = document.createElementNS(NS, 'circle');
+    ring.setAttribute('r', '9');
+    ring.setAttribute('class', 'ring');
+    dot.setAttribute('r', '3.5');
+    dot.setAttribute('class', 'dot');
+    g.append(path, ring, dot);
+    leadersSvg.appendChild(g);
+    return { comp, path, ring, dot, btn: document.querySelector('.callout[data-comp="' + comp + '"]') };
+  });
+  const v = new THREE.Vector3();
+  function recolor() {
+    items.forEach(it => {
+      const c = app.cssVar(COMP_VAR[it.comp]);
+      it.path.setAttribute('stroke', c);
+      it.ring.setAttribute('stroke', c);
+      it.dot.setAttribute('fill', c);
+    });
+  }
+  function update(group, camera) {
+    if (getComputedStyle(leadersSvg).display === 'none') return;
+    const sr = stage.getBoundingClientRect();
+    const cr = host.getBoundingClientRect();
+    items.forEach(it => {
+      v.copy(ANCHORS[it.comp]).applyMatrix4(group.matrixWorld).project(camera);
+      const ax = cr.left - sr.left + (v.x + 1) / 2 * cr.width;
+      const ay = cr.top - sr.top + (1 - v.y) / 2 * cr.height;
+      const br = it.btn.getBoundingClientRect();
+      const left = LEFT_SIDE.has(it.comp);
+      const sx = left ? br.right - sr.left + 4 : br.left - sr.left - 4;
+      const sy = br.top - sr.top + 20;
+      const kx = left ? sx + 26 : sx - 26;
+      it.path.setAttribute('d', 'M' + sx.toFixed(1) + ' ' + sy.toFixed(1) + ' H' + kx.toFixed(1) + ' L' + ax.toFixed(1) + ' ' + ay.toFixed(1));
+      ['cx', 'cy'].forEach((attr, i) => {
+        const val = (i ? ay : ax).toFixed(1);
+        it.ring.setAttribute(attr, val);
+        it.dot.setAttribute(attr, val);
+      });
+    });
+  }
+  recolor();
+  return { update, recolor };
+}
+
+try {
+  start();
+} catch (err) {
+  console.error('Gagal menjalankan tampilan 3D:', err);
+  fallback.textContent = 'Tampilan 3D tidak bisa dijalankan di browser ini (WebGL). Semua perhitungan tetap berjalan.';
+  fallback.hidden = false;
+}
+</script>

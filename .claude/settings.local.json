@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -)",
+      "Bash(node --check /private/tmp/claude-502/-Users-aryautomo-Documents-7th-Term-SKRIPSI/cd172464-08b3-4c43-ae3e-d51fe8c39fc1/scratchpad/app-check.mjs)"
+    ]
+  }
+}
