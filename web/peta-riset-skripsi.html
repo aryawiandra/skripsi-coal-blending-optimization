@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Peta Riset Skripsi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #ECEEF1;
+  --surface: #F8F9FB;
+  --surface-2: #E2E5EA;
+  --ink: #14161B;
+  --ink-2: #3B414C;
+  --muted: #5E6573;
+  --line: #C8CDD5;
+  --line-soft: #DADDE3;
+  --accent: #A95C0C;
+  --accent-strong: #8B4A07;
+  --accent-soft: #F3E2CA;
+  --blue: #2A62C4;
+  --blue-soft: #D9E5F7;
+  --bad: #B3372B;
+  --bad-soft: #F2D9D5;
+  --good: #2E7A4C;
+  --good-soft: #D7EBDF;
+  --warn-soft: #F1E4CC;
+  --lane-a: #F8F9FB;
+  --lane-b: #F1F3F6;
+  --shadow: 0 1px 0 rgba(20, 22, 27, 0.04), 0 14px 34px -20px rgba(20, 22, 27, 0.28);
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0E1014; --surface: #161920; --surface-2: #1E222A; --ink: #E7E9EE; --ink-2: #C4C9D2;
+    --muted: #8E96A4; --line: #2C313B; --line-soft: #232730; --accent: #F0A443; --accent-strong: #F6B865;
+    --accent-soft: #3A2A15; --blue: #62A0FF; --blue-soft: #1A2740; --bad: #FF7A6B; --bad-soft: #3A1D1A;
+    --good: #5CC48A; --good-soft: #15291F; --warn-soft: #33260F; --lane-a: #161920; --lane-b: #1A1E26;
+    --shadow: 0 1px 0 rgba(0,0,0,0.3), 0 18px 40px -22px rgba(0,0,0,0.75);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E1014; --surface: #161920; --surface-2: #1E222A; --ink: #E7E9EE; --ink-2: #C4C9D2;
+  --muted: #8E96A4; --line: #2C313B; --line-soft: #232730; --accent: #F0A443; --accent-strong: #F6B865;
+  --accent-soft: #3A2A15; --blue: #62A0FF; --blue-soft: #1A2740; --bad: #FF7A6B; --bad-soft: #3A1D1A;
+  --good: #5CC48A; --good-soft: #15291F; --warn-soft: #33260F; --lane-a: #161920; --lane-b: #1A1E26;
+  --shadow: 0 1px 0 rgba(0,0,0,0.3), 0 18px 40px -22px rgba(0,0,0,0.75);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--font-body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--accent-strong); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 12px/1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.prose { max-width: 68ch; color: var(--ink-2); }
+.prose strong, .prose b { color: var(--ink); font-weight: 600; }
+.btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 8px 15px; font: 500 13px/1 var(--font-body); cursor: pointer; }
+.btn:hover:not(:disabled) { border-color: var(--ink-2); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn[aria-pressed="true"], .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip { display: inline-block; font: 500 11px/1 var(--font-mono); letter-spacing: 0.04em; padding: 4px 7px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
+.chip.inti { color: var(--good); border-color: var(--good); }
+.chip.opsi { color: var(--accent-strong); border-color: var(--accent); }
+.chip.ref { color: var(--blue); border-color: var(--blue); }
+
+/* ---------- Top bar ---------- */
+.topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-block: 10px; }
+.nav { display: flex; gap: 4px 16px; flex-wrap: wrap; font: 500 13px/1 var(--font-body); }
+.nav a { color: var(--ink-2); text-decoration: none; padding: 6px 0; border-bottom: 2px solid transparent; }
+.nav a:hover { color: var(--ink); border-color: var(--accent); }
+.nav .other { color: var(--muted); }
+
+/* ---------- Hero ---------- */
+.hero { padding-block: 44px 30px; display: grid; gap: 24px; }
+.hero-head { display: grid; gap: 12px; max-width: 74ch; }
+.hero h1 { font-size: clamp(2.2rem, 5.2vw, 3.7rem); font-weight: 800; font-variation-settings: "wdth" 125; font-stretch: 125%; line-height: 1.02; letter-spacing: -0.015em; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.dek { font-size: 1.1rem; color: var(--ink-2); max-width: 64ch; }
+.pitch { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.pitch article { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; box-shadow: var(--shadow); }
+.pitch .no { font: 600 13px/1 var(--font-mono); color: var(--accent-strong); }
+.pitch h3 { font-size: 18px; font-weight: 800; font-variation-settings: "wdth" 112; font-stretch: 112%; line-height: 1.2; }
+.pitch p { font-size: 14.5px; color: var(--ink-2); }
+.oneliner { font-size: 1.05rem; padding: 16px 20px; border-radius: 12px; background: var(--accent-soft); max-width: 90ch; }
+.oneliner b { font-weight: 600; }
+
+/* ---------- Sections ---------- */
+.sec { border-top: 1px solid var(--line); padding-block: 52px; display: grid; gap: 24px; scroll-margin-top: 52px; }
+.sec-head { display: grid; gap: 10px; max-width: 74ch; }
+.sec h2 { font-size: clamp(1.6rem, 3.2vw, 2.2rem); font-weight: 800; font-variation-settings: "wdth" 118; font-stretch: 118%; line-height: 1.1; letter-spacing: -0.01em; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); min-width: 0; }
+.panel-title { font: 700 18px/1.2 var(--font-display); font-stretch: 112%; font-variation-settings: "wdth" 112; }
+
+/* ---------- BPMN ---------- */
+.bpmn-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.bpmn-bar .spacer { flex: 1; }
+.step-count { font: 500 13px/1 var(--font-mono); color: var(--muted); }
+.legend-bpmn { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--muted); align-items: center; }
+.legend-bpmn svg { vertical-align: middle; margin-right: 5px; }
+.bpmn-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); box-shadow: var(--shadow); }
+.bpmn-scroll svg { display: block; min-width: 1240px; width: 100%; height: auto; }
+.lane-bg-a { fill: var(--lane-a); }
+.lane-bg-b { fill: var(--lane-b); }
+.lane-line { stroke: var(--line); stroke-width: 1; }
+.lane-label { fill: var(--muted); font: 600 11.5px var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.lane-tag { fill: var(--ink-2); }
+.edge { fill: none; stroke: var(--ink-2); stroke-width: 1.6; transition: stroke 0.2s, opacity 0.2s; }
+.edge.msg { stroke-dasharray: 6 5; stroke: var(--muted); }
+.edge.on { stroke: var(--accent); stroke-width: 2.2; }
+.arrowhead { fill: var(--ink-2); }
+.edge-lbl { font: 600 11px var(--font-mono); fill: var(--muted); }
+.edge-lbl.yes { fill: var(--good); }
+.edge-lbl.no { fill: var(--bad); }
+.node { cursor: pointer; outline: none; }
+.node .shape { fill: var(--surface); stroke: var(--ink-2); stroke-width: 1.6; transition: stroke 0.15s, fill 0.15s; }
+.node.t-task .shape { fill: var(--surface); }
+.node.t-start .shape { stroke: var(--good); stroke-width: 2.2; }
+.node.t-end .shape { stroke: var(--bad); stroke-width: 3.6; }
+.node.t-event .shape { stroke-width: 1.6; }
+.node.t-gw .shape { fill: var(--warn-soft); }
+.node.k-fisika .shape { fill: var(--blue-soft); }
+.node.k-ml .shape { fill: var(--accent-soft); }
+.node text { font: 500 12.5px var(--font-body); fill: var(--ink); pointer-events: none; text-anchor: middle; }
+.node text.sm { font: 400 11.5px var(--font-body); fill: var(--ink-2); }
+.node .gw-mark { font: 700 20px var(--font-display); fill: var(--ink-2); }
+.node:hover .shape, .node:focus-visible .shape { stroke: var(--accent); stroke-width: 2.4; }
+.node.active .shape { stroke: var(--accent); stroke-width: 3; }
+.node.active text { font-weight: 600; }
+.node.dim { opacity: 0.35; }
+.node .step-dot { fill: var(--ink); }
+.node .step-no { font: 600 10px var(--font-mono); fill: var(--bg); text-anchor: middle; }
+.node.active .step-dot { fill: var(--accent); }
+.badge-bg { fill: var(--ink-2); }
+.badge-tx { font: 600 10px var(--font-mono); fill: var(--bg); text-anchor: middle; pointer-events: none; }
+.edge.dim { opacity: 0.25; }
+.after-note { font-size: 13px; color: var(--muted); }
+
+.detail { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.detail-main { display: grid; gap: 14px; }
+.detail-main h3 { font-size: 1.5rem; font-weight: 800; font-variation-settings: "wdth" 118; font-stretch: 118%; line-height: 1.15; }
+.detail-kind { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.d-block { display: grid; gap: 4px; }
+.d-block h4 { font: 500 11px/1.2 var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-strong); }
+.d-block p, .d-block li { font-size: 15px; color: var(--ink-2); }
+.d-block ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+.analogy { background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; color: var(--ink); }
+.io { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.io > div { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--bg); }
+.io h4 { margin-bottom: 4px; }
+.io p { font-size: 14px; }
+.ask { border-left: 3px solid var(--accent); padding: 8px 14px; background: var(--surface-2); border-radius: 0 10px 10px 0; display: grid; gap: 4px; }
+.ask .q { font-weight: 600; font-size: 14.5px; color: var(--ink); }
+.ask .a { font-size: 14.5px; color: var(--ink-2); }
+.detail-side { display: grid; gap: 14px; }
+.tour-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: s; }
+.tour-list button { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: baseline; padding: 6px 8px; border-radius: 8px; cursor: pointer; font-size: 14px; color: var(--ink-2); }
+.tour-list button:hover { background: var(--surface-2); }
+.tour-list button:focus-visible { outline: 2px solid var(--accent); }
+.tour-list button[aria-current="true"] { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
+.tour-list .n { font: 600 12px var(--font-mono); color: var(--muted); }
+.tour-list .lane-tag2 { font: 500 11px var(--font-mono); color: var(--muted); display: block; font-weight: 400; }
+
+/* ---------- Labs ---------- */
+.lab { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 20px; align-items: start; }
+.controls { display: grid; gap: 16px; }
+.ctl { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
+.ctl label { font-weight: 600; font-size: 15px; }
+.ctl output { font: 600 15px/1 var(--font-mono); font-variant-numeric: tabular-nums; }
+.ctl input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); margin: 4px 0 0; }
+.ctl-hint { grid-column: 1 / -1; font-size: 13px; color: var(--muted); }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.stat { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--bg); display: grid; gap: 2px; align-content: start; }
+.stat .k { font-size: 12.5px; color: var(--muted); }
+.stat .v { font: 600 20px/1.2 var(--font-mono); font-variant-numeric: tabular-nums; }
+.stat .s { font-size: 12px; color: var(--muted); }
+.stat.hl { background: var(--accent-soft); border-color: transparent; }
+.stat.hl .v { color: var(--accent-strong); }
+.stat.bad .v { color: var(--bad); }
+.stat.good .v { color: var(--good); }
+.fig svg { width: 100%; height: auto; display: block; overflow: visible; }
+.ax line { stroke: var(--line); }
+.ax text { fill: var(--muted); font: 400 11px var(--font-mono); }
+.ax .axis-title { fill: var(--muted); font: 500 11.5px var(--font-body); }
+.h-bar { fill: var(--ink-2); opacity: 0.45; }
+.h-bar.rej { fill: var(--bad); opacity: 0.5; }
+.h-bar.tail { fill: var(--bad); opacity: 0.95; }
+.v-spec { stroke: var(--good); stroke-width: 2; }
+.v-var { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 4; }
+.v-cvar { stroke: var(--bad); stroke-width: 2.4; }
+.v-lbl { font: 600 11px var(--font-mono); }
+.v-lbl.spec { fill: var(--good); } .v-lbl.var { fill: var(--accent-strong); } .v-lbl.cvar { fill: var(--bad); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); align-items: center; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.explain { font-size: 15px; color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 12px; }
+.explain b { color: var(--ink); font-family: var(--font-mono); font-weight: 600; }
+.note-box { font-size: 14px; color: var(--ink-2); background: var(--warn-soft); padding: 10px 14px; border-radius: 10px; }
+.note-box[hidden] { display: none; }
+.caveat { font-size: 13.5px; color: var(--muted); max-width: 84ch; }
+.caveat b { color: var(--ink-2); }
+
+.pt-dom { fill: var(--muted); opacity: 0.4; }
+.pt-front { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+.pt-sel { fill: none; stroke: var(--ink); stroke-width: 2.5; }
+.pt-lp { fill: var(--blue); stroke: var(--surface); stroke-width: 1.5; }
+.lbl-lp { fill: var(--blue); font: 600 11px var(--font-mono); }
+.comp-bars { display: grid; gap: 6px; }
+.comp-row { display: grid; grid-template-columns: 110px 1fr 56px; gap: 10px; align-items: center; font-size: 13.5px; }
+.comp-track { height: 14px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.comp-track span { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
+.comp-row .mono { text-align: right; }
+.src-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.src-table th { text-align: left; font: 500 11px/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 5px 6px; border-bottom: 1px solid var(--line); }
+.src-table td { padding: 5px 6px; border-bottom: 1px solid var(--line-soft); }
+.src-table td.num, .src-table th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* ---------- Glossary ---------- */
+.gl-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.gl-tools input[type="search"] { flex: 1 1 220px; min-width: 0; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 400 14px var(--font-body); }
+.gl-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.gl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.term { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 0; overflow: hidden; }
+.term > button { all: unset; box-sizing: border-box; display: grid; gap: 6px; width: 100%; padding: 14px 16px; cursor: pointer; }
+.term > button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.term-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.term h3 { font-size: 18px; font-weight: 800; font-variation-settings: "wdth" 112; font-stretch: 112%; line-height: 1.2; }
+.term .one { font-size: 14.5px; color: var(--ink-2); }
+.term .more { display: none; padding: 0 16px 16px; gap: 10px; }
+.term.open .more { display: grid; }
+.term .caret { font: 600 14px var(--font-mono); color: var(--muted); }
+.term.open .caret { transform: rotate(90deg); }
+.gl-empty { color: var(--muted); }
+
+/* ---------- Decision ---------- */
+.dtree { display: grid; gap: 12px; }
+.dq { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 14px 22px; align-items: center; }
+.dq .q { font: 700 16px/1.3 var(--font-display); font-variation-settings: "wdth" 108; font-stretch: 108%; }
+.dq .q small { display: block; font: 400 13px/1.4 var(--font-body); color: var(--muted); margin-top: 4px; }
+.dq .ans { display: grid; gap: 8px; }
+.ans-row { display: grid; grid-template-columns: 54px 1fr; gap: 10px; align-items: start; font-size: 14.5px; color: var(--ink-2); }
+.ans-row b.y { color: var(--good); font: 600 12px var(--font-mono); letter-spacing: .04em; padding-top: 3px; }
+.ans-row b.n { color: var(--bad); font: 600 12px var(--font-mono); letter-spacing: .04em; padding-top: 3px; }
+.ans-row strong { color: var(--ink); }
+.dq.main { border-color: var(--accent); }
+.dflow-note { font-size: 13.5px; color: var(--muted); max-width: 80ch; }
+.status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.status-col { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; align-content: start; }
+.status-col h3 { font-size: 16px; font-weight: 800; font-variation-settings: "wdth" 112; font-stretch: 112%; display: flex; align-items: center; gap: 8px; }
+.status-col ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; color: var(--ink-2); }
+.status-col.s-inti { border-top: 3px solid var(--good); }
+.status-col.s-opsi { border-top: 3px solid var(--accent); }
+.status-col.s-tunggu { border-top: 3px solid var(--blue); }
+
+footer { border-top: 1px solid var(--line); padding-block: 28px 44px; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 980px) {
+  .lab, .detail { grid-template-columns: 1fr; }
+  .pitch { grid-template-columns: 1fr; }
+  .dq { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .io { grid-template-columns: 1fr; }
+  .comp-row { grid-template-columns: 90px 1fr 50px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .edge, .node .shape { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <nav class="nav" aria-label="Navigasi halaman">
+      <a href="#alur">Alur BPMN</a>
+      <a href="#cvar">Lab CVaR</a>
+      <a href="#pareto">Lab NSGA-II</a>
+      <a href="#kamus">Kamus istilah</a>
+      <a href="#topik">Topik &amp; status</a>
+      <a class="other" href="model-gar-batubara.html">Anatomi GAR ↗</a>
+      <a class="other" href="rantai-nilai-blending-gar.html">Rantai nilai ↗</a>
+    </nav>
+    <button class="btn" id="theme-toggle" type="button" aria-label="Ganti tema terang atau gelap">Tema</button>
+  </div>
+</div>
+
+<main>
+<header class="wrap hero">
+  <div class="hero-head">
+    <span class="eyebrow">Bahan belajar &amp; bimbingan skripsi · Teknik Komputer FTUI</span>
+    <h1>Skripsi ini, dari awal sampai akhir, dalam <em>satu peta</em></h1>
+    <p class="dek">Halaman ini menerjemahkan catatan riset menjadi alur yang bisa diklik. Mulai dari masalah di lapangan, model yang dipakai, sampai cara hasilnya dinilai. Setiap istilah teknis (CVaR, NSGA-II, dan lainnya) dijelaskan dengan bahasa biasa, analogi, dan simulasi kecil yang bisa digeser-geser.</p>
+  </div>
+
+  <p class="oneliner"><b>Versi 30 detik untuk dosen:</b> Batu bara dari beberapa sumber dicampur supaya kualitasnya (GAR) pas dengan kontrak. Rumus rata-rata tertimbang yang dipakai selama ini mengabaikan bahwa hasil campuran meleset dari rencana. Skripsi ini memakai <i>machine learning</i> untuk mempelajari seberapa besar meleset itu, lalu memakai optimisasi untuk memilih rasio campuran yang aman dari penolakan tanpa membuang kualitas percuma.</p>
+
+  <div class="pitch">
+    <article>
+      <span class="no">1 · MASALAH</span>
+      <h3>Kualitas harus pas, tidak kurang dan tidak kelebihan</h3>
+      <p>Di bawah batas kontrak, kargo bisa ditolak atau kena penalti. Jauh di atas batas, kualitas lebih itu tidak dibayar (<i>give-away</i>). Dua kesalahan itu saling tarik-menarik.</p>
+    </article>
+    <article>
+      <span class="no">2 · CELAH</span>
+      <h3>Praktik sekarang menganggap campuran itu pasti</h3>
+      <p>Riset blending di Indonesia yang ditemukan memakai <i>linear programming</i> atau Excel Solver, tanpa model prediksi dan tanpa memperhitungkan ketidakpastian. Optimizer seperti itu menaruh campuran tepat di batas, sehingga peluang ditolaknya sekitar 50%.</p>
+    </article>
+    <article>
+      <span class="no">3 · USULAN</span>
+      <h3>Prediksi dulu, optimasi sesudahnya</h3>
+      <p>Tiga lapis: fisika (dihitung), <i>machine learning</i> (dipelajari dari data realisasi), optimisasi (memilih rasio dengan risiko yang terkendali). Pola prediksi-lalu-optimasi ini sama dengan skripsi acuan Aldrian.</p>
+    </article>
+  </div>
+</header>
+
+<!-- ======================= BPMN ======================= -->
+<section class="wrap sec" id="alur" aria-labelledby="alur-title">
+  <div class="sec-head">
+    <span class="eyebrow">1 · Alur proses (BPMN)</span>
+    <h2 id="alur-title">Dari kontrak sampai rekomendasi rasio campuran</h2>
+    <p class="prose">Setiap baris (<i>swimlane</i>) adalah satu pelaku atau tahap: dunia nyata, model, optimisasi, evaluasi. <b>Klik kotak mana pun</b> untuk membaca penjelasannya, atau tekan <b>Mulai penjelasan berurutan</b> lalu geser dengan tombol Berikutnya (atau panah kiri dan kanan di keyboard). Cocok dipakai saat menjelaskan ke dosen.</p>
+  </div>
+
+  <div class="bpmn-bar">
+    <button class="btn primary" id="tour-start" type="button">▶ Mulai penjelasan berurutan</button>
+    <button class="btn" id="tour-prev" type="button" disabled>← Sebelumnya</button>
+    <button class="btn" id="tour-next" type="button">Berikutnya →</button>
+    <button class="btn" id="tour-reset" type="button">Tampilkan semua</button>
+    <span class="step-count" id="step-count" aria-live="polite"></span>
+  </div>
+
+  <div class="legend-bpmn" aria-label="Keterangan simbol">
+    <span><svg width="18" height="18"><circle cx="9" cy="9" r="7" fill="none" stroke="var(--good)" stroke-width="2"/></svg>Awal</span>
+    <span><svg width="26" height="18"><rect x="1" y="2" width="24" height="14" rx="4" fill="var(--surface)" stroke="var(--ink-2)" stroke-width="1.5"/></svg>Aktivitas</span>
+    <span><svg width="26" height="18"><rect x="1" y="2" width="24" height="14" rx="4" fill="var(--blue-soft)" stroke="var(--ink-2)" stroke-width="1.5"/></svg>Dihitung (rumus)</span>
+    <span><svg width="26" height="18"><rect x="1" y="2" width="24" height="14" rx="4" fill="var(--accent-soft)" stroke="var(--ink-2)" stroke-width="1.5"/></svg>Dipelajari (ML)</span>
+    <span><svg width="20" height="20"><path d="M10 1 L19 10 L10 19 L1 10 Z" fill="var(--warn-soft)" stroke="var(--ink-2)" stroke-width="1.5"/></svg>Percabangan</span>
+    <span><svg width="18" height="18"><circle cx="9" cy="9" r="7" fill="none" stroke="var(--bad)" stroke-width="3.2"/></svg>Akhir</span>
+    <span><svg width="30" height="10"><line x1="0" y1="5" x2="30" y2="5" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="6 5"/></svg>Umpan balik data</span>
+    <span><svg width="18" height="18"><circle cx="9" cy="9" r="8" fill="var(--ink-2)"/><text x="9" y="12.5" text-anchor="middle" font-size="10" font-family="monospace" font-weight="600" fill="var(--bg)">C</text></svg>Tabel data dari permohonan (A, B, C, D)</span>
+  </div>
+
+  <div class="bpmn-scroll">
+    <svg id="bpmn" viewBox="0 0 1500 740" role="group" aria-label="Diagram BPMN alur skripsi" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" class="arrowhead"/></marker>
+        <marker id="ah-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="var(--accent)"/></marker>
+        <marker id="ah-m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="var(--muted)"/></marker>
+      </defs>
+      <g id="lanes"></g>
+      <g id="edges"></g>
+      <g id="nodes"></g>
+    </svg>
+  </div>
+
+  <div class="detail panel" aria-live="polite">
+    <div class="detail-main" id="detail"></div>
+    <aside class="detail-side">
+      <h3 class="panel-title">Urutan penjelasan</h3>
+      <ol class="tour-list" id="tour-list"></ol>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================= CVaR LAB ======================= -->
+<section class="wrap sec" id="cvar" aria-labelledby="cvar-title">
+  <div class="sec-head">
+    <span class="eyebrow">2 · Lab risiko · VaR dan CVaR</span>
+    <h2 id="cvar-title">“Peluang ditolak 5%” belum menjawab “kalau meleset, seberapa parah?”</h2>
+    <p class="prose">Bayangkan satu rasio campuran dikirim 4.000 kali (4.000 kargo virtual). GAR tiap kargo meleset dari rencana secara acak. Histogram di bawah adalah hasilnya. Tiga ukuran risiko menjawab pertanyaan yang berbeda:</p>
+    <ul class="prose" style="margin:0;padding-left:20px;display:grid;gap:4px">
+      <li><b>Peluang tolak</b>: berapa persen kargo yang GAR-nya di bawah batas kontrak.</li>
+      <li><b>VaR</b> (<i>Value at Risk</i>): batas bawah dari “5% kargo terburuk”. Artinya 95% kargo lebih baik dari angka ini.</li>
+      <li><b>CVaR</b> (<i>Conditional VaR</i>, disebut juga <i>expected shortfall</i>): <b>rata-rata</b> GAR dari 5% kargo terburuk itu. Ini mengukur seberapa dalam jatuhnya saat sedang sial.</li>
+    </ul>
+  </div>
+
+  <div class="lab">
+    <section class="panel controls" aria-labelledby="cv-ctl">
+      <h3 class="panel-title" id="cv-ctl">Atur skenario</h3>
+      <div class="ctl">
+        <label for="cv-w">Porsi sumber premium (A)</label><output id="cv-w-o" for="cv-w"></output>
+        <input type="range" id="cv-w" min="0" max="100" step="1" value="60">
+        <span class="ctl-hint">Sisanya sumber B. Makin banyak A, makin tinggi GAR rata-rata, makin mahal.</span>
+      </div>
+      <div class="ctl">
+        <label for="cv-s">Seberapa meleset realisasi (σ)</label><output id="cv-s-o" for="cv-s"></output>
+        <input type="range" id="cv-s" min="30" max="180" step="5" value="100">
+        <span class="ctl-hint">Simpangan baku GAR kargo (σ). Dalam skripsi, nilai ini dipelajari dari data rencana vs hasil lab.</span>
+      </div>
+      <div class="ctl">
+        <label for="cv-a">Tingkat keyakinan (α)</label><output id="cv-a-o" for="cv-a"></output>
+        <input type="range" id="cv-a" min="90" max="99" step="1" value="95">
+        <span class="ctl-hint">95% berarti kita melihat 5% kargo terburuk.</span>
+      </div>
+      <div>
+        <p class="eyebrow" style="margin-bottom:8px">Pilih strategi optimizer</p>
+        <div class="presets">
+          <button class="btn" type="button" id="p-lp">Linear (tepat di batas)</button>
+          <button class="btn" type="button" id="p-chance">Aman: tolak ≤ 5%</button>
+          <button class="btn" type="button" id="p-cvar">Aman: CVaR ≥ batas</button>
+        </div>
+      </div>
+      <div class="presets"><button class="btn" type="button" id="cv-resample">Ambil 4.000 sampel baru</button></div>
+      <p class="note-box" id="cv-note" hidden></p>
+      <p class="caveat">Angka ilustratif: batas kontrak GAR 4.000 kcal/kg, sumber A 4.300 (lebih mahal 18%), sumber B 3.700. Rata-rata campuran memakai rata-rata tertimbang hanya sebagai titik tengah. Penyimpangan di sekelilingnya yang menjadi inti skripsi.</p>
+    </section>
+
+    <section class="panel fig" aria-labelledby="cv-fig">
+      <h3 class="panel-title" id="cv-fig">Distribusi GAR 4.000 kargo virtual</h3>
+      <svg id="cv-svg" viewBox="0 0 640 340" role="img" aria-label="Histogram GAR kargo dengan garis batas kontrak, VaR, dan CVaR"></svg>
+      <div class="legend">
+        <span><i style="background:var(--bad);opacity:.5"></i>di bawah batas (ditolak)</span>
+        <span><i style="background:var(--bad)"></i>tail: kargo terburuk (1−α)</span>
+        <span><i style="background:var(--good)"></i>batas kontrak</span>
+        <span><i style="background:var(--accent)"></i>VaR</span>
+      </div>
+      <div class="stats" id="cv-stats"></div>
+      <p class="explain" id="cv-explain"></p>
+    </section>
+  </div>
+  <p class="caveat"><b>Status CVaR di skripsimu:</b> dalam catatan riset, CVaR muncul sebagai contoh metode di skripsi lain (trading dengan <i>reinforcement learning</i> dan pembatasan risiko CVaR) dan sebagai saran gaya untuk topik inventori. Untuk blending, penggunaannya masih <b>opsi</b>: kendala peluang (<i>chance constraint</i>) yang sudah ada di halaman “Anatomi GAR” bisa diperkuat dengan CVaR. Belum diputuskan, jadi sebut sebagai kandidat.</p>
+</section>
+
+<!-- ======================= PARETO LAB ======================= -->
+<section class="wrap sec" id="pareto" aria-labelledby="pareto-title">
+  <div class="sec-head">
+    <span class="eyebrow">3 · Lab optimisasi · Pareto dan NSGA-II</span>
+    <h2 id="pareto-title">Optimizer multi-objektif tidak memberi satu jawaban, tapi satu menu</h2>
+    <p class="prose">Kita ingin dua hal yang bertentangan: biaya serendah mungkin dan peluang ditolak serendah mungkin. Tiga sumber batu bara bisa dicampur dengan rasio apa pun. Tiap titik adalah satu rasio. Titik <b style="color:var(--accent-strong)">oranye</b> tidak bisa diperbaiki di satu sisi tanpa merugikan sisi lain: itulah <b>Pareto front</b>. Tekan <b>Jalankan NSGA-II</b> dan lihat populasi rasio bergerak ke front itu generasi demi generasi.</p>
+  </div>
+
+  <div class="lab">
+    <section class="panel controls" aria-labelledby="pa-ctl">
+      <h3 class="panel-title" id="pa-ctl">Atur pencarian</h3>
+      <div class="presets">
+        <button class="btn primary" id="pa-run" type="button">▶ Jalankan NSGA-II</button>
+        <button class="btn" id="pa-reset" type="button">Mulai ulang (acak)</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="k">Generasi</span><span class="v" id="pa-gen">0</span></div>
+        <div class="stat"><span class="k">Titik di front</span><span class="v" id="pa-nf">0</span></div>
+      </div>
+      <div class="ctl">
+        <label for="pa-eps">Batas peluang tolak yang saya terima</label><output id="pa-eps-o" for="pa-eps"></output>
+        <input type="range" id="pa-eps" min="1" max="50" step="1" value="5">
+        <span class="ctl-hint">Dari menu di front, ambil yang termurah dengan risiko di bawah batas ini.</span>
+      </div>
+      <div id="pa-pick" class="comp-bars"></div>
+      <table class="src-table" aria-label="Parameter tiga sumber ilustratif">
+        <thead><tr><th>Sumber</th><th class="num">GAR</th><th class="num">Galat</th><th class="num">Biaya</th></tr></thead>
+        <tbody>
+          <tr><td>A · premium</td><td class="num">4.300</td><td class="num">60</td><td class="num">118</td></tr>
+          <tr><td>B · menengah</td><td class="num">3.700</td><td class="num">80</td><td class="num">100</td></tr>
+          <tr><td>C · murah</td><td class="num">3.400</td><td class="num">120</td><td class="num">88</td></tr>
+        </tbody>
+      </table>
+      <p class="caveat">Angka ilustratif; “Galat” adalah simpangan baku GAR tiap sumber (kcal/kg). Batas kontrak GAR 4.000. Peluang tolak memakai pendekatan normal dengan galat tiap sumber saling bebas. NSGA-II di sini adalah versi ringkas yang sungguhan: <i>non-dominated sorting</i> dan <i>crowding distance</i>.</p>
+    </section>
+
+    <section class="panel fig" aria-labelledby="pa-fig">
+      <h3 class="panel-title" id="pa-fig">Biaya vs peluang ditolak</h3>
+      <svg id="pa-svg" viewBox="0 0 640 380" role="img" aria-label="Sebaran rasio campuran pada bidang biaya dan peluang ditolak"></svg>
+      <div class="legend">
+        <span><i style="background:var(--muted);opacity:.5"></i>rasio yang kalah (ada yang lebih baik di kedua sisi)</span>
+        <span><i style="background:var(--accent)"></i>Pareto front</span>
+        <span><i style="background:var(--blue)"></i>hasil linear programming</span>
+      </div>
+      <p class="explain" id="pa-explain"></p>
+    </section>
+  </div>
+</section>
+
+<!-- ======================= GLOSSARY ======================= -->
+<section class="wrap sec" id="kamus" aria-labelledby="kamus-title">
+  <div class="sec-head">
+    <span class="eyebrow">4 · Kamus istilah</span>
+    <h2 id="kamus-title">Semua istilah yang mungkin ditanyakan, dalam bahasa biasa</h2>
+    <p class="prose">Klik kartu untuk membuka analogi dan posisinya di skripsimu. Label <span class="chip inti">INTI</span> berarti sudah jadi bagian rencana, <span class="chip opsi">OPSI</span> berarti kandidat yang belum diputuskan, <span class="chip ref">REFERENSI</span> berarti muncul di karya lain atau sebagai pembanding.</p>
+  </div>
+  <div class="gl-tools">
+    <input type="search" id="gl-q" placeholder="Cari istilah, mis. CVaR, Pareto, conformal" aria-label="Cari istilah">
+    <div class="gl-tabs" id="gl-tabs" role="group" aria-label="Filter kategori"></div>
+  </div>
+  <div class="gl-grid" id="gl-grid"></div>
+  <p class="gl-empty" id="gl-empty" hidden>Tidak ada istilah yang cocok.</p>
+</section>
+
+<!-- ======================= TOPIK & STATUS ======================= -->
+<section class="wrap sec" id="topik" aria-labelledby="topik-title">
+  <div class="sec-head">
+    <span class="eyebrow">5 · Topik, cadangan, dan status</span>
+    <h2 id="topik-title">Apa yang sudah pasti, apa yang masih terbuka</h2>
+    <p class="prose">Berguna kalau dosen bertanya “jadi kamu sebenarnya pakai apa?”. Jawab jujur: bagian inti sudah jelas, sebagian metode masih kandidat, dan data utama masih menunggu persetujuan.</p>
+  </div>
+
+  <div class="status-grid">
+    <div class="status-col s-inti">
+      <h3><span class="chip inti">SUDAH ARAH TETAP</span></h3>
+      <ul>
+        <li>Topik utama: optimisasi blending batu bara terhadap spesifikasi kontrak.</li>
+        <li>Pola prediksi lalu optimasi berkendala, sama dengan skripsi acuan Aldrian.</li>
+        <li>Variabel keputusan: proporsi tiap sumber, jumlahnya selalu 100%.</li>
+        <li>Objektif dua sisi: ditolak (di bawah batas) dan <i>give-away</i> (kelebihan).</li>
+        <li>Linear programming sebagai <i>baseline</i> yang mewakili praktik dan riset Indonesia.</li>
+        <li>Model tiga lapis: fisika, ML untuk penyimpangan, optimisasi.</li>
+      </ul>
+    </div>
+    <div class="status-col s-opsi">
+      <h3><span class="chip opsi">MASIH KANDIDAT</span></h3>
+      <ul>
+        <li>Model prediksi: <i>gradient boosting</i> + <i>quantile regression</i>, atau model fisika ditambah <i>Gaussian process</i>.</li>
+        <li>Interval terkalibrasi dengan <i>conformal prediction</i>.</li>
+        <li>Optimizer utama: <i>chance-constrained</i>, NSGA-II, atau R-NSGA-II.</li>
+        <li>CVaR sebagai ukuran risiko ekor. Belum ditetapkan.</li>
+        <li>Judul sementara belum dikonfirmasi ke pembimbing.</li>
+      </ul>
+    </div>
+    <div class="status-col s-tunggu">
+      <h3><span class="chip ref">MENUNGGU</span></h3>
+      <ul>
+        <li>Data kualitas dan stockpile Adaro: perlu persetujuan lintas unit bisnis, belum ada kepastian waktu.</li>
+        <li>Metrik error model blending internal Adaro (kalau boleh dibagikan) sebagai pembanding.</li>
+        <li>Pengecekan repositori UI (<span class="mono">lib.ui.ac.id</span>) untuk memastikan belum ada skripsi blending serupa.</li>
+        <li>Kalender sidang resmi.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:12px">
+    <h3 style="font-size:1.35rem;font-weight:800;font-variation-settings:'wdth' 112;font-stretch:112%">Kalau data Adaro tidak keluar, pilih topik yang mana?</h3>
+    <p class="prose">Urutan ini mengikuti bagian “Update 29 September” di catatan topik cadangan. Dibaca dari atas ke bawah.</p>
+  </div>
+  <div class="dtree">
+    <div class="dq main">
+      <div class="q">Data Adaro sudah disetujui?<small>Jalur utama</small></div>
+      <div class="ans">
+        <div class="ans-row"><b class="y">YA</b><span><strong>Blending batu bara Adaro</strong> dengan tiga lapis seperti di peta di atas.</span></div>
+        <div class="ans-row"><b class="n">BELUM</b><span>Lanjut ke pertanyaan berikut. Topik ini tidak dibatalkan, hanya menunggu.</span></div>
+      </div>
+    </div>
+    <div class="dq">
+      <div class="q">Mau tetap di batu bara dan tidak membuang kerja?</div>
+      <div class="ans">
+        <div class="ans-row"><b class="y">YA</b><span><strong>Blending dengan data publik USGS COALQUAL v3.0</strong> (7.657 sampel). Pipeline dan bab metodologi bisa dibangun sekarang; saat data Adaro keluar, lapisan datanya ditukar. Kelemahan: data AS, dan tidak ada pasangan rencana vs realisasi sehingga lapis penyimpangan harus disimulasikan.</span></div>
+        <div class="ans-row"><b class="n">TIDAK</b><span>Lanjut.</span></div>
+      </div>
+    </div>
+    <div class="dq">
+      <div class="q">Mau tetap di domain tambang, lepas dari data Adaro?</div>
+      <div class="ans">
+        <div class="ans-row"><b class="y">YA</b><span><strong>Segmentasi dan deteksi perubahan area tambang Kalimantan</strong> (Sentinel-2 + poligon Maus et al. 2022). Belum ada judul satelit di Teknik Komputer UI. Risiko: label hanya tahun 2019 dan awan tropis.</span></div>
+        <div class="ans-row"><b class="n">TIDAK</b><span>Lanjut.</span></div>
+      </div>
+    </div>
+    <div class="dq">
+      <div class="q">Prioritas karier consulting?</div>
+      <div class="ans">
+        <div class="ans-row"><b class="y">YA</b><span><strong>Peramalan permintaan + optimisasi inventori (M5/Walmart)</strong>, atau <strong>process monitoring prediktif + preskriptif (BPI Challenge 2017)</strong> yang memakai pengalaman BPMN dan DMAIC dari magang.</span></div>
+        <div class="ans-row"><b class="n">TIDAK</b><span>Soft sensor flotasi + optimisasi setpoint (struktur paling mirip skripsi Aldrian), lalu Volve (migas) dan ASHRAE (energi gedung) sebagai pilihan terakhir.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="dflow-note">Semua kandidat cadangan mempertahankan struktur “model prediktif + optimizer berkendala”. Jadi kemampuan yang dibangun tetap bisa dipakai kalau akhirnya kembali ke topik Adaro.</p>
+</section>
+</main>
+
+<footer class="wrap">Disusun untuk bahan belajar dan bimbingan skripsi, Muhammad Arya Wiandra Utomo, Teknik Komputer FTUI. Seluruh angka pada simulasi adalah ilustrasi untuk menunjukkan bentuk masalah, bukan data perusahaan. Sumber narasi: catatan riset di folder <span class="mono">research/notes</span>.</footer>
+
+<script>
+(function () {
+  'use strict';
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function el(name, attrs, parent) {
+    var e = document.createElementNS(SVGNS, name);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function h(tag, attrs, html) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+  var nfID = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 });
+  var nf1 = new Intl.NumberFormat('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  /* ---------- Tema ---------- */
+  var root = document.documentElement;
+  var tbtn = document.getElementById('theme-toggle');
+  try { var saved = localStorage.getItem('peta-riset-theme'); if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved); } catch (_) {}
+  tbtn.addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme');
+    if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('peta-riset-theme', next); } catch (_) {}
+  });
+
+  /* =====================================================================
+     BPMN
+     ===================================================================== */
+  var LANES = [
+    { id: 'dunia', label: 'Dunia nyata', sub: 'Adaro · Kelanis', y: 0 },
+    { id: 'model', label: 'Model', sub: 'fisika + ML', y: 180 },
+    { id: 'opt', label: 'Optimisasi', sub: 'pilih rasio', y: 360 },
+    { id: 'eval', label: 'Evaluasi', sub: 'uji & putuskan', y: 540 }
+  ];
+  var LANE_H = 180, LABEL_W = 96, W = 1500;
+  function laneY(id) { for (var i = 0; i < LANES.length; i++) if (LANES[i].id === id) return LANES[i].y + LANE_H / 2; }
+
+  // node geometry: cx, cy, w, h (task), r (event), d (gateway half-diagonal)
+  var N = {};
+  function defNode(id, o) { o.id = id; N[id] = o; }
+  var Y1 = laneY('dunia'), Y2 = laneY('model'), Y3 = laneY('opt'), Y4 = laneY('eval');
+
+  defNode('s',  { type: 'start', cx: 150, cy: Y1, r: 18, lines: ['Kontrak minta', 'GAR ≥ batas'], lbl: 'below', step: 1, badges: ['D'] });
+  defNode('t1', { type: 'task', cx: 270, cy: Y1, w: 140, h: 58, lines: ['Ambil sampel mutu', 'tiap sumber'], step: 2, badges: ['A'] });
+  defNode('t2', { type: 'task', cx: 440, cy: Y1, w: 140, h: 58, lines: ['Catat stok &', 'mutu stockpile'], step: 3, badges: ['B'] });
+  defNode('m1', { type: 'task', cx: 440, cy: Y2, w: 140, h: 58, kind: 'fisika', lines: ['Hitung mutu campuran', 'dengan rumus fisika'], step: 4 });
+  defNode('m2', { type: 'task', cx: 620, cy: Y2, w: 140, h: 58, kind: 'ml', lines: ['Latih ML: seberapa', 'meleset dari rencana'], step: 5, badges: ['C'] });
+  defNode('m3', { type: 'event', cx: 770, cy: Y2, r: 20, lines: ['Distribusi GAR,', 'bukan satu angka'], lbl: 'above', step: 6 });
+  defNode('o1', { type: 'task', cx: 770, cy: Y3, w: 140, h: 58, lines: ['Rumuskan masalah', 'optimisasi'], step: 7, badges: ['D'] });
+  defNode('g1', { type: 'gw', cx: 890, cy: Y3, d: 24, mark: '+', lines: ['Dua pendekatan'], lbl: 'belowleft', step: 8 });
+  defNode('o2a',{ type: 'task', cx: 1010, cy: Y3 - 36, w: 140, h: 54, lines: ['Baseline:', 'Linear Programming'], step: 9 });
+  defNode('o2b',{ type: 'task', cx: 1010, cy: Y3 + 36, w: 140, h: 54, kind: 'ml', lines: ['Utama: NSGA-II /', 'chance-constrained'], step: 10 });
+  defNode('g2', { type: 'gw', cx: 1150, cy: Y3, d: 24, mark: '+', lines: ['Gabung hasil'], lbl: 'right', step: 11 });
+  defNode('e1', { type: 'task', cx: 1150, cy: Y4 - 14, w: 140, h: 58, lines: ['Uji dengan simulasi', 'Monte Carlo'], step: 12, badges: ['C'] });
+  defNode('g3', { type: 'gw', cx: 1290, cy: Y4 - 14, d: 26, mark: '×', lines: ['Lebih baik &', 'risiko aman?'], lbl: 'right', step: 13 });
+  defNode('t7', { type: 'task', cx: 1290, cy: Y1, w: 140, h: 58, lines: ['Blending & muat', 'kargo di Kelanis'], step: 14 });
+  defNode('end',{ type: 'end', cx: 1425, cy: Y1, r: 17, lines: ['Sesuai kontrak,', 'give-away kecil'], lbl: 'below', step: 15 });
+
+  var ORDER = ['s','t1','t2','m1','m2','m3','o1','g1','o2a','o2b','g2','e1','g3','t7','end'];
+
+  function anchor(n, side) {
+    var hw, hh;
+    if (n.type === 'task') { hw = n.w / 2; hh = n.h / 2; }
+    else if (n.type === 'gw') { hw = n.d; hh = n.d; }
+    else { hw = n.r; hh = n.r; }
+    if (side === 'l') return [n.cx - hw, n.cy];
+    if (side === 'r') return [n.cx + hw, n.cy];
+    if (side === 't') return [n.cx, n.cy - hh];
+    return [n.cx, n.cy + hh];
+  }
+  function P(id, side) { return anchor(N[id], side); }
+
+  var EDGES = [
+    { id: 'e-s-t1',  from: 's',  to: 't1',  pts: [P('s','r'), P('t1','l')] },
+    { id: 'e-t1-t2', from: 't1', to: 't2',  pts: [P('t1','r'), P('t2','l')] },
+    { id: 'e-t2-m1', from: 't2', to: 'm1',  pts: [P('t2','b'), P('m1','t')] },
+    { id: 'e-m1-m2', from: 'm1', to: 'm2',  pts: [P('m1','r'), P('m2','l')] },
+    { id: 'e-m2-m3', from: 'm2', to: 'm3',  pts: [P('m2','r'), P('m3','l')] },
+    { id: 'e-m3-o1', from: 'm3', to: 'o1',  pts: [P('m3','b'), P('o1','t')] },
+    { id: 'e-o1-g1', from: 'o1', to: 'g1',  pts: [P('o1','r'), P('g1','l')] },
+    { id: 'e-g1-a',  from: 'g1', to: 'o2a', pts: [P('g1','t'), [N.g1.cx, N.o2a.cy], P('o2a','l')] },
+    { id: 'e-g1-b',  from: 'g1', to: 'o2b', pts: [P('g1','b'), [N.g1.cx, N.o2b.cy], P('o2b','l')] },
+    { id: 'e-a-g2',  from: 'o2a', to: 'g2', pts: [P('o2a','r'), [1100, N.o2a.cy], [1100, N.g2.cy], P('g2','l')] },
+    { id: 'e-b-g2',  from: 'o2b', to: 'g2', pts: [P('o2b','r'), [1100, N.o2b.cy], [1100, N.g2.cy]] , noHead: true },
+    { id: 'e-g2-e1', from: 'g2', to: 'e1',  pts: [P('g2','b'), P('e1','t')] },
+    { id: 'e-e1-g3', from: 'e1', to: 'g3',  pts: [P('e1','r'), P('g3','l')] },
+    { id: 'e-g3-t7', from: 'g3', to: 't7',  pts: [P('g3','t'), P('t7','b')], label: 'Ya', lblPos: [1300, 560], lblCls: 'yes' },
+    { id: 'e-g3-o1', from: 'g3', to: 'o1',  pts: [P('g3','b'), [N.g3.cx, 712], [N.o1.cx, 712], P('o1','b')], label: 'Tidak: ubah formulasi / longgarkan kendala', lblPos: [790, 704], lblCls: 'no' },
+    { id: 'e-t7-end',from: 't7', to: 'end', pts: [P('t7','r'), P('end','l')] },
+    { id: 'e-fb',    from: 't7', to: 'm2',  pts: [P('t7','t'), [N.t7.cx, 22], [N.m2.cx, 22], P('m2','t')], msg: true, label: 'Hasil lab (CoA) jadi data belajar berikutnya', lblPos: [N.m2.cx + 12, 16] }
+  ];
+
+  var svg = document.getElementById('bpmn');
+  var gLanes = document.getElementById('lanes');
+  var gEdges = document.getElementById('edges');
+  var gNodes = document.getElementById('nodes');
+
+  LANES.forEach(function (ln, i) {
+    el('rect', { x: 0, y: ln.y, width: W, height: LANE_H, class: i % 2 ? 'lane-bg-b' : 'lane-bg-a' }, gLanes);
+    el('line', { x1: 0, y1: ln.y, x2: W, y2: ln.y, class: 'lane-line' }, gLanes);
+    el('line', { x1: LABEL_W, y1: ln.y, x2: LABEL_W, y2: ln.y + LANE_H, class: 'lane-line' }, gLanes);
+    var t = el('text', { x: 0, y: 0, class: 'lane-label', transform: 'translate(' + (LABEL_W / 2 - 4) + ',' + (ln.y + LANE_H / 2) + ') rotate(-90)', 'text-anchor': 'middle' }, gLanes);
+    t.textContent = ln.label;
+    var t2 = el('text', { x: 0, y: 0, class: 'lane-label', transform: 'translate(' + (LABEL_W / 2 + 12) + ',' + (ln.y + LANE_H / 2) + ') rotate(-90)', 'text-anchor': 'middle', style: 'font-weight:400;opacity:.8;text-transform:none;letter-spacing:0' }, gLanes);
+    t2.textContent = ln.sub;
+  });
+  el('line', { x1: 0, y1: 720, x2: W, y2: 720, class: 'lane-line' }, gLanes);
+
+  function pathD(pts) {
+    return pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0] + ' ' + p[1]; }).join(' ');
+  }
+  var edgeEls = {};
+  EDGES.forEach(function (e) {
+    var p = el('path', { d: pathD(e.pts), class: 'edge' + (e.msg ? ' msg' : ''), 'data-from': e.from, 'data-to': e.to }, gEdges);
+    if (!e.noHead) p.setAttribute('marker-end', e.msg ? 'url(#ah-m)' : 'url(#ah)');
+    edgeEls[e.id] = p;
+    if (e.label) {
+      var l = el('text', { x: e.lblPos[0], y: e.lblPos[1], class: 'edge-lbl ' + (e.lblCls || '') }, gEdges);
+      l.textContent = e.label;
+    }
+  });
+
+  function placeLabel(g, n, ext) {
+    var pos = n.lbl || 'below', x = n.cx, y0, anc = 'middle', lh = 14;
+    if (pos === 'below') y0 = n.cy + ext + 17;
+    else if (pos === 'above') y0 = n.cy - ext - 8 - (n.lines.length - 1) * lh;
+    else if (pos === 'right') { x = n.cx + ext + 10; anc = 'start'; y0 = n.cy + 4 - (n.lines.length - 1) * lh / 2; }
+    else { x = n.cx - 10; anc = 'end'; y0 = n.cy + ext + 26; } // belowleft
+    n.lines.forEach(function (ln, i) { var t = el('text', { x: x, y: y0 + i * lh, class: 'sm', style: 'text-anchor:' + anc }, g); t.textContent = ln; });
+  }
+  var nodeEls = {};
+  ORDER.forEach(function (id) {
+    var n = N[id];
+    var g = el('g', { class: 'node t-' + (n.type === 'start' ? 'start' : n.type === 'end' ? 'end' : n.type === 'gw' ? 'gw' : n.type === 'event' ? 'event' : 'task') + (n.kind ? ' k-' + n.kind : ''), tabindex: 0, role: 'button', 'data-id': id, 'aria-label': 'Langkah ' + n.step + ': ' + n.lines.join(' ') }, gNodes);
+    var topY;
+    if (n.type === 'task') {
+      el('rect', { class: 'shape', x: n.cx - n.w / 2, y: n.cy - n.h / 2, width: n.w, height: n.h, rx: 9 }, g);
+      topY = n.cy - n.h / 2;
+      var startY = n.cy - (n.lines.length - 1) * 7 + 4;
+      n.lines.forEach(function (ln, i) { var t = el('text', { x: n.cx, y: startY + i * 15 }, g); t.textContent = ln; });
+    } else if (n.type === 'gw') {
+      el('path', { class: 'shape', d: 'M' + n.cx + ' ' + (n.cy - n.d) + ' L' + (n.cx + n.d) + ' ' + n.cy + ' L' + n.cx + ' ' + (n.cy + n.d) + ' L' + (n.cx - n.d) + ' ' + n.cy + ' Z' }, g);
+      var mk = el('text', { x: n.cx, y: n.cy + 7, class: 'gw-mark' }, g); mk.textContent = n.mark;
+      topY = n.cy - n.d;
+      placeLabel(g, n, n.d);
+    } else {
+      var c = el('circle', { class: 'shape', cx: n.cx, cy: n.cy, r: n.r }, g);
+      if (n.type === 'event') el('circle', { class: 'shape', cx: n.cx, cy: n.cy, r: n.r - 4, style: 'fill:none' }, g);
+      topY = n.cy - n.r;
+      placeLabel(g, n, n.r);
+    }
+    // step dot
+    el('circle', { class: 'step-dot', cx: (n.type === 'task' ? n.cx - n.w / 2 : n.cx - (n.d || n.r) ) + 2, cy: topY + 2, r: 9 }, g);
+    var sn = el('text', { class: 'step-no', x: (n.type === 'task' ? n.cx - n.w / 2 : n.cx - (n.d || n.r)) + 2, y: topY + 5.5 }, g);
+    sn.textContent = n.step;
+    // data badges
+    (n.badges || []).forEach(function (b, i) {
+      var bx = (n.type === 'task' ? n.cx + n.w / 2 : n.cx + (n.r || n.d)) - 4 - i * 20, by = topY + 2;
+      el('circle', { class: 'badge-bg', cx: bx, cy: by, r: 9 }, g);
+      var bt = el('text', { class: 'badge-tx', x: bx, y: by + 3.5 }, g); bt.textContent = b;
+    });
+    nodeEls[id] = g;
+  });
+
+  /* ---------- Konten tiap langkah ---------- */
+  var CONTENT = {
+    s: {
+      kind: 'Awal · Dunia nyata', title: 'Kontrak meminta mutu tertentu',
+      plain: 'Pembeli menulis di kontrak bahwa batu bara yang dikirim harus punya nilai kalori (GAR) minimal sekian, plus batas untuk kelembapan (TM), abu (ash), dan sulfur. Itulah garis finis yang harus dicapai setiap kargo.',
+      analogy: 'Seperti memesan kopi “minimal 80% arabika”. Kalau kurang dari 80%, pesanan ditolak. Kalau isinya 100% arabika padahal dibayar harga 80%, penjual rugi karena memberi lebih tanpa dibayar.',
+      masuk: 'Tabel D: batas minimum dan maksimum tiap parameter per produk.', keluar: 'Target yang harus dipenuhi blending.',
+      ask: ['Apa masalah bisnisnya?', 'Dua kesalahan yang saling tarik-menarik: kualitas di bawah batas (ditolak atau penalti) dan kualitas jauh di atas batas (<i>give-away</i>: kualitas lebih yang tidak dibayar).']
+    },
+    t1: {
+      kind: 'Aktivitas · Dunia nyata', title: 'Ambil sampel mutu tiap sumber',
+      plain: 'Setiap pit atau seam disampel di stockpile ROM, lalu dianalisis di laboratorium: GAR, total moisture, ash, total sulphur, dan tonase. Hasilnya dipakai sebagai “kualitas” sumber tersebut.',
+      analogy: 'Mencicipi satu sendok dari panci besar untuk menilai rasa seluruh sup. Sendoknya bisa kebetulan lebih asin atau lebih hambar dari rata-rata panci.',
+      masuk: 'Batu bara di stockpile ROM tiap sumber.', keluar: 'Tabel A: angka mutu per sumber (harian, 12 bulan terakhir yang diminta).',
+      ask: ['Kenapa angka dari sampel tidak bisa dipercaya penuh?', 'Mutu stockpile hanya diketahui dari sampel, jadi ada galat sampling dan segregasi. Rencana campuran dibuat di atas angka yang tidak pasti. Inilah sumber ketidakpastian pertama.']
+    },
+    t2: {
+      kind: 'Aktivitas · Dunia nyata', title: 'Catat stok dan mutu stockpile',
+      plain: 'Di Terminal Kelanis ada banyak stockpile dari berbagai sumber. Dicatat berapa ton yang tersedia dan berapa mutu rata-ratanya. Stok yang terbatas menjadi kendala: tidak bisa memakai sumber premium lebih banyak dari yang ada.',
+      analogy: 'Mengecek isi lemari bahan sebelum memutuskan resep. Resep terbaik tidak berguna kalau bahannya tidak cukup.',
+      masuk: 'Pencatatan harian stockpile di Kelanis.', keluar: 'Tabel B: tonase tersedia dan mutu rata-rata per stockpile.',
+      ask: ['Kenapa Kelanis?', 'Di Terminal Kelanis terjadi blending, titik di mana proporsi campuran ditentukan sebelum kargo dimuat ke tongkang.']
+    },
+    m1: {
+      kind: 'Dihitung · Lapis 1 (Fisika)', title: 'Hitung mutu campuran dengan rumus fisika',
+      plain: 'Sebagian besar hubungan antar angka batu bara sudah punya rumus baku: konversi basis (as received, air dried, dry basis, dry ash free) dan neraca massa serta energi saat dua batu bara dicampur. Bagian ini cukup ditulis sebagai fungsi, tidak perlu dilatih.',
+      analogy: 'Seperti resep yang sudah pasti: 100 gram gula ditambah 100 gram air selalu 200 gram. Tidak perlu belajar dari data.',
+      masuk: 'Tabel A (mutu per sumber) dan rasio campuran yang dicoba.', keluar: 'Perkiraan GAR campuran menurut hukum fisika.',
+      ask: ['Kalau GAR campuran itu rata-rata tertimbang, kenapa perlu model?', 'GAR adalah perkalian energi bagian yang terbakar dengan fraksi beratnya, sehingga efek 1% abu bergantung pada moisture. Rata-rata tertimbang hanya benar saat pencampuran; setelah itu moisture berubah karena hujan dan pengeringan. Lihat halaman <a href="model-gar-batubara.html">Anatomi GAR</a>.']
+    },
+    m2: {
+      kind: 'Dipelajari · Lapis 2 (Machine learning)', title: 'Latih ML: seberapa jauh realisasi meleset dari rencana',
+      plain: 'Rumus fisika memberi angka rencana. Tapi hasil lab (Certificate of Analysis) setelah kargo dimuat sering berbeda. Yang tidak punya rumus adalah <b>seberapa jauh dan ke arah mana</b> bedanya. Itu dipelajari dari data historis: sumber apa, rasio berapa, berapa lama menunggu, cuaca seperti apa.',
+      analogy: 'Navigasi di HP menghitung jarak dengan rumus (fisika), tapi tebakan waktu tiba dipelajari dari data lalu lintas masa lalu (ML).',
+      masuk: 'Tabel B, Tabel C (catatan campuran dan hasil lab), curah hujan.', keluar: 'Model yang menebak selisih GAR rencana vs hasil lab.',
+      ask: ['Kenapa tidak seluruhnya pakai ML?', 'Bagian fisika sudah punya rumus dan datanya terbatas. Memaksa ML mempelajari ulang yang sudah diketahui memboroskan data. ML dipakai hanya di tempat rumus tidak ada.', 'Metode apa?', 'Kandidat: <i>gradient boosting</i> sebagai baseline, <i>quantile regression</i>, lalu <i>conformal prediction</i> untuk interval terkalibrasi.']
+    },
+    m3: {
+      kind: 'Peristiwa antara · Model', title: 'Keluaran: distribusi GAR, bukan satu angka',
+      plain: 'Model tidak menjawab “GAR kargo ini 4.150”, melainkan “GAR kargo ini kemungkinan di antara 4.030 dan 4.270 dengan keyakinan 90%”. Rentang ini yang dipakai optimizer untuk menjaga jarak aman dari batas kontrak.',
+      analogy: 'Prakiraan cuaca yang bilang “peluang hujan 30%” lebih berguna untuk memutuskan bawa payung daripada “besok tidak hujan”.',
+      masuk: 'Prediksi dari fisika dan ML.', keluar: 'Distribusi atau interval GAR per rasio campuran.',
+      ask: ['Apa manfaatnya bagi keputusan?', 'Tanpa ketidakpastian, optimizer menaruh campuran tepat di batas dan peluang ditolaknya sekitar 50%. Dengan distribusi, ia bisa menjaga jarak aman. Coba sendiri di <a href="#cvar">Lab CVaR</a>.']
+    },
+    o1: {
+      kind: 'Aktivitas · Optimisasi', title: 'Rumuskan masalah optimisasi',
+      plain: 'Menyusun “soal” untuk komputer. <b>Yang diatur</b> (variabel keputusan): proporsi tiap sumber, totalnya 100%. <b>Yang diminimalkan</b> (objektif): biaya sumber premium dan <i>give-away</i>. <b>Syaratnya</b> (kendala): peluang tolak di bawah batas, stok cukup, kapasitas tongkang.',
+      analogy: 'Mengatur belanja bulanan: yang dipilih adalah jumlah tiap barang, yang ingin diperkecil adalah total harga, syaratnya gizi tercukupi dan uang tidak melebihi saldo.',
+      masuk: 'Distribusi GAR dari model, Tabel D (batas spesifikasi), stok dari Tabel B.', keluar: 'Soal optimisasi yang siap diselesaikan.',
+      ask: ['Apa bedanya dengan skripsi Aldrian?', 'Aldrian: variabel keputusan adalah setelan mesin (kontinu), kendalanya rentang operasi aman, dan satu titik operasi. Di sini: proporsi campuran berjumlah tetap, kendalanya spesifikasi kontrak dan stok, berulang per kargo, dan mutu stockpile hanya diketahui dari sampel. Dua yang terakhir tidak ada di jalur RKEF.']
+    },
+    g1: {
+      kind: 'Percabangan paralel (+)', title: 'Jalankan dua pendekatan sekaligus',
+      plain: 'Soal yang sama diselesaikan dengan dua cara: cara lama sebagai pembanding (baseline) dan cara yang diusulkan. Tanda “+” berarti kedua jalur dijalankan, bukan dipilih salah satu.',
+      analogy: 'Menguji obat baru melawan obat standar. Tanpa pembanding, klaim “lebih baik” tidak bisa dibuktikan.',
+      masuk: 'Soal optimisasi.', keluar: 'Dua hasil untuk dibandingkan.',
+      ask: ['Kenapa perlu baseline?', 'Karena kontribusi harus bisa diukur. Linear programming mewakili praktik dan seluruh riset blending Indonesia yang ditemukan (Unsri, Unhas, UIN Jakarta, dan lainnya).']
+    },
+    o2a: {
+      kind: 'Aktivitas · Pembanding', title: 'Baseline: Linear Programming',
+      plain: 'Cara klasik: anggap mutu campuran = rata-rata tertimbang, lalu cari campuran termurah yang memenuhi batas. Hasilnya selalu menaruh campuran <b>tepat di batas</b>, karena itu yang termurah. Kalau realisasi meleset sedikit ke bawah, kargo ditolak.',
+      analogy: 'Berangkat ke bandara dengan perhitungan waktu yang pas-pasan: tiba tepat saat gerbang ditutup. Lancar di kertas, gagal begitu ada macet kecil.',
+      masuk: 'Soal optimisasi dengan mutu rata-rata tertimbang.', keluar: 'Satu rasio, peluang tolaknya sekitar 50%.',
+      ask: ['Kenapa 50%?', 'Karena rata-rata campuran persis di batas, dan galat realisasi simetris: separuh kemungkinan di atas, separuh di bawah. Titik biru di <a href="#pareto">Lab NSGA-II</a> menunjukkan posisi ini.']
+    },
+    o2b: {
+      kind: 'Dipelajari · Metode utama', title: 'Utama: NSGA-II atau chance-constrained',
+      plain: 'Dua cara yang sama-sama memperhitungkan ketidakpastian. <b>Chance-constrained</b>: batasi peluang tolak (misalnya ≤ 5%) lalu cari yang termurah. <b>NSGA-II</b> (algoritma evolusi): jangan pilih dulu, cari seluruh rangkaian kompromi antara biaya dan risiko (Pareto front), lalu manusia memilih titiknya.',
+      analogy: 'Agen perjalanan yang tidak memberi satu tiket, tapi daftar pilihan dari yang termurah-berisiko sampai yang termahal-aman, dan Anda memilih sesuai selera risiko.',
+      masuk: 'Soal optimisasi dengan distribusi GAR.', keluar: 'Pareto front: banyak rasio dengan kompromi berbeda.',
+      ask: ['Kenapa NSGA-II dan bukan Genetic Algorithm biasa?', 'GA biasa menggabungkan semua tujuan jadi satu angka, sehingga harus menentukan bobot di depan. NSGA-II menjaga beberapa tujuan terpisah dan memberi front sekaligus. Angkatan skripsi RKEF sudah naik ke R-NSGA-II, jadi ini setara standar sekarang.', 'Di mana CVaR?', 'CVaR bisa dipakai sebagai ukuran risiko pada kendala atau sebagai objektif kedua. Masih opsi. Lihat <a href="#cvar">Lab CVaR</a>.']
+    },
+    g2: {
+      kind: 'Penggabung paralel (+)', title: 'Gabungkan hasil kedua jalur',
+      plain: 'Hasil baseline dan hasil metode utama dikumpulkan di satu tempat supaya bisa diadu dengan ukuran yang sama.',
+      analogy: 'Dua pelari menyelesaikan lintasan; baru setelah keduanya finis kita membandingkan waktunya.',
+      masuk: 'Rasio dari LP dan Pareto front.', keluar: 'Kumpulan kandidat rasio untuk diuji.',
+      ask: ['Apakah ada keputusan di sini?', 'Belum. Ini hanya sinkronisasi. Keputusan ada di percabangan berikutnya.']
+    },
+    e1: {
+      kind: 'Aktivitas · Evaluasi', title: 'Uji dengan simulasi Monte Carlo',
+      plain: 'Tiap kandidat rasio “dikirim” ribuan kali di komputer, dengan penyimpangan acak yang bentuknya dipelajari dari data. Dari situ dihitung: berapa persen ditolak, berapa rata-rata <i>give-away</i>, berapa biaya, berapa lama komputasinya. Karena kargo nyata tidak bisa diulang ribuan kali, simulasi inilah cara adil membandingkan.',
+      analogy: 'Melempar dadu seribu kali untuk tahu seberapa sering muncul angka enam, bukan menebak dari satu lemparan.',
+      masuk: 'Kandidat rasio dan model ketidakpastian dari Tabel C.', keluar: 'Peluang tolak, give-away, biaya, waktu komputasi tiap kandidat.',
+      ask: ['Bagaimana mengukur hasilnya?', 'Skripsi Aldrian mengukur lima sumbu, antara lain pelanggaran kendala dan waktu komputasi. Di sini sumbu utamanya peluang tolak, <i>give-away</i>, dan biaya. Sumbu persisnya perlu disepakati dengan pembimbing.']
+    },
+    g3: {
+      kind: 'Percabangan eksklusif (×)', title: 'Lebih baik dari baseline dan risikonya aman?',
+      plain: 'Pertanyaan ya atau tidak. Kalau metode utama menang dan peluang tolaknya di bawah batas, lanjut ke penerapan. Kalau tidak, kembali merumuskan ulang soal: ubah objektif, longgarkan kendala, atau perbaiki model.',
+      analogy: 'Gerbang kendali mutu di pabrik: lolos dilanjut ke pengiriman, tidak lolos kembali ke bengkel.',
+      masuk: 'Hasil uji tiap kandidat.', keluar: 'Rasio terpilih (ya), atau perintah merumuskan ulang (tidak).',
+      ask: ['Bagaimana kalau hasilnya tidak lebih baik?', 'Itu tetap hasil penelitian yang sah, selama pengujiannya adil dan temuannya dilaporkan apa adanya. Yang berbahaya adalah baseline yang sengaja dibuat lemah.']
+    },
+    t7: {
+      kind: 'Aktivitas · Dunia nyata', title: 'Terapkan di blending Kelanis dan muat kargo',
+      plain: 'Rasio terpilih dipakai tim lapangan untuk mencampur dan memuat kargo ke tongkang. Setelah itu laboratorium menerbitkan Certificate of Analysis yang menjadi data baru untuk belajar (panah putus-putus ke atas).',
+      analogy: 'Resep terbaik baru terbukti saat disajikan; ulasan tamu menjadi bahan memperbaiki resep berikutnya.',
+      masuk: 'Rasio rekomendasi.', keluar: 'Kargo termuat dan Certificate of Analysis.',
+      ask: ['Apakah skripsi sampai ke penerapan nyata?', 'Asumsi saya: lingkup skripsi berhenti di rekomendasi dan pengujian simulasi dengan data historis, seperti skripsi acuan. Penerapan operasional langsung kemungkinan di luar lingkup. Perlu dikonfirmasi ke pembimbing.']
+    },
+    end: {
+      kind: 'Akhir', title: 'Kargo sesuai kontrak dengan give-away kecil',
+      plain: 'Tujuan akhir: kargo lolos spesifikasi, tidak ada klaim atau penalti, dan kualitas tidak terbuang percuma. Itu berarti ukuran keberhasilan skripsi ada dua: peluang tolak turun, dan give-away tidak membengkak.',
+      analogy: 'Ukuran yang baik bukan “paling aman” (selalu kirim yang terbaik, mahal), bukan juga “paling hemat” (mepet batas, sering ditolak), tapi keseimbangan yang bisa dipertanggungjawabkan.',
+      masuk: 'Kargo yang sudah dicampur.', keluar: 'Kontrak terpenuhi.',
+      ask: ['Apa kontribusi teknik komputernya?', 'Tiga hal: pemodelan prediktif sebagai pengganti asumsi rata-rata tertimbang, formulasi optimisasi berkendala yang sadar ketidakpastian, dan rancangan sistemnya.']
+    }
+  };
+
+  var detail = document.getElementById('detail');
+  var tourList = document.getElementById('tour-list');
+  var stepCount = document.getElementById('step-count');
+  var btnPrev = document.getElementById('tour-prev');
+  var btnNext = document.getElementById('tour-next');
+  var btnStart = document.getElementById('tour-start');
+  var btnReset = document.getElementById('tour-reset');
+  var current = -1;      // index in ORDER
+  var touring = false;
+
+  var LANE_OF = { s:'dunia', t1:'dunia', t2:'dunia', t7:'dunia', end:'dunia', m1:'model', m2:'model', m3:'model', o1:'opt', g1:'opt', o2a:'opt', o2b:'opt', g2:'opt', e1:'eval', g3:'eval' };
+  var LANE_NAME = { dunia: 'Dunia nyata', model: 'Model', opt: 'Optimisasi', eval: 'Evaluasi' };
+
+  ORDER.forEach(function (id, i) {
+    var li = h('li');
+    var b = h('button', { type: 'button', 'data-i': i }, '<span class="n">' + (i + 1) + '</span><span>' + CONTENT[id].title + '<span class="lane-tag2">' + LANE_NAME[LANE_OF[id]] + '</span></span>');
+    b.addEventListener('click', function () { select(i, false); });
+    li.appendChild(b); tourList.appendChild(li);
+  });
+
+  function render(id) {
+    var c = CONTENT[id];
+    var html = '';
+    html += '<div class="detail-kind"><span class="chip">' + c.kind + '</span><span class="chip">Langkah ' + N[id].step + ' dari ' + ORDER.length + '</span></div>';
+    html += '<h3>' + c.title + '</h3>';
+    html += '<div class="d-block"><h4>Dalam bahasa biasa</h4><p>' + c.plain + '</p></div>';
+    html += '<div class="d-block analogy"><h4>Analogi</h4><p>' + c.analogy + '</p></div>';
+    html += '<div class="io"><div class="d-block"><h4>Masuk</h4><p>' + c.masuk + '</p></div><div class="d-block"><h4>Keluar</h4><p>' + c.keluar + '</p></div></div>';
+    for (var i = 0; i < c.ask.length; i += 2) {
+      html += '<div class="ask"><span class="q">Kalau dosen tanya: “' + c.ask[i] + '”</span><span class="a">' + c.ask[i + 1] + '</span></div>';
+    }
+    detail.innerHTML = html;
+  }
+
+  function applyState() {
+    var cur = current >= 0 ? ORDER[current] : null;
+    ORDER.forEach(function (id, i) {
+      var g = nodeEls[id];
+      g.classList.toggle('active', id === cur);
+      g.classList.toggle('dim', touring && i > current);
+    });
+    Object.keys(edgeEls).forEach(function (k) {
+      var e = EDGES.filter(function (x) { return x.id === k; })[0];
+      var fi = ORDER.indexOf(e.from), ti = ORDER.indexOf(e.to);
+      var reached = touring ? (ti <= current && !(e.id === 'e-g3-o1' || e.id === 'e-fb')) : false;
+      var isCur = cur && (e.to === cur || e.from === cur);
+      edgeEls[k].classList.toggle('on', !!(isCur));
+      if (!e.noHead) edgeEls[k].setAttribute('marker-end', isCur ? 'url(#ah-on)' : (e.msg ? 'url(#ah-m)' : 'url(#ah)'));
+      edgeEls[k].classList.toggle('dim', touring && !reached && !isCur);
+    });
+    Array.prototype.forEach.call(tourList.querySelectorAll('button'), function (b) {
+      b.setAttribute('aria-current', String(+b.getAttribute('data-i') === current));
+    });
+    btnPrev.disabled = !(current > 0);
+    btnNext.disabled = touring && current >= ORDER.length - 1;
+    stepCount.textContent = touring ? 'Langkah ' + (current + 1) + ' dari ' + ORDER.length : '';
+  }
+
+  function select(i, tour) {
+    current = i; touring = !!tour || touring;
+    render(ORDER[i]); applyState();
+  }
+
+  btnStart.addEventListener('click', function () { touring = true; select(0, true); btnStart.blur(); });
+  btnNext.addEventListener('click', function () {
+    touring = true;
+    if (current < ORDER.length - 1) select(current + 1, true); else select(current, true);
+  });
+  btnPrev.addEventListener('click', function () { if (current > 0) select(current - 1, touring); });
+  btnReset.addEventListener('click', function () { touring = false; applyState(); });
+
+  Object.keys(nodeEls).forEach(function (id) {
+    var g = nodeEls[id];
+    g.addEventListener('click', function () { touring = false; select(ORDER.indexOf(id), false); });
+    g.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); touring = false; select(ORDER.indexOf(id), false); }
+    });
+  });
+  document.addEventListener('keydown', function (ev) {
+    var t = ev.target && ev.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') return;
+    if (!touring) return;
+    if (ev.key === 'ArrowRight' && current < ORDER.length - 1) { ev.preventDefault(); select(current + 1, true); }
+    if (ev.key === 'ArrowLeft' && current > 0) { ev.preventDefault(); select(current - 1, true); }
+  });
+  select(0, false);
+
+  /* =====================================================================
+     Matematika bersama
+     ===================================================================== */
+  function erf(x) { // Abramowitz-Stegun 7.1.26
+    var s = x < 0 ? -1 : 1; x = Math.abs(x);
+    var t = 1 / (1 + 0.3275911 * x);
+    var y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+    return s * y;
+  }
+  function Phi(z) { return 0.5 * (1 + erf(z / Math.SQRT2)); }
+  function phi(z) { return Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI); }
+  function PhiInv(p) { // Acklam
+    var a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+    var b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+    var c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+    var d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+    var pl = 0.02425, q, r;
+    if (p < pl) { q = Math.sqrt(-2 * Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+    if (p > 1 - pl) { q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+    q = p - 0.5; r = q * q;
+    return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q / (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+  }
+  function mulberry(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function gaussSamples(n, seed) {
+    var rnd = mulberry(seed), out = new Float64Array(n);
+    for (var i = 0; i < n; i += 2) {
+      var u1 = Math.max(rnd(), 1e-12), u2 = rnd(), r = Math.sqrt(-2 * Math.log(u1));
+      out[i] = r * Math.cos(2 * Math.PI * u2);
+      if (i + 1 < n) out[i + 1] = r * Math.sin(2 * Math.PI * u2);
+    }
+    return out;
+  }
+
+  /* =====================================================================
+     LAB CVaR
+     ===================================================================== */
+  var SPEC = 4000, GA = 4300, GB = 3700, CA = 118, CB = 100, NS = 4000;
+  var cvSeed = 7, Z = gaussSamples(NS, cvSeed);
+  var $w = document.getElementById('cv-w'), $s = document.getElementById('cv-s'), $a = document.getElementById('cv-a');
+  var $wo = document.getElementById('cv-w-o'), $so = document.getElementById('cv-s-o'), $ao = document.getElementById('cv-a-o');
+  var cvSvg = document.getElementById('cv-svg'), cvStats = document.getElementById('cv-stats'), cvExplain = document.getElementById('cv-explain'), cvNote = document.getElementById('cv-note');
+  var X0 = 3500, X1 = 4800, NB = 52, CW = 640, CH = 340, ML = 20, MR = 14, MT = 58, MB = 40;
+
+  function meanOf(w) { return GB + (GA - GB) * w; }
+  function costOf(w) { return CB + (CA - CB) * w; }
+  function xPix(v) { return ML + (v - X0) / (X1 - X0) * (CW - ML - MR); }
+
+  function cvCompute(w, sg, alpha) {
+    var mu = meanOf(w), g = new Float64Array(NS);
+    for (var i = 0; i < NS; i++) g[i] = mu + sg * Z[i];
+    var sorted = Array.prototype.slice.call(g).sort(function (a, b) { return a - b; });
+    var k = Math.max(1, Math.round((1 - alpha) * NS));
+    var tailSum = 0; for (var j = 0; j < k; j++) tailSum += sorted[j];
+    var cvarGar = tailSum / k;               // rata-rata GAR di (1-α) kargo terburuk
+    var varGar = sorted[k - 1];              // GAR persentil ke (1-α)
+    var rej = 0, give = 0;
+    for (var m = 0; m < NS; m++) { if (g[m] < SPEC) rej++; else give += g[m] - SPEC; }
+    return { mu: mu, g: g, varGar: varGar, cvarGar: cvarGar, rej: rej / NS, give: give / NS, k: k };
+  }
+
+  function drawCV() {
+    var w = +$w.value / 100, sg = +$s.value, alpha = +$a.value / 100;
+    $wo.textContent = nfID.format(w * 100) + '% A · ' + nfID.format((1 - w) * 100) + '% B';
+    $so.textContent = nfID.format(sg) + ' kcal/kg';
+    $ao.textContent = nfID.format(alpha * 100) + '%';
+    var r = cvCompute(w, sg, alpha);
+    var bw = (X1 - X0) / NB, bins = new Array(NB).fill(0), tailEdge = r.varGar;
+    var tailBins = new Array(NB).fill(0);
+    for (var i = 0; i < NS; i++) {
+      var b = Math.floor((r.g[i] - X0) / bw);
+      if (b < 0) b = 0; if (b >= NB) b = NB - 1;
+      bins[b]++;
+      if (r.g[i] <= tailEdge) tailBins[b]++;
+    }
+    var maxB = 0; for (var q = 0; q < NB; q++) if (bins[q] > maxB) maxB = bins[q];
+    maxB = Math.max(maxB, 60);
+    var hPix = CH - MT - MB;
+    var out = '';
+    // axes
+    out += '<g class="ax">';
+    for (var tv = 3600; tv <= 4800; tv += 200) out += '<line x1="' + xPix(tv) + '" x2="' + xPix(tv) + '" y1="' + (CH - MB) + '" y2="' + (CH - MB + 4) + '"/><text x="' + xPix(tv) + '" y="' + (CH - MB + 17) + '" text-anchor="middle">' + nfID.format(tv) + '</text>';
+    out += '<line x1="' + ML + '" x2="' + (CW - MR) + '" y1="' + (CH - MB) + '" y2="' + (CH - MB) + '"/>';
+    out += '<text class="axis-title" x="' + ((ML + CW - MR) / 2) + '" y="' + (CH - 6) + '" text-anchor="middle">GAR kargo (kcal/kg)</text></g>';
+    // bars
+    for (var k2 = 0; k2 < NB; k2++) {
+      var x = xPix(X0 + k2 * bw), wpx = xPix(X0 + (k2 + 1) * bw) - x - 1;
+      var hh = bins[k2] / maxB * hPix, y0 = CH - MB;
+      var binMid = X0 + (k2 + 0.5) * bw;
+      var cls = binMid < SPEC ? 'h-bar rej' : 'h-bar';
+      out += '<rect class="' + cls + '" x="' + x + '" y="' + (y0 - hh) + '" width="' + wpx + '" height="' + hh + '"/>';
+      if (tailBins[k2]) out += '<rect class="h-bar tail" x="' + x + '" y="' + (y0 - tailBins[k2] / maxB * hPix) + '" width="' + wpx + '" height="' + (tailBins[k2] / maxB * hPix) + '"/>';
+    }
+    // lines
+    function vline(v, cls, label, ly, anchor) {
+      var xx = Math.min(Math.max(xPix(v), ML), CW - MR);
+      return '<line class="' + cls + '" x1="' + xx + '" x2="' + xx + '" y1="' + (ly - 9) + '" y2="' + (CH - MB) + '"/>' +
+        '<text class="v-lbl ' + cls.replace('v-', '') + '" x="' + (xx + (anchor === 'end' ? -6 : 6)) + '" y="' + ly + '" text-anchor="' + (anchor || 'start') + '">' + label + '</text>';
+    }
+    out += vline(r.cvarGar, 'v-cvar', 'CVaR ' + nfID.format(r.cvarGar), 38, 'end');
+    out += vline(r.varGar, 'v-var', 'VaR ' + nfID.format(r.varGar), 22, 'start');
+    out += vline(SPEC, 'v-spec', 'batas kontrak ' + nfID.format(SPEC), 54, 'start');
+    cvSvg.innerHTML = out;
+
+    var okCvar = r.cvarGar >= SPEC;
+    var cost = costOf(w);
+    cvStats.innerHTML =
+      stat('Peluang tolak', nf1.format(r.rej * 100) + '%', 'GAR di bawah ' + nfID.format(SPEC), r.rej > 0.051 ? 'bad' : 'good') +
+      stat('VaR ' + nfID.format(alpha * 100) + '%', nfID.format(r.varGar), 'GAR persentil ke-' + nfID.format((1 - alpha) * 100), '') +
+      stat('CVaR ' + nfID.format(alpha * 100) + '%', nfID.format(r.cvarGar), 'rata-rata ' + nfID.format((1 - alpha) * 100) + '% kargo terburuk', okCvar ? 'good' : 'bad', true) +
+      stat('Give-away rata-rata', nfID.format(r.give), 'kcal/kg di atas batas', '') +
+      stat('Biaya relatif', nf1.format(cost), 'B = 100', '');
+
+    var gapCv = r.cvarGar - SPEC;
+    cvExplain.innerHTML =
+      'Dari <b>' + nfID.format(NS) + '</b> kargo, <b>' + nf1.format(r.rej * 100) + '%</b> ditolak. ' +
+      'Ambil <b>' + nfID.format((1 - alpha) * 100) + '%</b> terburuk (' + nfID.format(r.k) + ' kargo, batang merah gelap): batas atasnya adalah VaR <b>' + nfID.format(r.varGar) + '</b>, dan rata-ratanya adalah CVaR <b>' + nfID.format(r.cvarGar) + '</b>. ' +
+      (okCvar
+        ? 'Bahkan rata-rata kargo-kargo terburuk itu masih ' + nfID.format(gapCv) + ' kcal/kg di atas batas kontrak.'
+        : 'Rata-rata kargo-kargo terburuk itu berada ' + nfID.format(-gapCv) + ' kcal/kg di <b>bawah</b> batas kontrak. Peluang tolak bisa terlihat kecil, tetapi kalau meleset, melesetnya dalam.');
+  }
+  function stat(k, v, s, cls, hl) {
+    return '<div class="stat ' + (cls || '') + (hl ? ' hl' : '') + '"><span class="k">' + k + '</span><span class="v">' + v + '</span><span class="s">' + s + '</span></div>';
+  }
+
+  function showNote(msg) { if (msg) { cvNote.hidden = false; cvNote.textContent = msg; } else { cvNote.hidden = true; } }
+  function solveW(requiredMu) { return (requiredMu - GB) / (GA - GB); }
+  function setW(w, msg, up) {
+    var c = Math.min(1, Math.max(0, w));
+    $w.value = up ? Math.min(100, Math.ceil(c * 100) + 1) : Math.round(c * 100);
+    showNote(w > 1 ? msg || 'Tidak ada rasio yang aman pada σ dan α ini, bahkan 100% sumber A. Nilai diset ke 100% A.' : msg || '');
+    drawCV();
+  }
+  document.getElementById('p-lp').addEventListener('click', function () {
+    setW(solveW(SPEC), 'Optimizer linear menaruh rata-rata tepat di batas kontrak karena itu yang termurah. Perhatikan peluang tolaknya sekitar 50%.');
+  });
+  document.getElementById('p-chance').addEventListener('click', function () {
+    var sg = +$s.value, mu = SPEC + PhiInv(0.95) * sg;
+    setW(solveW(mu), 'Kendala peluang: rata-rata digeser ke atas sebesar 1,645σ supaya peluang tolak ≤ 5% (porsi dibulatkan ke atas).', true);
+  });
+  document.getElementById('p-cvar').addEventListener('click', function () {
+    var sg = +$s.value, al = +$a.value / 100, z = PhiInv(al);
+    var mu = SPEC + sg * phi(z) / (1 - al);
+    setW(solveW(mu), 'Kendala CVaR: rata-rata digeser ke atas sebesar σ·φ(z)/(1−α), supaya rata-rata kargo terburuk pun masih memenuhi batas. Lebih ketat dan lebih mahal daripada kendala peluang 5% (porsi dibulatkan ke atas).', true);
+  });
+  document.getElementById('cv-resample').addEventListener('click', function () { cvSeed = (cvSeed * 7919 + 13) % 100000; Z = gaussSamples(NS, cvSeed); drawCV(); });
+  [$w, $s, $a].forEach(function (c) { c.addEventListener('input', function () { showNote(''); drawCV(); }); });
+  drawCV();
+
+  /* =====================================================================
+     LAB Pareto / NSGA-II
+     ===================================================================== */
+  var SRC = [
+    { n: 'A', mu: 4300, sd: 60, c: 118 },
+    { n: 'B', mu: 3700, sd: 80, c: 100 },
+    { n: 'C', mu: 3400, sd: 120, c: 88 }
+  ];
+  function evalBlend(w) {
+    var mu = 0, v = 0, c = 0;
+    for (var i = 0; i < 3; i++) { mu += w[i] * SRC[i].mu; v += w[i] * w[i] * SRC[i].sd * SRC[i].sd; c += w[i] * SRC[i].c; }
+    var sd = Math.sqrt(v);
+    return { cost: c, rej: Phi((SPEC - mu) / sd), mu: mu, sd: sd };
+  }
+  function norm(w) {
+    var a = Math.max(0, w[0]), b = Math.max(0, w[1]), c = Math.max(0, w[2]), s = a + b + c;
+    if (s < 1e-9) return [1 / 3, 1 / 3, 1 / 3];
+    return [a / s, b / s, c / s];
+  }
+  var rngP = mulberry(42);
+  function randBlend() { var e = [-Math.log(1 - rngP()), -Math.log(1 - rngP()), -Math.log(1 - rngP())]; return norm(e); }
+  function mk(w) { var o = evalBlend(w); return { w: w, f: [o.cost, o.rej], mu: o.mu, sd: o.sd }; }
+
+  function dominates(a, b) { return a.f[0] <= b.f[0] && a.f[1] <= b.f[1] && (a.f[0] < b.f[0] || a.f[1] < b.f[1]); }
+  function sortFronts(pop) {
+    var S = pop.map(function () { return []; }), nd = pop.map(function () { return 0; }), fronts = [[]];
+    for (var i = 0; i < pop.length; i++) {
+      for (var j = 0; j < pop.length; j++) {
+        if (i === j) continue;
+        if (dominates(pop[i], pop[j])) S[i].push(j);
+        else if (dominates(pop[j], pop[i])) nd[i]++;
+      }
+      if (nd[i] === 0) { pop[i].rank = 0; fronts[0].push(i); }
+    }
+    var k = 0;
+    while (fronts[k].length) {
+      var next = [];
+      fronts[k].forEach(function (i) { S[i].forEach(function (j) { nd[j]--; if (nd[j] === 0) { pop[j].rank = k + 1; next.push(j); } }); });
+      k++; fronts.push(next);
+    }
+    fronts.pop();
+    return fronts;
+  }
+  function crowding(pop, idxs) {
+    idxs.forEach(function (i) { pop[i].cd = 0; });
+    for (var m = 0; m < 2; m++) {
+      var s = idxs.slice().sort(function (a, b) { return pop[a].f[m] - pop[b].f[m]; });
+      pop[s[0]].cd = Infinity; pop[s[s.length - 1]].cd = Infinity;
+      var range = pop[s[s.length - 1]].f[m] - pop[s[0]].f[m] || 1;
+      for (var i = 1; i < s.length - 1; i++) pop[s[i]].cd += (pop[s[i + 1]].f[m] - pop[s[i - 1]].f[m]) / range;
+    }
+  }
+  var POP = 60, pop = [], gen = 0, cloud = [], timer = null, sel = null;
+  function initPop() {
+    gen = 0; pop = []; rngP = mulberry(1 + Math.floor(Math.random() * 1e6));
+    for (var i = 0; i < POP; i++) pop.push(mk(randBlend()));
+    cloud = pop.slice();
+    var fr = sortFronts(pop); fr.forEach(function (f) { crowding(pop, f); });
+  }
+  function tournament() {
+    var a = pop[Math.floor(rngP() * pop.length)], b = pop[Math.floor(rngP() * pop.length)];
+    if (a.rank !== b.rank) return a.rank < b.rank ? a : b;
+    return a.cd >= b.cd ? a : b;
+  }
+  function gaussR() { var u = Math.max(rngP(), 1e-12), v = rngP(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  function step() {
+    var kids = [];
+    while (kids.length < POP) {
+      var p1 = tournament(), p2 = tournament(), t = -0.2 + 1.4 * rngP();
+      var w = [0, 1, 2].map(function (i) { return t * p1.w[i] + (1 - t) * p2.w[i] + (rngP() < 0.4 ? 0.05 * gaussR() : 0); });
+      kids.push(mk(norm(w)));
+    }
+    var all = pop.concat(kids), fronts = sortFronts(all), next = [];
+    for (var f = 0; f < fronts.length; f++) {
+      crowding(all, fronts[f]);
+      if (next.length + fronts[f].length <= POP) fronts[f].forEach(function (i) { next.push(all[i]); });
+      else {
+        var rest = fronts[f].slice().sort(function (a, b) { return all[b].cd - all[a].cd; });
+        for (var r = 0; next.length < POP; r++) next.push(all[rest[r]]);
+        break;
+      }
+    }
+    pop = next; gen++;
+    var fr2 = sortFronts(pop); fr2.forEach(function (fr) { crowding(pop, fr); });
+  }
+
+  var paSvg = document.getElementById('pa-svg');
+  var PW = 640, PH = 380, PL = 48, PR = 16, PT = 16, PB = 44;
+  var CX0 = 84, CX1 = 121, RY0 = 0, RY1 = 1;
+  function px(c) { return PL + (c - CX0) / (CX1 - CX0) * (PW - PL - PR); }
+  function py(r) { return PH - PB - (r - RY0) / (RY1 - RY0) * (PH - PT - PB); }
+  var LP = (function () { // LP: min biaya s.t. rata-rata >= SPEC, pakai A dan C (B di atas garis A-C)
+    var wA = (SPEC - 3400) / (4300 - 3400), w = [wA, 0, 1 - wA];
+    return mk(w);
+  })();
+  var $eps = document.getElementById('pa-eps'), $epso = document.getElementById('pa-eps-o');
+
+  function frontPoints() {
+    var fr = sortFronts(pop)[0].map(function (i) { return pop[i]; });
+    fr.sort(function (a, b) { return a.f[0] - b.f[0]; });
+    return fr;
+  }
+  function drawPA() {
+    var eps = +$eps.value / 100;
+    $epso.textContent = nfID.format(eps * 100) + '%';
+    var fr = frontPoints();
+    var out = '<g class="ax">';
+    for (var c = 85; c <= 120; c += 5) out += '<line x1="' + px(c) + '" x2="' + px(c) + '" y1="' + (PH - PB) + '" y2="' + (PH - PB + 4) + '"/><text x="' + px(c) + '" y="' + (PH - PB + 17) + '" text-anchor="middle">' + c + '</text>';
+    for (var r = 0; r <= 1.0001; r += 0.25) out += '<line x1="' + PL + '" x2="' + (PW - PR) + '" y1="' + py(r) + '" y2="' + py(r) + '" style="stroke:var(--line-soft)"/><text x="' + (PL - 6) + '" y="' + (py(r) + 4) + '" text-anchor="end">' + nfID.format(r * 100) + '%</text>';
+    out += '<line x1="' + PL + '" x2="' + (PW - PR) + '" y1="' + (PH - PB) + '" y2="' + (PH - PB) + '"/><line x1="' + PL + '" x2="' + PL + '" y1="' + PT + '" y2="' + (PH - PB) + '"/>';
+    out += '<text class="axis-title" x="' + ((PL + PW - PR) / 2) + '" y="' + (PH - 6) + '" text-anchor="middle">Biaya relatif (makin kiri makin murah)</text>';
+    out += '<text class="axis-title" transform="translate(12,' + ((PT + PH - PB) / 2) + ') rotate(-90)" text-anchor="middle">Peluang tolak (makin bawah makin aman)</text></g>';
+    var frSet = new Set(fr);
+    cloud.forEach(function (p) { if (!frSet.has(p)) out += '<circle class="pt-dom" cx="' + px(p.f[0]) + '" cy="' + py(p.f[1]) + '" r="3.5"/>'; });
+    pop.forEach(function (p) { if (!frSet.has(p)) out += '<circle class="pt-dom" cx="' + px(p.f[0]) + '" cy="' + py(p.f[1]) + '" r="3.5" style="opacity:.7"/>'; });
+    if (fr.length > 1) out += '<path d="' + fr.map(function (p, i) { return (i ? 'L' : 'M') + px(p.f[0]) + ' ' + py(p.f[1]); }).join(' ') + '" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity=".6"/>';
+    fr.forEach(function (p) { out += '<circle class="pt-front" cx="' + px(p.f[0]) + '" cy="' + py(p.f[1]) + '" r="5"/>'; });
+    out += '<circle class="pt-lp" cx="' + px(LP.f[0]) + '" cy="' + py(LP.f[1]) + '" r="6.5"/><text class="lbl-lp" x="' + (px(LP.f[0]) - 10) + '" y="' + (py(LP.f[1]) - 10) + '" text-anchor="end">Linear programming</text>';
+    // pilihan
+    var pick = null;
+    fr.forEach(function (p) { if (p.f[1] <= eps && (!pick || p.f[0] < pick.f[0])) pick = p; });
+    sel = pick;
+    if (pick) out += '<circle class="pt-sel" cx="' + px(pick.f[0]) + '" cy="' + py(pick.f[1]) + '" r="10"/>';
+    paSvg.innerHTML = out;
+    document.getElementById('pa-gen').textContent = gen;
+    document.getElementById('pa-nf').textContent = fr.length;
+
+    var box = document.getElementById('pa-pick');
+    if (pick) {
+      var rows = '<p class="eyebrow">Pilihan: termurah dengan peluang tolak ≤ ' + nfID.format(eps * 100) + '%</p>';
+      for (var i = 0; i < 3; i++) rows += '<div class="comp-row"><span>Sumber ' + SRC[i].n + '</span><div class="comp-track"><span style="width:' + (pick.w[i] * 100) + '%"></span></div><span class="mono">' + nfID.format(pick.w[i] * 100) + '%</span></div>';
+      box.innerHTML = rows;
+    } else {
+      box.innerHTML = '<p class="note-box">Belum ada titik di front dengan peluang tolak sekecil itu. Jalankan NSGA-II beberapa generasi atau longgarkan batasnya.</p>';
+    }
+    var ex = document.getElementById('pa-explain');
+    if (pick) {
+      var dC = pick.f[0] - LP.f[0];
+      ex.innerHTML = 'Linear programming: biaya <b>' + nf1.format(LP.f[0]) + '</b>, peluang tolak <b>' + nfID.format(LP.f[1] * 100) + '%</b>. Pilihan dari front: biaya <b>' + nf1.format(pick.f[0]) + '</b>, peluang tolak <b>' + nf1.format(pick.f[1] * 100) + '%</b>. Menurunkan risiko dari ' + nfID.format(LP.f[1] * 100) + '% ke ' + nf1.format(pick.f[1] * 100) + '% “membeli” ' + (dC >= 0 ? 'tambahan biaya ' + nf1.format(dC) + ' poin' : 'penghematan ' + nf1.format(-dC) + ' poin') + '. Itulah menu yang diberikan NSGA-II, dan keputusan ada di manusia.';
+    } else {
+      ex.innerHTML = 'Titik biru adalah jawaban linear programming. Titik oranye adalah menu kompromi dari NSGA-II.';
+    }
+  }
+  var $run = document.getElementById('pa-run');
+  function stopRun() { if (timer) { clearInterval(timer); timer = null; } $run.textContent = '▶ Jalankan NSGA-II'; }
+  $run.addEventListener('click', function () {
+    if (timer) { stopRun(); return; }
+    $run.textContent = '⏸ Jeda';
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { for (var i = 0; i < 60; i++) step(); drawPA(); stopRun(); return; }
+    timer = setInterval(function () { step(); drawPA(); if (gen >= 80) stopRun(); }, 120);
+  });
+  document.getElementById('pa-reset').addEventListener('click', function () { stopRun(); initPop(); drawPA(); });
+  $eps.addEventListener('input', drawPA);
+  initPop(); drawPA();
+
+  /* =====================================================================
+     Kamus
+     ===================================================================== */
+  var CATS = ['Semua', 'Batu bara', 'Risiko', 'Machine learning', 'Optimisasi'];
+  var TERMS = [
+    { t: 'GAR (Gross As Received)', c: 'Batu bara', s: 'inti', one: 'Nilai kalori batu bara apa adanya saat diterima, termasuk airnya. Satuan kcal/kg.', an: 'Seperti kalori makanan per porsi saat sudah ditimbang bersama airnya. Makanan basah punya kalori per gram lebih kecil.', me: 'Parameter mutu utama pada kontrak dan target blending. Lihat halaman Anatomi GAR.' },
+    { t: 'TM (Total Moisture)', c: 'Batu bara', s: 'inti', one: 'Kandungan air total dalam batu bara, dalam persen berat.', an: 'Handuk basah lebih berat tapi tidak lebih hangat. Air menambah bobot tanpa menambah energi.', me: 'Salah satu penyebab GAR berubah setelah pencampuran: hujan menambah, panas mengeringkan.' },
+    { t: 'Blending (pencampuran)', c: 'Batu bara', s: 'inti', one: 'Mencampur batu bara dari beberapa sumber supaya hasilnya memenuhi spesifikasi kontrak.', an: 'Mencampur kopi dari beberapa kebun untuk mendapat rasa yang konsisten.', me: 'Objek yang dioptimasi. Terjadi di Terminal Kelanis sebelum kargo dimuat ke tongkang.' },
+    { t: 'Give-away', c: 'Batu bara', s: 'inti', one: 'Kualitas yang dikirim lebih tinggi dari yang dikontrakkan, sehingga kelebihannya tidak dibayar.', an: 'Mengirim kopi arabika murni padahal pesanan dan harganya untuk campuran 80%.', me: 'Sisi kedua dari objektif dua sisi, berlawanan dengan risiko ditolak.' },
+    { t: 'Reject / penalti', c: 'Batu bara', s: 'inti', one: 'Kargo ditolak atau dikenai potongan karena mutu di bawah batas kontrak.', an: 'Pesanan dikembalikan karena tidak sesuai yang dijanjikan.', me: 'Sisi pertama dari objektif dua sisi. Diukur sebagai peluang tolak.' },
+    { t: 'Certificate of Analysis (CoA)', c: 'Batu bara', s: 'inti', one: 'Laporan laboratorium atas mutu kargo yang sudah dimuat. Dasar penagihan dan perhitungan royalti.', an: 'Struk timbangan resmi yang menentukan berapa harus dibayar.', me: 'Sumber data hasil realisasi (Tabel C) untuk melatih model penyimpangan.' },
+    { t: 'Basis (ar, ad, db, daf)', c: 'Batu bara', s: 'inti', one: 'Cara menyatakan mutu batu bara: apa adanya (ar), setelah dikeringkan udara (ad), kering (db), atau kering tanpa abu (daf).', an: 'Berat badan dengan baju, tanpa baju, tanpa air, tanpa lemak: orang yang sama, angka berbeda.', me: 'Tahap konversi basis ada di lapis fisika. Interaktif di halaman Anatomi GAR.' },
+    { t: 'Monte Carlo', c: 'Risiko', s: 'inti', one: 'Mengulang percobaan acak ribuan kali di komputer, lalu menghitung seberapa sering suatu hasil terjadi.', an: 'Melempar dadu seribu kali untuk tahu seberapa sering muncul enam.', me: 'Dipakai untuk mensimulasikan kargo virtual dan mengevaluasi tiap rasio.' },
+    { t: 'Chance constraint (kendala peluang)', c: 'Risiko', s: 'inti', one: 'Syarat berbentuk “peluang syarat terpenuhi harus minimal 95%”, bukan “harus selalu terpenuhi”.', an: 'Berangkat lebih awal agar 95% hari tidak terlambat, bukan menjamin tidak pernah terlambat.', me: 'Cara paling sederhana memakai ketidakpastian di optimizer. Sudah ada di model Anatomi GAR.' },
+    { t: 'VaR (Value at Risk)', c: 'Risiko', s: 'opsi', one: 'Batas dari “α% terburuk”: dengan keyakinan 95%, hasil tidak akan lebih buruk dari angka ini.', an: 'Garis banjir 20 tahunan: air hanya melewati tinggi ini 5% dari tahun-tahun.', me: 'Dipakai untuk menjelaskan CVaR. Tidak memberi tahu seberapa parah saat garis itu terlewati.' },
+    { t: 'CVaR (Conditional VaR / expected shortfall)', c: 'Risiko', s: 'opsi', one: 'Rata-rata hasil dari α% kasus terburuk. Mengukur seberapa dalam jatuhnya saat benar-benar sial.', an: 'VaR: “banjir tidak akan lebih tinggi dari 3 m, kecuali 5% tahun terburuk”. CVaR: “di 5% tahun terburuk itu, rata-rata tingginya 4,2 m”.', me: 'Kandidat ukuran risiko ekor untuk kendala atau objektif. Muncul di catatan lewat skripsi lain. Belum diputuskan. Coba Lab CVaR.' },
+    { t: 'Tail risk (risiko ekor)', c: 'Risiko', s: 'opsi', one: 'Risiko dari kejadian jarang tapi parah di ujung distribusi.', an: 'Kemungkinan satu kargo besar ditolak total, bukan selisih kecil di banyak kargo.', me: 'Alasan memakai CVaR: peluang tolak rendah tidak menjamin kerugian saat tolak itu terjadi kecil.' },
+    { t: 'Stockpile & segregasi', c: 'Batu bara', s: 'inti', one: 'Tumpukan batu bara. Segregasi: bagian kasar dan halus terpisah sehingga isi tumpukan tidak seragam.', an: 'Sekantong granola: kismis menumpuk di bawah, sehingga satu sendok dari atas tidak mewakili seluruh kantong.', me: 'Salah satu alasan mutu stockpile hanya diketahui dari sampel dan galatnya nyata.' },
+    { t: 'Gradient boosting (XGBoost, LightGBM)', c: 'Machine learning', s: 'inti', one: 'Banyak pohon keputusan kecil yang disusun berurutan; tiap pohon baru memperbaiki kesalahan pohon sebelumnya.', an: 'Tim editor: editor pertama menulis draf kasar, tiap editor berikutnya hanya memperbaiki kesalahan yang masih tersisa.', me: 'Kandidat model baseline untuk memprediksi penyimpangan GAR. Naik tingkat dari Ridge Regression pada skripsi Aldrian.' },
+    { t: 'Quantile regression', c: 'Machine learning', s: 'opsi', one: 'Model yang memprediksi persentil tertentu (misalnya persentil ke-5), bukan hanya rata-rata.', an: 'Alih-alih “rata-rata waktu tempuh 40 menit”, jawabnya “90% perjalanan selesai dalam 55 menit”.', me: 'Cara memperoleh batas bawah GAR yang realistis untuk keputusan berisiko.' },
+    { t: 'Conformal prediction', c: 'Machine learning', s: 'opsi', one: 'Pembungkus untuk model apa pun supaya menghasilkan interval prediksi dengan jaminan cakupan, misalnya 90% kenyataan jatuh di dalam interval.', an: 'Mengukur dulu seberapa sering tebakan kita meleset di data lama, lalu melebarkan rentang tebakan sebesar itu.', me: 'Kandidat untuk membuat keluaran lapis 2 berupa interval yang dapat dipercaya.' },
+    { t: 'Physics-informed model', c: 'Machine learning', s: 'opsi', one: 'Model yang memakai rumus fisika yang sudah diketahui, lalu ML hanya mempelajari sisa yang tidak bisa dijelaskan rumus.', an: 'Kalkulator menghitung jarak, ML hanya menebak macetnya.', me: 'Inti model tiga lapis: lapis 1 rumus, lapis 2 ML untuk residual.' },
+    { t: 'Surrogate model / predict-then-optimize', c: 'Machine learning', s: 'ref', one: 'Memakai model ML sebagai pengganti perhitungan mahal di dalam optimizer; atau pola dua tahap: prediksi dulu, lalu optimasi atas prediksi itu.', an: 'Peta lalu lintas diprediksi dulu, baru rute terbaik dipilih berdasarkan peta itu.', me: 'Nama umum pola skripsi ini dan skripsi Aldrian. Tersedia juga pada paper EPJ 2026 (coking coal).' },
+    { t: 'Reinforcement learning (RL)', c: 'Machine learning', s: 'ref', one: 'Agen belajar mengambil keputusan lewat coba-coba dan hadiah, tanpa contoh jawaban benar.', an: 'Anak belajar sepeda: jatuh = hukuman, melaju = hadiah.', me: 'Muncul di paper PLOS ONE 2025 (QNSGA-III) dan di skripsi trading sebagai pembanding standar metode terbaru.' },
+    { t: 'Baseline', c: 'Optimisasi', s: 'inti', one: 'Metode pembanding yang sederhana atau sudah lazim, untuk membuktikan metode baru memang lebih baik.', an: 'Obat plasebo atau obat standar dalam uji klinis.', me: 'Linear programming mewakili praktik dan riset blending di Indonesia.' },
+    { t: 'Linear Programming (LP)', c: 'Optimisasi', s: 'inti', one: 'Mencari kombinasi terbaik ketika tujuan dan semua syarat berbentuk garis lurus.', an: 'Menyusun menu murah yang memenuhi kebutuhan gizi, dengan harga dan gizi proporsional jumlah.', me: 'Baseline. Menghasilkan campuran tepat di batas dan peluang tolak ± 50%.' },
+    { t: 'SLSQP', c: 'Optimisasi', s: 'ref', one: 'Algoritma optimisasi berbasis gradien untuk masalah halus dengan kendala; cepat tapi hanya mencari optimum lokal.', an: 'Menuruni bukit dengan merasakan kemiringan tanah; cepat, tapi bisa terjebak di lembah kecil.', me: 'Dipakai Aldrian dan jauh lebih cepat dari GA (SLSQP 23,8 detik, GA 365,78 detik pada skenario yang dibandingkan).' },
+    { t: 'Genetic Algorithm (GA)', c: 'Optimisasi', s: 'ref', one: 'Algoritma yang meniru evolusi: populasi solusi saling dikawinkan dan dimutasi, yang baik bertahan.', an: 'Memuliakan tanaman: silangkan yang terbaik, ambil keturunan terbaik, ulangi.', me: 'Pembanding SLSQP di skripsi Aldrian. Dasar dari NSGA-II.' },
+    { t: 'Multi-objective optimization', c: 'Optimisasi', s: 'inti', one: 'Mengoptimalkan beberapa tujuan yang saling bertentangan sekaligus, tanpa menggabungkannya jadi satu angka.', an: 'Mencari laptop: murah, ringan, dan kencang tidak bisa semuanya maksimal.', me: 'Biaya vs peluang tolak, atau reject vs give-away.' },
+    { t: 'Pareto front', c: 'Optimisasi', s: 'inti', one: 'Kumpulan solusi yang tidak bisa diperbaiki di satu tujuan tanpa memperburuk tujuan lain.', an: 'Daftar tiket pesawat tanpa pilihan yang dikalahkan: tidak ada tiket lain yang sekaligus lebih murah dan lebih cepat.', me: 'Keluaran NSGA-II. Manusia memilih titiknya sesuai selera risiko.' },
+    { t: 'NSGA-II', c: 'Optimisasi', s: 'opsi', one: 'Algoritma evolusi multi-objektif: mengurutkan populasi menurut lapisan non-dominasi dan menjaga sebaran dengan crowding distance.', an: 'Seleksi bertingkat: ambil dulu kelompok “tak terkalahkan”, lalu pilih yang tersebar agar menunya beragam.', me: 'Kandidat metode utama. Lihat Lab NSGA-II.' },
+    { t: 'R-NSGA-II', c: 'Optimisasi', s: 'ref', one: 'NSGA-II dengan titik acuan (reference point): pencarian diarahkan ke area kompromi yang dianggap menarik oleh pengguna.', an: 'Agen tiket yang diberitahu “anggaran saya sekitar 2 juta” lalu fokus mencari di sekitar angka itu.', me: 'Dipakai Darren di skripsi RKEF 2025/2026-2. Menunjukkan standar angkatan sekarang.' },
+    { t: 'Constraint (kendala)', c: 'Optimisasi', s: 'inti', one: 'Syarat yang harus dipenuhi solusi, mis. mutu minimal, stok tersedia, total proporsi 100%.', an: 'Anggaran, jam buka toko, dan saldo kartu pada belanja bulanan.', me: 'Spesifikasi kontrak, ketersediaan stok, dan kapasitas tongkang.' },
+    { t: 'Decision variable (variabel keputusan)', c: 'Optimisasi', s: 'inti', one: 'Hal yang boleh diatur oleh optimizer.', an: 'Berapa banyak tiap barang yang dibeli.', me: 'Proporsi tiap sumber dalam satu kargo.' }
+  ];
+  var glGrid = document.getElementById('gl-grid'), glTabs = document.getElementById('gl-tabs'), glQ = document.getElementById('gl-q'), glEmpty = document.getElementById('gl-empty');
+  var catNow = 'Semua';
+  var STATUS_LBL = { inti: 'INTI', opsi: 'OPSI', ref: 'REFERENSI' };
+  TERMS.forEach(function (t) {
+    var d = h('div', { class: 'term', 'data-cat': t.c, 'data-text': (t.t + ' ' + t.one + ' ' + t.me).toLowerCase() });
+    var b = h('button', { type: 'button', 'aria-expanded': 'false' },
+      '<div class="term-top"><span class="chip ' + t.s + '">' + STATUS_LBL[t.s] + '</span><span class="caret" aria-hidden="true">›</span></div>' +
+      '<h3>' + t.t + '</h3><p class="one">' + t.one + '</p>');
+    var more = h('div', { class: 'more' },
+      '<div class="d-block analogy"><h4>Analogi</h4><p>' + t.an + '</p></div>' +
+      '<div class="d-block"><h4>Di skripsimu</h4><p>' + t.me + '</p></div>');
+    b.addEventListener('click', function () { var o = d.classList.toggle('open'); b.setAttribute('aria-expanded', String(o)); });
+    d.appendChild(b); d.appendChild(more); glGrid.appendChild(d);
+  });
+  CATS.forEach(function (c) {
+    var b = h('button', { type: 'button', class: 'btn', 'aria-pressed': String(c === 'Semua') }, c);
+    b.addEventListener('click', function () {
+      catNow = c;
+      Array.prototype.forEach.call(glTabs.children, function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      filterGl();
+    });
+    glTabs.appendChild(b);
+  });
+  function filterGl() {
+    var q = glQ.value.trim().toLowerCase(), shown = 0;
+    Array.prototype.forEach.call(glGrid.children, function (d) {
+      var ok = (catNow === 'Semua' || d.getAttribute('data-cat') === catNow) && (!q || d.getAttribute('data-text').indexOf(q) !== -1);
+      d.hidden = !ok; if (ok) shown++;
+    });
+    glEmpty.hidden = shown > 0;
+  }
+  glQ.addEventListener('input', filterGl);
+})();
+</script>
+</body>
+</html>
